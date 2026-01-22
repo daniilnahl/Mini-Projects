@@ -1,0 +1,30 @@
+Project Title:
+    Paycheck Budgeting Utility
+
+Project Description:
+    This utility's purpose is to automate my paycheck budgeting. The user will be prompted to enter their paycheck amount and prompted to go through a configuration of their budget if its their first time using the utility. 
+    Configuration includes setting up sectors for their budget and if needed adding specific sub-sectors inside the sectors. Afterwards, the configuration will be saved for future use. After this process is complete, the utility
+    will automatically budget your paycheck and output into a formatted excel file.
+
+Scope of Work:
+    Saving user configuration:
+        Function to serialize user configuration.
+        Function to deserialize user configuration.
+    
+    Output to Excel:
+        Function to output formatted budget into an excel file.
+
+    Budgeting:
+        Function to create sectors of the budget (Stage 1).
+        Function to create sub-sectors inside sectors (Stage 2).
+
+    Interface:
+        Create a command menu using Typer Library.
+        Create a command to budget a paycheck.
+        Create a command to configure a budget.
+
+Due Date:
+    January 12th 2025
+
+        
+

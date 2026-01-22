@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/budget_app.dir/link.d CMakeFiles/budget_app.dir/main.cpp.o CMakeFiles/budget_app.dir/Budget.cpp.o -o budget_app  output/libOpenXLSX.a
