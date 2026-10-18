@@ -1,0 +1,7 @@
+[  132.544101] apple 0003:05AC:024F.0002: input,hiddev96,hidraw1: USB HID v1.11 Keyboard [Keychron Keychron K6] on usb-3f980000.usb-1.1.2/input1
+[  636.366528] Hello from syscalls!
+[  636.366561] Hello from Daniil
+[  640.191555] Hello from syscalls!
+[  640.191600] Hello from Daniil
+[  726.984769] Hello from syscalls!
+[  726.984812] Hello from Daniil

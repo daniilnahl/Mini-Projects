@@ -1,0 +1,51 @@
+Binary files linux/arch/arm64/boot/kernel8-daniil and linux-daniil/arch/arm64/boot/kernel8-daniil differ
+Binary files linux/arch/arm64/boot/kernel8-daniil.img and linux-daniil/arch/arm64/boot/kernel8-daniil.img differ
+diff -urNp '--exclude=.git' linux/arch/arm64/tools/syscall_64.tbl linux-daniil/arch/arm64/tools/syscall_64.tbl
+--- linux/arch/arm64/tools/syscall_64.tbl	2026-10-17 18:03:15.850613651 -0700
++++ linux-daniil/arch/arm64/tools/syscall_64.tbl	2026-10-17 18:46:04.774785140 -0700
+@@ -410,3 +410,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	daniil_call			sys_daniil_call
+diff -urNp '--exclude=.git' linux/include/linux/syscalls.h linux-daniil/include/linux/syscalls.h
+--- linux/include/linux/syscalls.h	2026-10-17 18:03:15.364609400 -0700
++++ linux-daniil/include/linux/syscalls.h	2026-10-17 18:36:16.776761782 -0700
+@@ -1116,6 +1116,7 @@ asmlinkage long sys_sysfs(int option,
+ 				unsigned long arg1, unsigned long arg2);
+ asmlinkage long sys_fork(void);
+ 
++asmlinkage long sys_daniil_call(void);
+ /* obsolete */
+ asmlinkage long sys_stime(__kernel_old_time_t __user *tptr);
+ asmlinkage long sys_stime32(old_time32_t __user *tptr);
+diff -urNp '--exclude=.git' linux/kernel/sys.c linux-daniil/kernel/sys.c
+--- linux/kernel/sys.c	2026-10-17 18:03:15.552611044 -0700
++++ linux-daniil/kernel/sys.c	2026-10-17 18:48:32.483472315 -0700
+@@ -19,6 +19,7 @@
+ #include <linux/perf_event.h>
+ #include <linux/resource.h>
+ #include <linux/kernel.h>
++#include <linux/printk.h>
+ #include <linux/workqueue.h>
+ #include <linux/capability.h>
+ #include <linux/device.h>
+@@ -3034,3 +3035,10 @@ COMPAT_SYSCALL_DEFINE1(sysinfo, struct c
+ 	return 0;
+ }
+ #endif /* CONFIG_COMPAT */
++
++SYSCALL_DEFINE0(daniil_call)
++{
++	pr_info("Hello from syscalls!\n"); // printk() wrapper
++	printk(KERN_INFO "Hello from Daniil\n"); //direct printk() call
++	return 0;
++}
+diff -urNp '--exclude=.git' linux/scripts/syscall.tbl linux-daniil/scripts/syscall.tbl
+--- linux/scripts/syscall.tbl	2026-10-17 18:03:15.850613651 -0700
++++ linux-daniil/scripts/syscall.tbl	2026-10-17 18:46:04.774785140 -0700
+@@ -410,3 +410,4 @@
+ 467	common	open_tree_attr			sys_open_tree_attr
+ 468	common	file_getattr			sys_file_getattr
+ 469	common	file_setattr			sys_file_setattr
++470	common	daniil_call			sys_daniil_call
