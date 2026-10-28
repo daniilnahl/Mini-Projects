@@ -52,9 +52,6 @@ STM32F746-Nested-Interrupts-LCD/
 `Core/Src/main.c` is intended for use inside an STM32CubeIDE **STM32F746G-DISCO HAL project**. Project-generated startup, HAL, and `main.h` files are not included.
 
 ## Demonstration
-_Add your 1-minute Lab 3 demonstration video here once recorded and verified._
+[YouTube Demonstration](https://youtube.com/shorts/SNVj-a5_by0?si=hl1ygIaFJ0p-HNcq)
 
-```markdown
-[YouTube Demonstration](INSERT_YOUTUBE_VIDEO_URL)
-```
 
