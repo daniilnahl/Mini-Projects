@@ -3,14 +3,19 @@
 #include <time.h>
 #include <stdbool.h>
 
-#define ROWS 50U
-#define COLS 50U
+#define ROWS 3200U
+#define COLS 3200U
 #define UPPER_RAND_LIMIT 9U
 #define LOWER_RAND_LIMIT 1U
-//init 2 matrices of 2000 x 2000 integers where each element must be initialized
-//allocate sufficient space for resulting matrix
-//calculate dot product of them
-//verify dot product
+
+struct Matrices {
+    int matrix1[ROWS][COLS];
+    int matrix2[ROWS][COLS];
+    int matrix_res[ROWS][COLS]; 
+    int matrix_verify[ROWS][COLS];    
+};
+
+struct Matrices matrices = {0};
 
 void fillMatrix(int (*matrix)[COLS]);
 void matrixMultiMethod1(int (*matrix1)[COLS], int (*matrix2)[COLS], int (*res)[COLS]);
@@ -18,18 +23,13 @@ void matrixMultiMethod2(int (*matrix1)[COLS], int (*matrix2)[COLS], int (*res)[C
 bool matrixMatch(int (*mat1)[COLS], int (*mat2)[COLS]);
 
 int main() {
-   int matrix1[ROWS][COLS];
-    int matrix2[ROWS][COLS];
-    int matrix_res[ROWS][COLS]; 
-    int matrix_verify[ROWS][COLS];
-
     //fill up values of the matrices
-    fillMatrix(matrix1);
-    fillMatrix(matrix2);
+    srand(time(NULL));
+    fillMatrix(matrices.matrix1);
+    fillMatrix(matrices.matrix2);
 
     //get timestamp before matrix multiplication
     struct timespec start, end;
-
     clock_gettime(CLOCK_MONOTONIC, &start);
 
     //convert seconds and nanoseconds into total nanoseconds
@@ -37,7 +37,7 @@ int main() {
     printf("START at ns: %lld\n", start_ns);
 
     //matrix multiplication
-    matrixMultiMethod1(matrix1, matrix2, matrix_res);
+    matrixMultiMethod1(matrices.matrix1, matrices.matrix2, matrices.matrix_res);
 
     //get timestamp after multiplication
     clock_gettime(CLOCK_MONOTONIC, &end);
@@ -53,10 +53,10 @@ int main() {
         elapsed_ns / 1000000.0);
 
     //2nd matrix operation
-    matrixMultiMethod2(matrix1, matrix2, matrix_verify);
+    matrixMultiMethod2(matrices.matrix1, matrices.matrix2, matrices.matrix_verify);
 
     //verification
-    bool verification_status = matrixMatch(matrix_verify, matrix_res);
+    bool verification_status = matrixMatch(matrices.matrix_verify, matrices.matrix_res);
     if (verification_status) printf("Verification process passed. OPERATION SUCCESFUL.\n");
     else printf("Verification process failed. OPERATION FAILED.\n");
 
@@ -65,7 +65,6 @@ int main() {
 
 
 void fillMatrix(int (*matrix)[COLS]){
-    srand(time(NULL));
     size_t rows = 0, cols = 0;
 
     for (size_t i = 0; i < (size_t)(ROWS * COLS); i++){
