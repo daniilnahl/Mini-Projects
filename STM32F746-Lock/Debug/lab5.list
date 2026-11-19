@@ -1,0 +1,4251 @@
+
+lab5.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   000001c8  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00001a7c  080001c8  080001c8  000011c8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       000000f8  08001c44  08001c44  00002c44  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  08001d3c  08001d3c  0000300c  2**0
+                  CONTENTS, READONLY
+  4 .ARM          00000000  08001d3c  08001d3c  0000300c  2**0
+                  CONTENTS, READONLY
+  5 .preinit_array 00000000  08001d3c  08001d3c  0000300c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08001d3c  08001d3c  00002d3c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  08001d40  08001d40  00002d40  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         0000000c  20000000  08001d44  00003000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          000000c4  2000000c  08001d50  0000300c  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000600  200000d0  08001d50  000030d0  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000030  00000000  00000000  0000300c  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   00001f5c  00000000  00000000  0000303c  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_abbrev 0000074e  00000000  00000000  00004f98  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_aranges 000002a8  00000000  00000000  000056e8  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_rnglists 000001fa  00000000  00000000  00005990  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_macro  0001be72  00000000  00000000  00005b8a  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_line   000023f5  00000000  00000000  000219fc  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    0009cfa5  00000000  00000000  00023df1  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .comment      00000043  00000000  00000000  000c0d96  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  0000094c  00000000  00000000  000c0ddc  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 21 .debug_line_str 0000006c  00000000  00000000  000c1728  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+080001c8 <__do_global_dtors_aux>:
+ 80001c8:	b510      	push	{r4, lr}
+ 80001ca:	4c05      	ldr	r4, [pc, #20]	@ (80001e0 <__do_global_dtors_aux+0x18>)
+ 80001cc:	7823      	ldrb	r3, [r4, #0]
+ 80001ce:	b933      	cbnz	r3, 80001de <__do_global_dtors_aux+0x16>
+ 80001d0:	4b04      	ldr	r3, [pc, #16]	@ (80001e4 <__do_global_dtors_aux+0x1c>)
+ 80001d2:	b113      	cbz	r3, 80001da <__do_global_dtors_aux+0x12>
+ 80001d4:	4804      	ldr	r0, [pc, #16]	@ (80001e8 <__do_global_dtors_aux+0x20>)
+ 80001d6:	f3af 8000 	nop.w
+ 80001da:	2301      	movs	r3, #1
+ 80001dc:	7023      	strb	r3, [r4, #0]
+ 80001de:	bd10      	pop	{r4, pc}
+ 80001e0:	2000000c 	.word	0x2000000c
+ 80001e4:	00000000 	.word	0x00000000
+ 80001e8:	08001c2c 	.word	0x08001c2c
+
+080001ec <frame_dummy>:
+ 80001ec:	b508      	push	{r3, lr}
+ 80001ee:	4b03      	ldr	r3, [pc, #12]	@ (80001fc <frame_dummy+0x10>)
+ 80001f0:	b11b      	cbz	r3, 80001fa <frame_dummy+0xe>
+ 80001f2:	4903      	ldr	r1, [pc, #12]	@ (8000200 <frame_dummy+0x14>)
+ 80001f4:	4803      	ldr	r0, [pc, #12]	@ (8000204 <frame_dummy+0x18>)
+ 80001f6:	f3af 8000 	nop.w
+ 80001fa:	bd08      	pop	{r3, pc}
+ 80001fc:	00000000 	.word	0x00000000
+ 8000200:	20000010 	.word	0x20000010
+ 8000204:	08001c2c 	.word	0x08001c2c
+
+08000208 <i2c_lcd_is_valid_config>:
+#define LCD_RS_BIT 0U
+#define LCD_EN_BIT 2U
+#define LCD_BL_BIT 3U
+#define LCD_D4_BIT 4U
+
+static uint8_t i2c_lcd_is_valid_config(const I2C_LCD_Config *config) {
+ 8000208:	b480      	push	{r7}
+ 800020a:	b083      	sub	sp, #12
+ 800020c:	af00      	add	r7, sp, #0
+ 800020e:	6078      	str	r0, [r7, #4]
+    if (config == NULL) {
+ 8000210:	687b      	ldr	r3, [r7, #4]
+ 8000212:	2b00      	cmp	r3, #0
+ 8000214:	d101      	bne.n	800021a <i2c_lcd_is_valid_config+0x12>
+        return 0U;
+ 8000216:	2300      	movs	r3, #0
+ 8000218:	e018      	b.n	800024c <i2c_lcd_is_valid_config+0x44>
+    }
+
+    if ((config->write_fn == NULL) || (config->delay_ms_fn == NULL)) {
+ 800021a:	687b      	ldr	r3, [r7, #4]
+ 800021c:	689b      	ldr	r3, [r3, #8]
+ 800021e:	2b00      	cmp	r3, #0
+ 8000220:	d003      	beq.n	800022a <i2c_lcd_is_valid_config+0x22>
+ 8000222:	687b      	ldr	r3, [r7, #4]
+ 8000224:	68db      	ldr	r3, [r3, #12]
+ 8000226:	2b00      	cmp	r3, #0
+ 8000228:	d101      	bne.n	800022e <i2c_lcd_is_valid_config+0x26>
+        return 0U;
+ 800022a:	2300      	movs	r3, #0
+ 800022c:	e00e      	b.n	800024c <i2c_lcd_is_valid_config+0x44>
+    }
+
+    if ((config->row_count == 0U) || (config->row_count > 4U) || (config->col_count == 0U)) {
+ 800022e:	687b      	ldr	r3, [r7, #4]
+ 8000230:	785b      	ldrb	r3, [r3, #1]
+ 8000232:	2b00      	cmp	r3, #0
+ 8000234:	d007      	beq.n	8000246 <i2c_lcd_is_valid_config+0x3e>
+ 8000236:	687b      	ldr	r3, [r7, #4]
+ 8000238:	785b      	ldrb	r3, [r3, #1]
+ 800023a:	2b04      	cmp	r3, #4
+ 800023c:	d803      	bhi.n	8000246 <i2c_lcd_is_valid_config+0x3e>
+ 800023e:	687b      	ldr	r3, [r7, #4]
+ 8000240:	789b      	ldrb	r3, [r3, #2]
+ 8000242:	2b00      	cmp	r3, #0
+ 8000244:	d101      	bne.n	800024a <i2c_lcd_is_valid_config+0x42>
+        return 0U;
+ 8000246:	2300      	movs	r3, #0
+ 8000248:	e000      	b.n	800024c <i2c_lcd_is_valid_config+0x44>
+    }
+
+    return 1U;
+ 800024a:	2301      	movs	r3, #1
+}
+ 800024c:	4618      	mov	r0, r3
+ 800024e:	370c      	adds	r7, #12
+ 8000250:	46bd      	mov	sp, r7
+ 8000252:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000256:	4770      	bx	lr
+
+08000258 <i2c_lcd_is_ready>:
+
+static uint8_t i2c_lcd_is_ready(const I2C_LCD_HandleTypeDef *lcd) {
+ 8000258:	b580      	push	{r7, lr}
+ 800025a:	b082      	sub	sp, #8
+ 800025c:	af00      	add	r7, sp, #0
+ 800025e:	6078      	str	r0, [r7, #4]
+    if ((lcd == NULL) || (lcd->initialized == 0U)) {
+ 8000260:	687b      	ldr	r3, [r7, #4]
+ 8000262:	2b00      	cmp	r3, #0
+ 8000264:	d003      	beq.n	800026e <i2c_lcd_is_ready+0x16>
+ 8000266:	687b      	ldr	r3, [r7, #4]
+ 8000268:	7ddb      	ldrb	r3, [r3, #23]
+ 800026a:	2b00      	cmp	r3, #0
+ 800026c:	d101      	bne.n	8000272 <i2c_lcd_is_ready+0x1a>
+        return 0U;
+ 800026e:	2300      	movs	r3, #0
+ 8000270:	e004      	b.n	800027c <i2c_lcd_is_ready+0x24>
+    }
+
+    return i2c_lcd_is_valid_config(&lcd->config);
+ 8000272:	687b      	ldr	r3, [r7, #4]
+ 8000274:	4618      	mov	r0, r3
+ 8000276:	f7ff ffc7 	bl	8000208 <i2c_lcd_is_valid_config>
+ 800027a:	4603      	mov	r3, r0
+}
+ 800027c:	4618      	mov	r0, r3
+ 800027e:	3708      	adds	r7, #8
+ 8000280:	46bd      	mov	sp, r7
+ 8000282:	bd80      	pop	{r7, pc}
+
+08000284 <i2c_lcd_delay_ms>:
+
+static void i2c_lcd_delay_ms(I2C_LCD_HandleTypeDef *lcd, uint32_t delay_ms) {
+ 8000284:	b580      	push	{r7, lr}
+ 8000286:	b082      	sub	sp, #8
+ 8000288:	af00      	add	r7, sp, #0
+ 800028a:	6078      	str	r0, [r7, #4]
+ 800028c:	6039      	str	r1, [r7, #0]
+    lcd->config.delay_ms_fn(lcd->config.user_context, delay_ms);
+ 800028e:	687b      	ldr	r3, [r7, #4]
+ 8000290:	68db      	ldr	r3, [r3, #12]
+ 8000292:	687a      	ldr	r2, [r7, #4]
+ 8000294:	6852      	ldr	r2, [r2, #4]
+ 8000296:	6839      	ldr	r1, [r7, #0]
+ 8000298:	4610      	mov	r0, r2
+ 800029a:	4798      	blx	r3
+}
+ 800029c:	bf00      	nop
+ 800029e:	3708      	adds	r7, #8
+ 80002a0:	46bd      	mov	sp, r7
+ 80002a2:	bd80      	pop	{r7, pc}
+
+080002a4 <i2c_lcd_write_raw>:
+
+static int32_t i2c_lcd_write_raw(I2C_LCD_HandleTypeDef *lcd, uint8_t value) {
+ 80002a4:	b590      	push	{r4, r7, lr}
+ 80002a6:	b083      	sub	sp, #12
+ 80002a8:	af00      	add	r7, sp, #0
+ 80002aa:	6078      	str	r0, [r7, #4]
+ 80002ac:	460b      	mov	r3, r1
+ 80002ae:	70fb      	strb	r3, [r7, #3]
+    return lcd->config.write_fn(lcd->config.user_context,
+ 80002b0:	687b      	ldr	r3, [r7, #4]
+ 80002b2:	689c      	ldr	r4, [r3, #8]
+ 80002b4:	687b      	ldr	r3, [r7, #4]
+ 80002b6:	6858      	ldr	r0, [r3, #4]
+ 80002b8:	687b      	ldr	r3, [r7, #4]
+ 80002ba:	7819      	ldrb	r1, [r3, #0]
+ 80002bc:	1cfa      	adds	r2, r7, #3
+ 80002be:	2301      	movs	r3, #1
+ 80002c0:	47a0      	blx	r4
+ 80002c2:	4603      	mov	r3, r0
+                                lcd->config.i2c_address_7bit,
+                                &value,
+                                1U);
+}
+ 80002c4:	4618      	mov	r0, r3
+ 80002c6:	370c      	adds	r7, #12
+ 80002c8:	46bd      	mov	sp, r7
+ 80002ca:	bd90      	pop	{r4, r7, pc}
+
+080002cc <i2c_lcd_expander_value>:
+
+static uint8_t i2c_lcd_expander_value(const I2C_LCD_HandleTypeDef *lcd,
+                                      uint8_t nibble,
+                                      uint8_t rs) {
+ 80002cc:	b480      	push	{r7}
+ 80002ce:	b085      	sub	sp, #20
+ 80002d0:	af00      	add	r7, sp, #0
+ 80002d2:	6078      	str	r0, [r7, #4]
+ 80002d4:	460b      	mov	r3, r1
+ 80002d6:	70fb      	strb	r3, [r7, #3]
+ 80002d8:	4613      	mov	r3, r2
+ 80002da:	70bb      	strb	r3, [r7, #2]
+    uint8_t value = (uint8_t)((nibble & 0x0FU) << LCD_D4_BIT);
+ 80002dc:	78fb      	ldrb	r3, [r7, #3]
+ 80002de:	011b      	lsls	r3, r3, #4
+ 80002e0:	73fb      	strb	r3, [r7, #15]
+
+    if (rs != 0U) {
+ 80002e2:	78bb      	ldrb	r3, [r7, #2]
+ 80002e4:	2b00      	cmp	r3, #0
+ 80002e6:	d003      	beq.n	80002f0 <i2c_lcd_expander_value+0x24>
+        value |= (uint8_t)(1U << LCD_RS_BIT);
+ 80002e8:	7bfb      	ldrb	r3, [r7, #15]
+ 80002ea:	f043 0301 	orr.w	r3, r3, #1
+ 80002ee:	73fb      	strb	r3, [r7, #15]
+    }
+
+    if (lcd->config.backlight_on != 0U) {
+ 80002f0:	687b      	ldr	r3, [r7, #4]
+ 80002f2:	78db      	ldrb	r3, [r3, #3]
+ 80002f4:	2b00      	cmp	r3, #0
+ 80002f6:	d003      	beq.n	8000300 <i2c_lcd_expander_value+0x34>
+        value |= (uint8_t)(1U << LCD_BL_BIT);
+ 80002f8:	7bfb      	ldrb	r3, [r7, #15]
+ 80002fa:	f043 0308 	orr.w	r3, r3, #8
+ 80002fe:	73fb      	strb	r3, [r7, #15]
+    }
+
+    return value;
+ 8000300:	7bfb      	ldrb	r3, [r7, #15]
+}
+ 8000302:	4618      	mov	r0, r3
+ 8000304:	3714      	adds	r7, #20
+ 8000306:	46bd      	mov	sp, r7
+ 8000308:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800030c:	4770      	bx	lr
+
+0800030e <i2c_lcd_pulse_enable>:
+
+static int32_t i2c_lcd_pulse_enable(I2C_LCD_HandleTypeDef *lcd, uint8_t value) {
+ 800030e:	b580      	push	{r7, lr}
+ 8000310:	b084      	sub	sp, #16
+ 8000312:	af00      	add	r7, sp, #0
+ 8000314:	6078      	str	r0, [r7, #4]
+ 8000316:	460b      	mov	r3, r1
+ 8000318:	70fb      	strb	r3, [r7, #3]
+    int32_t status;
+
+    status = i2c_lcd_write_raw(lcd, (uint8_t)(value | (uint8_t)(1U << LCD_EN_BIT)));
+ 800031a:	78fb      	ldrb	r3, [r7, #3]
+ 800031c:	f043 0304 	orr.w	r3, r3, #4
+ 8000320:	b2db      	uxtb	r3, r3
+ 8000322:	4619      	mov	r1, r3
+ 8000324:	6878      	ldr	r0, [r7, #4]
+ 8000326:	f7ff ffbd 	bl	80002a4 <i2c_lcd_write_raw>
+ 800032a:	60f8      	str	r0, [r7, #12]
+    if (status != I2C_LCD_OK) {
+ 800032c:	68fb      	ldr	r3, [r7, #12]
+ 800032e:	2b00      	cmp	r3, #0
+ 8000330:	d002      	beq.n	8000338 <i2c_lcd_pulse_enable+0x2a>
+        return I2C_LCD_ERR_IO;
+ 8000332:	f06f 0301 	mvn.w	r3, #1
+ 8000336:	e017      	b.n	8000368 <i2c_lcd_pulse_enable+0x5a>
+    }
+
+    i2c_lcd_delay_ms(lcd, 1U);
+ 8000338:	2101      	movs	r1, #1
+ 800033a:	6878      	ldr	r0, [r7, #4]
+ 800033c:	f7ff ffa2 	bl	8000284 <i2c_lcd_delay_ms>
+
+    status = i2c_lcd_write_raw(lcd, (uint8_t)(value & (uint8_t)~(1U << LCD_EN_BIT)));
+ 8000340:	78fb      	ldrb	r3, [r7, #3]
+ 8000342:	f023 0304 	bic.w	r3, r3, #4
+ 8000346:	b2db      	uxtb	r3, r3
+ 8000348:	4619      	mov	r1, r3
+ 800034a:	6878      	ldr	r0, [r7, #4]
+ 800034c:	f7ff ffaa 	bl	80002a4 <i2c_lcd_write_raw>
+ 8000350:	60f8      	str	r0, [r7, #12]
+    if (status != I2C_LCD_OK) {
+ 8000352:	68fb      	ldr	r3, [r7, #12]
+ 8000354:	2b00      	cmp	r3, #0
+ 8000356:	d002      	beq.n	800035e <i2c_lcd_pulse_enable+0x50>
+        return I2C_LCD_ERR_IO;
+ 8000358:	f06f 0301 	mvn.w	r3, #1
+ 800035c:	e004      	b.n	8000368 <i2c_lcd_pulse_enable+0x5a>
+    }
+
+    i2c_lcd_delay_ms(lcd, 1U);
+ 800035e:	2101      	movs	r1, #1
+ 8000360:	6878      	ldr	r0, [r7, #4]
+ 8000362:	f7ff ff8f 	bl	8000284 <i2c_lcd_delay_ms>
+    return I2C_LCD_OK;
+ 8000366:	2300      	movs	r3, #0
+}
+ 8000368:	4618      	mov	r0, r3
+ 800036a:	3710      	adds	r7, #16
+ 800036c:	46bd      	mov	sp, r7
+ 800036e:	bd80      	pop	{r7, pc}
+
+08000370 <i2c_lcd_write_nibble>:
+
+static int32_t i2c_lcd_write_nibble(I2C_LCD_HandleTypeDef *lcd, uint8_t nibble, uint8_t rs) {
+ 8000370:	b580      	push	{r7, lr}
+ 8000372:	b082      	sub	sp, #8
+ 8000374:	af00      	add	r7, sp, #0
+ 8000376:	6078      	str	r0, [r7, #4]
+ 8000378:	460b      	mov	r3, r1
+ 800037a:	70fb      	strb	r3, [r7, #3]
+ 800037c:	4613      	mov	r3, r2
+ 800037e:	70bb      	strb	r3, [r7, #2]
+    return i2c_lcd_pulse_enable(lcd, i2c_lcd_expander_value(lcd, nibble, rs));
+ 8000380:	78ba      	ldrb	r2, [r7, #2]
+ 8000382:	78fb      	ldrb	r3, [r7, #3]
+ 8000384:	4619      	mov	r1, r3
+ 8000386:	6878      	ldr	r0, [r7, #4]
+ 8000388:	f7ff ffa0 	bl	80002cc <i2c_lcd_expander_value>
+ 800038c:	4603      	mov	r3, r0
+ 800038e:	4619      	mov	r1, r3
+ 8000390:	6878      	ldr	r0, [r7, #4]
+ 8000392:	f7ff ffbc 	bl	800030e <i2c_lcd_pulse_enable>
+ 8000396:	4603      	mov	r3, r0
+}
+ 8000398:	4618      	mov	r0, r3
+ 800039a:	3708      	adds	r7, #8
+ 800039c:	46bd      	mov	sp, r7
+ 800039e:	bd80      	pop	{r7, pc}
+
+080003a0 <i2c_lcd_send>:
+
+static int32_t i2c_lcd_send(I2C_LCD_HandleTypeDef *lcd, uint8_t value, uint8_t rs) {
+ 80003a0:	b580      	push	{r7, lr}
+ 80003a2:	b084      	sub	sp, #16
+ 80003a4:	af00      	add	r7, sp, #0
+ 80003a6:	6078      	str	r0, [r7, #4]
+ 80003a8:	460b      	mov	r3, r1
+ 80003aa:	70fb      	strb	r3, [r7, #3]
+ 80003ac:	4613      	mov	r3, r2
+ 80003ae:	70bb      	strb	r3, [r7, #2]
+    int32_t status;
+
+    status = i2c_lcd_write_nibble(lcd, (uint8_t)(value >> 4U), rs);
+ 80003b0:	78fb      	ldrb	r3, [r7, #3]
+ 80003b2:	091b      	lsrs	r3, r3, #4
+ 80003b4:	b2db      	uxtb	r3, r3
+ 80003b6:	78ba      	ldrb	r2, [r7, #2]
+ 80003b8:	4619      	mov	r1, r3
+ 80003ba:	6878      	ldr	r0, [r7, #4]
+ 80003bc:	f7ff ffd8 	bl	8000370 <i2c_lcd_write_nibble>
+ 80003c0:	60f8      	str	r0, [r7, #12]
+    if (status != I2C_LCD_OK) {
+ 80003c2:	68fb      	ldr	r3, [r7, #12]
+ 80003c4:	2b00      	cmp	r3, #0
+ 80003c6:	d001      	beq.n	80003cc <i2c_lcd_send+0x2c>
+        return status;
+ 80003c8:	68fb      	ldr	r3, [r7, #12]
+ 80003ca:	e00f      	b.n	80003ec <i2c_lcd_send+0x4c>
+    }
+
+    status = i2c_lcd_write_nibble(lcd, (uint8_t)(value & 0x0FU), rs);
+ 80003cc:	78fb      	ldrb	r3, [r7, #3]
+ 80003ce:	f003 030f 	and.w	r3, r3, #15
+ 80003d2:	b2db      	uxtb	r3, r3
+ 80003d4:	78ba      	ldrb	r2, [r7, #2]
+ 80003d6:	4619      	mov	r1, r3
+ 80003d8:	6878      	ldr	r0, [r7, #4]
+ 80003da:	f7ff ffc9 	bl	8000370 <i2c_lcd_write_nibble>
+ 80003de:	60f8      	str	r0, [r7, #12]
+    if (status != I2C_LCD_OK) {
+ 80003e0:	68fb      	ldr	r3, [r7, #12]
+ 80003e2:	2b00      	cmp	r3, #0
+ 80003e4:	d001      	beq.n	80003ea <i2c_lcd_send+0x4a>
+        return status;
+ 80003e6:	68fb      	ldr	r3, [r7, #12]
+ 80003e8:	e000      	b.n	80003ec <i2c_lcd_send+0x4c>
+    }
+
+    return I2C_LCD_OK;
+ 80003ea:	2300      	movs	r3, #0
+}
+ 80003ec:	4618      	mov	r0, r3
+ 80003ee:	3710      	adds	r7, #16
+ 80003f0:	46bd      	mov	sp, r7
+ 80003f2:	bd80      	pop	{r7, pc}
+
+080003f4 <I2C_LCD_SetDefaultRowOffsets>:
+
+void I2C_LCD_SetDefaultRowOffsets(I2C_LCD_HandleTypeDef *lcd) {
+ 80003f4:	b480      	push	{r7}
+ 80003f6:	b083      	sub	sp, #12
+ 80003f8:	af00      	add	r7, sp, #0
+ 80003fa:	6078      	str	r0, [r7, #4]
+    if (lcd == NULL) {
+ 80003fc:	687b      	ldr	r3, [r7, #4]
+ 80003fe:	2b00      	cmp	r3, #0
+ 8000400:	d010      	beq.n	8000424 <I2C_LCD_SetDefaultRowOffsets+0x30>
+        return;
+    }
+
+    lcd->row_offsets[0] = 0x00U;
+ 8000402:	687b      	ldr	r3, [r7, #4]
+ 8000404:	2200      	movs	r2, #0
+ 8000406:	74da      	strb	r2, [r3, #19]
+    lcd->row_offsets[1] = 0x40U;
+ 8000408:	687b      	ldr	r3, [r7, #4]
+ 800040a:	2240      	movs	r2, #64	@ 0x40
+ 800040c:	751a      	strb	r2, [r3, #20]
+    lcd->row_offsets[2] = lcd->config.col_count;
+ 800040e:	687b      	ldr	r3, [r7, #4]
+ 8000410:	789a      	ldrb	r2, [r3, #2]
+ 8000412:	687b      	ldr	r3, [r7, #4]
+ 8000414:	755a      	strb	r2, [r3, #21]
+    lcd->row_offsets[3] = (uint8_t)(0x40U + lcd->config.col_count);
+ 8000416:	687b      	ldr	r3, [r7, #4]
+ 8000418:	789b      	ldrb	r3, [r3, #2]
+ 800041a:	3340      	adds	r3, #64	@ 0x40
+ 800041c:	b2da      	uxtb	r2, r3
+ 800041e:	687b      	ldr	r3, [r7, #4]
+ 8000420:	759a      	strb	r2, [r3, #22]
+ 8000422:	e000      	b.n	8000426 <I2C_LCD_SetDefaultRowOffsets+0x32>
+        return;
+ 8000424:	bf00      	nop
+}
+ 8000426:	370c      	adds	r7, #12
+ 8000428:	46bd      	mov	sp, r7
+ 800042a:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800042e:	4770      	bx	lr
+
+08000430 <I2C_LCD_Command>:
+    lcd->row_offsets[3] = row3;
+
+    return I2C_LCD_OK;
+}
+
+int32_t I2C_LCD_Command(I2C_LCD_HandleTypeDef *lcd, uint8_t command) {
+ 8000430:	b580      	push	{r7, lr}
+ 8000432:	b082      	sub	sp, #8
+ 8000434:	af00      	add	r7, sp, #0
+ 8000436:	6078      	str	r0, [r7, #4]
+ 8000438:	460b      	mov	r3, r1
+ 800043a:	70fb      	strb	r3, [r7, #3]
+    if (i2c_lcd_is_ready(lcd) == 0U) {
+ 800043c:	6878      	ldr	r0, [r7, #4]
+ 800043e:	f7ff ff0b 	bl	8000258 <i2c_lcd_is_ready>
+ 8000442:	4603      	mov	r3, r0
+ 8000444:	2b00      	cmp	r3, #0
+ 8000446:	d102      	bne.n	800044e <I2C_LCD_Command+0x1e>
+        return I2C_LCD_ERR_INVALID_ARG;
+ 8000448:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 800044c:	e016      	b.n	800047c <I2C_LCD_Command+0x4c>
+    }
+
+    if (i2c_lcd_send(lcd, command, 0U) != I2C_LCD_OK) {
+ 800044e:	78fb      	ldrb	r3, [r7, #3]
+ 8000450:	2200      	movs	r2, #0
+ 8000452:	4619      	mov	r1, r3
+ 8000454:	6878      	ldr	r0, [r7, #4]
+ 8000456:	f7ff ffa3 	bl	80003a0 <i2c_lcd_send>
+ 800045a:	4603      	mov	r3, r0
+ 800045c:	2b00      	cmp	r3, #0
+ 800045e:	d002      	beq.n	8000466 <I2C_LCD_Command+0x36>
+        return I2C_LCD_ERR_IO;
+ 8000460:	f06f 0301 	mvn.w	r3, #1
+ 8000464:	e00a      	b.n	800047c <I2C_LCD_Command+0x4c>
+    }
+
+    if ((command == LCD_CLEARDISPLAY) || (command == LCD_RETURNHOME)) {
+ 8000466:	78fb      	ldrb	r3, [r7, #3]
+ 8000468:	2b01      	cmp	r3, #1
+ 800046a:	d002      	beq.n	8000472 <I2C_LCD_Command+0x42>
+ 800046c:	78fb      	ldrb	r3, [r7, #3]
+ 800046e:	2b02      	cmp	r3, #2
+ 8000470:	d103      	bne.n	800047a <I2C_LCD_Command+0x4a>
+        i2c_lcd_delay_ms(lcd, 2U);
+ 8000472:	2102      	movs	r1, #2
+ 8000474:	6878      	ldr	r0, [r7, #4]
+ 8000476:	f7ff ff05 	bl	8000284 <i2c_lcd_delay_ms>
+    }
+
+    return I2C_LCD_OK;
+ 800047a:	2300      	movs	r3, #0
+}
+ 800047c:	4618      	mov	r0, r3
+ 800047e:	3708      	adds	r7, #8
+ 8000480:	46bd      	mov	sp, r7
+ 8000482:	bd80      	pop	{r7, pc}
+
+08000484 <I2C_LCD_Init>:
+
+int32_t I2C_LCD_Init(I2C_LCD_HandleTypeDef *lcd, const I2C_LCD_Config *config) {
+ 8000484:	b590      	push	{r4, r7, lr}
+ 8000486:	b083      	sub	sp, #12
+ 8000488:	af00      	add	r7, sp, #0
+ 800048a:	6078      	str	r0, [r7, #4]
+ 800048c:	6039      	str	r1, [r7, #0]
+    if ((lcd == NULL) || (i2c_lcd_is_valid_config(config) == 0U)) {
+ 800048e:	687b      	ldr	r3, [r7, #4]
+ 8000490:	2b00      	cmp	r3, #0
+ 8000492:	d005      	beq.n	80004a0 <I2C_LCD_Init+0x1c>
+ 8000494:	6838      	ldr	r0, [r7, #0]
+ 8000496:	f7ff feb7 	bl	8000208 <i2c_lcd_is_valid_config>
+ 800049a:	4603      	mov	r3, r0
+ 800049c:	2b00      	cmp	r3, #0
+ 800049e:	d102      	bne.n	80004a6 <I2C_LCD_Init+0x22>
+        return I2C_LCD_ERR_INVALID_ARG;
+ 80004a0:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 80004a4:	e0a6      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+
+    lcd->config = *config;
+ 80004a6:	687a      	ldr	r2, [r7, #4]
+ 80004a8:	683b      	ldr	r3, [r7, #0]
+ 80004aa:	4614      	mov	r4, r2
+ 80004ac:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 80004ae:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+    lcd->display_function = (uint8_t)(LCD_FUNCTIONSET | LCD_4BITMODE | LCD_5x8DOTS);
+ 80004b2:	687b      	ldr	r3, [r7, #4]
+ 80004b4:	2220      	movs	r2, #32
+ 80004b6:	741a      	strb	r2, [r3, #16]
+    if (lcd->config.row_count > 1U) {
+ 80004b8:	687b      	ldr	r3, [r7, #4]
+ 80004ba:	785b      	ldrb	r3, [r3, #1]
+ 80004bc:	2b01      	cmp	r3, #1
+ 80004be:	d907      	bls.n	80004d0 <I2C_LCD_Init+0x4c>
+        lcd->display_function |= LCD_2LINE;
+ 80004c0:	687b      	ldr	r3, [r7, #4]
+ 80004c2:	7c1b      	ldrb	r3, [r3, #16]
+ 80004c4:	f043 0308 	orr.w	r3, r3, #8
+ 80004c8:	b2da      	uxtb	r2, r3
+ 80004ca:	687b      	ldr	r3, [r7, #4]
+ 80004cc:	741a      	strb	r2, [r3, #16]
+ 80004ce:	e003      	b.n	80004d8 <I2C_LCD_Init+0x54>
+    }
+    else {
+        lcd->display_function |= LCD_1LINE;
+ 80004d0:	687b      	ldr	r3, [r7, #4]
+ 80004d2:	7c1a      	ldrb	r2, [r3, #16]
+ 80004d4:	687b      	ldr	r3, [r7, #4]
+ 80004d6:	741a      	strb	r2, [r3, #16]
+    }
+
+    lcd->display_control = (uint8_t)(LCD_DISPLAYCONTROL | LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF);
+ 80004d8:	687b      	ldr	r3, [r7, #4]
+ 80004da:	220c      	movs	r2, #12
+ 80004dc:	745a      	strb	r2, [r3, #17]
+    lcd->display_mode = (uint8_t)(LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT);
+ 80004de:	687b      	ldr	r3, [r7, #4]
+ 80004e0:	2206      	movs	r2, #6
+ 80004e2:	749a      	strb	r2, [r3, #18]
+    lcd->initialized = 1U;
+ 80004e4:	687b      	ldr	r3, [r7, #4]
+ 80004e6:	2201      	movs	r2, #1
+ 80004e8:	75da      	strb	r2, [r3, #23]
+    I2C_LCD_SetDefaultRowOffsets(lcd);
+ 80004ea:	6878      	ldr	r0, [r7, #4]
+ 80004ec:	f7ff ff82 	bl	80003f4 <I2C_LCD_SetDefaultRowOffsets>
+
+    i2c_lcd_delay_ms(lcd, 50U);
+ 80004f0:	2132      	movs	r1, #50	@ 0x32
+ 80004f2:	6878      	ldr	r0, [r7, #4]
+ 80004f4:	f7ff fec6 	bl	8000284 <i2c_lcd_delay_ms>
+
+    if (i2c_lcd_write_nibble(lcd, 0x03U, 0U) != I2C_LCD_OK) {
+ 80004f8:	2200      	movs	r2, #0
+ 80004fa:	2103      	movs	r1, #3
+ 80004fc:	6878      	ldr	r0, [r7, #4]
+ 80004fe:	f7ff ff37 	bl	8000370 <i2c_lcd_write_nibble>
+ 8000502:	4603      	mov	r3, r0
+ 8000504:	2b00      	cmp	r3, #0
+ 8000506:	d005      	beq.n	8000514 <I2C_LCD_Init+0x90>
+        lcd->initialized = 0U;
+ 8000508:	687b      	ldr	r3, [r7, #4]
+ 800050a:	2200      	movs	r2, #0
+ 800050c:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 800050e:	f06f 0301 	mvn.w	r3, #1
+ 8000512:	e06f      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+    i2c_lcd_delay_ms(lcd, 5U);
+ 8000514:	2105      	movs	r1, #5
+ 8000516:	6878      	ldr	r0, [r7, #4]
+ 8000518:	f7ff feb4 	bl	8000284 <i2c_lcd_delay_ms>
+
+    if (i2c_lcd_write_nibble(lcd, 0x03U, 0U) != I2C_LCD_OK) {
+ 800051c:	2200      	movs	r2, #0
+ 800051e:	2103      	movs	r1, #3
+ 8000520:	6878      	ldr	r0, [r7, #4]
+ 8000522:	f7ff ff25 	bl	8000370 <i2c_lcd_write_nibble>
+ 8000526:	4603      	mov	r3, r0
+ 8000528:	2b00      	cmp	r3, #0
+ 800052a:	d005      	beq.n	8000538 <I2C_LCD_Init+0xb4>
+        lcd->initialized = 0U;
+ 800052c:	687b      	ldr	r3, [r7, #4]
+ 800052e:	2200      	movs	r2, #0
+ 8000530:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 8000532:	f06f 0301 	mvn.w	r3, #1
+ 8000536:	e05d      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+    i2c_lcd_delay_ms(lcd, 1U);
+ 8000538:	2101      	movs	r1, #1
+ 800053a:	6878      	ldr	r0, [r7, #4]
+ 800053c:	f7ff fea2 	bl	8000284 <i2c_lcd_delay_ms>
+
+    if (i2c_lcd_write_nibble(lcd, 0x03U, 0U) != I2C_LCD_OK) {
+ 8000540:	2200      	movs	r2, #0
+ 8000542:	2103      	movs	r1, #3
+ 8000544:	6878      	ldr	r0, [r7, #4]
+ 8000546:	f7ff ff13 	bl	8000370 <i2c_lcd_write_nibble>
+ 800054a:	4603      	mov	r3, r0
+ 800054c:	2b00      	cmp	r3, #0
+ 800054e:	d005      	beq.n	800055c <I2C_LCD_Init+0xd8>
+        lcd->initialized = 0U;
+ 8000550:	687b      	ldr	r3, [r7, #4]
+ 8000552:	2200      	movs	r2, #0
+ 8000554:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 8000556:	f06f 0301 	mvn.w	r3, #1
+ 800055a:	e04b      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+    i2c_lcd_delay_ms(lcd, 1U);
+ 800055c:	2101      	movs	r1, #1
+ 800055e:	6878      	ldr	r0, [r7, #4]
+ 8000560:	f7ff fe90 	bl	8000284 <i2c_lcd_delay_ms>
+
+    if (i2c_lcd_write_nibble(lcd, 0x02U, 0U) != I2C_LCD_OK) {
+ 8000564:	2200      	movs	r2, #0
+ 8000566:	2102      	movs	r1, #2
+ 8000568:	6878      	ldr	r0, [r7, #4]
+ 800056a:	f7ff ff01 	bl	8000370 <i2c_lcd_write_nibble>
+ 800056e:	4603      	mov	r3, r0
+ 8000570:	2b00      	cmp	r3, #0
+ 8000572:	d005      	beq.n	8000580 <I2C_LCD_Init+0xfc>
+        lcd->initialized = 0U;
+ 8000574:	687b      	ldr	r3, [r7, #4]
+ 8000576:	2200      	movs	r2, #0
+ 8000578:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 800057a:	f06f 0301 	mvn.w	r3, #1
+ 800057e:	e039      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+
+    if (I2C_LCD_Command(lcd, lcd->display_function) != I2C_LCD_OK) {
+ 8000580:	687b      	ldr	r3, [r7, #4]
+ 8000582:	7c1b      	ldrb	r3, [r3, #16]
+ 8000584:	4619      	mov	r1, r3
+ 8000586:	6878      	ldr	r0, [r7, #4]
+ 8000588:	f7ff ff52 	bl	8000430 <I2C_LCD_Command>
+ 800058c:	4603      	mov	r3, r0
+ 800058e:	2b00      	cmp	r3, #0
+ 8000590:	d005      	beq.n	800059e <I2C_LCD_Init+0x11a>
+        lcd->initialized = 0U;
+ 8000592:	687b      	ldr	r3, [r7, #4]
+ 8000594:	2200      	movs	r2, #0
+ 8000596:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 8000598:	f06f 0301 	mvn.w	r3, #1
+ 800059c:	e02a      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+
+    if (I2C_LCD_Command(lcd, lcd->display_control) != I2C_LCD_OK) {
+ 800059e:	687b      	ldr	r3, [r7, #4]
+ 80005a0:	7c5b      	ldrb	r3, [r3, #17]
+ 80005a2:	4619      	mov	r1, r3
+ 80005a4:	6878      	ldr	r0, [r7, #4]
+ 80005a6:	f7ff ff43 	bl	8000430 <I2C_LCD_Command>
+ 80005aa:	4603      	mov	r3, r0
+ 80005ac:	2b00      	cmp	r3, #0
+ 80005ae:	d005      	beq.n	80005bc <I2C_LCD_Init+0x138>
+        lcd->initialized = 0U;
+ 80005b0:	687b      	ldr	r3, [r7, #4]
+ 80005b2:	2200      	movs	r2, #0
+ 80005b4:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 80005b6:	f06f 0301 	mvn.w	r3, #1
+ 80005ba:	e01b      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+
+    if (I2C_LCD_Clear(lcd) != I2C_LCD_OK) {
+ 80005bc:	6878      	ldr	r0, [r7, #4]
+ 80005be:	f000 f81d 	bl	80005fc <I2C_LCD_Clear>
+ 80005c2:	4603      	mov	r3, r0
+ 80005c4:	2b00      	cmp	r3, #0
+ 80005c6:	d005      	beq.n	80005d4 <I2C_LCD_Init+0x150>
+        lcd->initialized = 0U;
+ 80005c8:	687b      	ldr	r3, [r7, #4]
+ 80005ca:	2200      	movs	r2, #0
+ 80005cc:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 80005ce:	f06f 0301 	mvn.w	r3, #1
+ 80005d2:	e00f      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+
+    if (I2C_LCD_Command(lcd, lcd->display_mode) != I2C_LCD_OK) {
+ 80005d4:	687b      	ldr	r3, [r7, #4]
+ 80005d6:	7c9b      	ldrb	r3, [r3, #18]
+ 80005d8:	4619      	mov	r1, r3
+ 80005da:	6878      	ldr	r0, [r7, #4]
+ 80005dc:	f7ff ff28 	bl	8000430 <I2C_LCD_Command>
+ 80005e0:	4603      	mov	r3, r0
+ 80005e2:	2b00      	cmp	r3, #0
+ 80005e4:	d005      	beq.n	80005f2 <I2C_LCD_Init+0x16e>
+        lcd->initialized = 0U;
+ 80005e6:	687b      	ldr	r3, [r7, #4]
+ 80005e8:	2200      	movs	r2, #0
+ 80005ea:	75da      	strb	r2, [r3, #23]
+        return I2C_LCD_ERR_IO;
+ 80005ec:	f06f 0301 	mvn.w	r3, #1
+ 80005f0:	e000      	b.n	80005f4 <I2C_LCD_Init+0x170>
+    }
+
+    return I2C_LCD_OK;
+ 80005f2:	2300      	movs	r3, #0
+}
+ 80005f4:	4618      	mov	r0, r3
+ 80005f6:	370c      	adds	r7, #12
+ 80005f8:	46bd      	mov	sp, r7
+ 80005fa:	bd90      	pop	{r4, r7, pc}
+
+080005fc <I2C_LCD_Clear>:
+
+int32_t I2C_LCD_Clear(I2C_LCD_HandleTypeDef *lcd) {
+ 80005fc:	b580      	push	{r7, lr}
+ 80005fe:	b082      	sub	sp, #8
+ 8000600:	af00      	add	r7, sp, #0
+ 8000602:	6078      	str	r0, [r7, #4]
+    return I2C_LCD_Command(lcd, LCD_CLEARDISPLAY);
+ 8000604:	2101      	movs	r1, #1
+ 8000606:	6878      	ldr	r0, [r7, #4]
+ 8000608:	f7ff ff12 	bl	8000430 <I2C_LCD_Command>
+ 800060c:	4603      	mov	r3, r0
+}
+ 800060e:	4618      	mov	r0, r3
+ 8000610:	3708      	adds	r7, #8
+ 8000612:	46bd      	mov	sp, r7
+ 8000614:	bd80      	pop	{r7, pc}
+
+08000616 <I2C_LCD_SetCursor>:
+
+int32_t I2C_LCD_Home(I2C_LCD_HandleTypeDef *lcd) {
+    return I2C_LCD_Command(lcd, LCD_RETURNHOME);
+}
+
+int32_t I2C_LCD_SetCursor(I2C_LCD_HandleTypeDef *lcd, uint8_t row, uint8_t column) {
+ 8000616:	b580      	push	{r7, lr}
+ 8000618:	b082      	sub	sp, #8
+ 800061a:	af00      	add	r7, sp, #0
+ 800061c:	6078      	str	r0, [r7, #4]
+ 800061e:	460b      	mov	r3, r1
+ 8000620:	70fb      	strb	r3, [r7, #3]
+ 8000622:	4613      	mov	r3, r2
+ 8000624:	70bb      	strb	r3, [r7, #2]
+    if (i2c_lcd_is_ready(lcd) == 0U) {
+ 8000626:	6878      	ldr	r0, [r7, #4]
+ 8000628:	f7ff fe16 	bl	8000258 <i2c_lcd_is_ready>
+ 800062c:	4603      	mov	r3, r0
+ 800062e:	2b00      	cmp	r3, #0
+ 8000630:	d102      	bne.n	8000638 <I2C_LCD_SetCursor+0x22>
+        return I2C_LCD_ERR_INVALID_ARG;
+ 8000632:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 8000636:	e01b      	b.n	8000670 <I2C_LCD_SetCursor+0x5a>
+    }
+
+    if ((row >= lcd->config.row_count) || (column >= lcd->config.col_count)) {
+ 8000638:	687b      	ldr	r3, [r7, #4]
+ 800063a:	785b      	ldrb	r3, [r3, #1]
+ 800063c:	78fa      	ldrb	r2, [r7, #3]
+ 800063e:	429a      	cmp	r2, r3
+ 8000640:	d204      	bcs.n	800064c <I2C_LCD_SetCursor+0x36>
+ 8000642:	687b      	ldr	r3, [r7, #4]
+ 8000644:	789b      	ldrb	r3, [r3, #2]
+ 8000646:	78ba      	ldrb	r2, [r7, #2]
+ 8000648:	429a      	cmp	r2, r3
+ 800064a:	d302      	bcc.n	8000652 <I2C_LCD_SetCursor+0x3c>
+        return I2C_LCD_ERR_INVALID_ARG;
+ 800064c:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 8000650:	e00e      	b.n	8000670 <I2C_LCD_SetCursor+0x5a>
+    }
+
+    return I2C_LCD_Command(lcd, (uint8_t)(LCD_SETDDRAMADDR | (lcd->row_offsets[row] + column)));
+ 8000652:	78fb      	ldrb	r3, [r7, #3]
+ 8000654:	687a      	ldr	r2, [r7, #4]
+ 8000656:	4413      	add	r3, r2
+ 8000658:	7cda      	ldrb	r2, [r3, #19]
+ 800065a:	78bb      	ldrb	r3, [r7, #2]
+ 800065c:	4413      	add	r3, r2
+ 800065e:	b2db      	uxtb	r3, r3
+ 8000660:	f063 037f 	orn	r3, r3, #127	@ 0x7f
+ 8000664:	b2db      	uxtb	r3, r3
+ 8000666:	4619      	mov	r1, r3
+ 8000668:	6878      	ldr	r0, [r7, #4]
+ 800066a:	f7ff fee1 	bl	8000430 <I2C_LCD_Command>
+ 800066e:	4603      	mov	r3, r0
+}
+ 8000670:	4618      	mov	r0, r3
+ 8000672:	3708      	adds	r7, #8
+ 8000674:	46bd      	mov	sp, r7
+ 8000676:	bd80      	pop	{r7, pc}
+
+08000678 <I2C_LCD_WriteChar>:
+
+int32_t I2C_LCD_WriteChar(I2C_LCD_HandleTypeDef *lcd, char value) {
+ 8000678:	b580      	push	{r7, lr}
+ 800067a:	b082      	sub	sp, #8
+ 800067c:	af00      	add	r7, sp, #0
+ 800067e:	6078      	str	r0, [r7, #4]
+ 8000680:	460b      	mov	r3, r1
+ 8000682:	70fb      	strb	r3, [r7, #3]
+    if (i2c_lcd_is_ready(lcd) == 0U) {
+ 8000684:	6878      	ldr	r0, [r7, #4]
+ 8000686:	f7ff fde7 	bl	8000258 <i2c_lcd_is_ready>
+ 800068a:	4603      	mov	r3, r0
+ 800068c:	2b00      	cmp	r3, #0
+ 800068e:	d102      	bne.n	8000696 <I2C_LCD_WriteChar+0x1e>
+        return I2C_LCD_ERR_INVALID_ARG;
+ 8000690:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 8000694:	e00c      	b.n	80006b0 <I2C_LCD_WriteChar+0x38>
+    }
+
+    if (i2c_lcd_send(lcd, (uint8_t)value, 1U) != I2C_LCD_OK) {
+ 8000696:	78fb      	ldrb	r3, [r7, #3]
+ 8000698:	2201      	movs	r2, #1
+ 800069a:	4619      	mov	r1, r3
+ 800069c:	6878      	ldr	r0, [r7, #4]
+ 800069e:	f7ff fe7f 	bl	80003a0 <i2c_lcd_send>
+ 80006a2:	4603      	mov	r3, r0
+ 80006a4:	2b00      	cmp	r3, #0
+ 80006a6:	d002      	beq.n	80006ae <I2C_LCD_WriteChar+0x36>
+        return I2C_LCD_ERR_IO;
+ 80006a8:	f06f 0301 	mvn.w	r3, #1
+ 80006ac:	e000      	b.n	80006b0 <I2C_LCD_WriteChar+0x38>
+    }
+
+    return I2C_LCD_OK;
+ 80006ae:	2300      	movs	r3, #0
+}
+ 80006b0:	4618      	mov	r0, r3
+ 80006b2:	3708      	adds	r7, #8
+ 80006b4:	46bd      	mov	sp, r7
+ 80006b6:	bd80      	pop	{r7, pc}
+
+080006b8 <I2C_LCD_WriteString>:
+
+int32_t I2C_LCD_WriteString(I2C_LCD_HandleTypeDef *lcd, const char *str) {
+ 80006b8:	b580      	push	{r7, lr}
+ 80006ba:	b084      	sub	sp, #16
+ 80006bc:	af00      	add	r7, sp, #0
+ 80006be:	6078      	str	r0, [r7, #4]
+ 80006c0:	6039      	str	r1, [r7, #0]
+    size_t index;
+
+    if ((i2c_lcd_is_ready(lcd) == 0U) || (str == NULL)) {
+ 80006c2:	6878      	ldr	r0, [r7, #4]
+ 80006c4:	f7ff fdc8 	bl	8000258 <i2c_lcd_is_ready>
+ 80006c8:	4603      	mov	r3, r0
+ 80006ca:	2b00      	cmp	r3, #0
+ 80006cc:	d002      	beq.n	80006d4 <I2C_LCD_WriteString+0x1c>
+ 80006ce:	683b      	ldr	r3, [r7, #0]
+ 80006d0:	2b00      	cmp	r3, #0
+ 80006d2:	d102      	bne.n	80006da <I2C_LCD_WriteString+0x22>
+        return I2C_LCD_ERR_INVALID_ARG;
+ 80006d4:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 80006d8:	e01a      	b.n	8000710 <I2C_LCD_WriteString+0x58>
+    }
+
+    for (index = 0U; str[index] != '\0'; index++) {
+ 80006da:	2300      	movs	r3, #0
+ 80006dc:	60fb      	str	r3, [r7, #12]
+ 80006de:	e010      	b.n	8000702 <I2C_LCD_WriteString+0x4a>
+        if (I2C_LCD_WriteChar(lcd, str[index]) != I2C_LCD_OK) {
+ 80006e0:	683a      	ldr	r2, [r7, #0]
+ 80006e2:	68fb      	ldr	r3, [r7, #12]
+ 80006e4:	4413      	add	r3, r2
+ 80006e6:	781b      	ldrb	r3, [r3, #0]
+ 80006e8:	4619      	mov	r1, r3
+ 80006ea:	6878      	ldr	r0, [r7, #4]
+ 80006ec:	f7ff ffc4 	bl	8000678 <I2C_LCD_WriteChar>
+ 80006f0:	4603      	mov	r3, r0
+ 80006f2:	2b00      	cmp	r3, #0
+ 80006f4:	d002      	beq.n	80006fc <I2C_LCD_WriteString+0x44>
+            return I2C_LCD_ERR_IO;
+ 80006f6:	f06f 0301 	mvn.w	r3, #1
+ 80006fa:	e009      	b.n	8000710 <I2C_LCD_WriteString+0x58>
+    for (index = 0U; str[index] != '\0'; index++) {
+ 80006fc:	68fb      	ldr	r3, [r7, #12]
+ 80006fe:	3301      	adds	r3, #1
+ 8000700:	60fb      	str	r3, [r7, #12]
+ 8000702:	683a      	ldr	r2, [r7, #0]
+ 8000704:	68fb      	ldr	r3, [r7, #12]
+ 8000706:	4413      	add	r3, r2
+ 8000708:	781b      	ldrb	r3, [r3, #0]
+ 800070a:	2b00      	cmp	r3, #0
+ 800070c:	d1e8      	bne.n	80006e0 <I2C_LCD_WriteString+0x28>
+        }
+    }
+
+    return I2C_LCD_OK;
+ 800070e:	2300      	movs	r3, #0
+}
+ 8000710:	4618      	mov	r0, r3
+ 8000712:	3710      	adds	r7, #16
+ 8000714:	46bd      	mov	sp, r7
+ 8000716:	bd80      	pop	{r7, pc}
+
+08000718 <Clock_Init>:
+                         const uint8_t *data, size_t length);
+static void LCD_Delay(void *context, uint32_t milliseconds);
+static int32_t LCD_Start(I2C_LCD_HandleTypeDef *lcd);
+
+static void Clock_Init(void)
+{
+ 8000718:	b580      	push	{r7, lr}
+ 800071a:	b082      	sub	sp, #8
+ 800071c:	af00      	add	r7, sp, #0
+    uint32_t remaining = CLOCK_STARTUP_LIMIT;
+ 800071e:	4b1f      	ldr	r3, [pc, #124]	@ (800079c <Clock_Init+0x84>)
+ 8000720:	607b      	str	r3, [r7, #4]
+    RCC_CR |= (1U << 0);                  //HSION
+ 8000722:	4b1f      	ldr	r3, [pc, #124]	@ (80007a0 <Clock_Init+0x88>)
+ 8000724:	681b      	ldr	r3, [r3, #0]
+ 8000726:	4a1e      	ldr	r2, [pc, #120]	@ (80007a0 <Clock_Init+0x88>)
+ 8000728:	f043 0301 	orr.w	r3, r3, #1
+ 800072c:	6013      	str	r3, [r2, #0]
+    while ((RCC_CR & (1U << 1)) == 0U) {  //HSIRDY
+ 800072e:	e007      	b.n	8000740 <Clock_Init+0x28>
+        if (--remaining == 0U) {
+ 8000730:	687b      	ldr	r3, [r7, #4]
+ 8000732:	3b01      	subs	r3, #1
+ 8000734:	607b      	str	r3, [r7, #4]
+ 8000736:	687b      	ldr	r3, [r7, #4]
+ 8000738:	2b00      	cmp	r3, #0
+ 800073a:	d101      	bne.n	8000740 <Clock_Init+0x28>
+            Error_Handler();
+ 800073c:	f000 fb52 	bl	8000de4 <Error_Handler>
+    while ((RCC_CR & (1U << 1)) == 0U) {  //HSIRDY
+ 8000740:	4b17      	ldr	r3, [pc, #92]	@ (80007a0 <Clock_Init+0x88>)
+ 8000742:	681b      	ldr	r3, [r3, #0]
+ 8000744:	f003 0302 	and.w	r3, r3, #2
+ 8000748:	2b00      	cmp	r3, #0
+ 800074a:	d0f1      	beq.n	8000730 <Clock_Init+0x18>
+        }
+    }
+
+    RCC_CFGR &= ~(3U << 0);              //SW=00: select HSI
+ 800074c:	4b15      	ldr	r3, [pc, #84]	@ (80007a4 <Clock_Init+0x8c>)
+ 800074e:	681b      	ldr	r3, [r3, #0]
+ 8000750:	4a14      	ldr	r2, [pc, #80]	@ (80007a4 <Clock_Init+0x8c>)
+ 8000752:	f023 0303 	bic.w	r3, r3, #3
+ 8000756:	6013      	str	r3, [r2, #0]
+    remaining = CLOCK_STARTUP_LIMIT;
+ 8000758:	4b10      	ldr	r3, [pc, #64]	@ (800079c <Clock_Init+0x84>)
+ 800075a:	607b      	str	r3, [r7, #4]
+    while ((RCC_CFGR & (3U << 2)) != 0U) {
+ 800075c:	e007      	b.n	800076e <Clock_Init+0x56>
+        if (--remaining == 0U) {
+ 800075e:	687b      	ldr	r3, [r7, #4]
+ 8000760:	3b01      	subs	r3, #1
+ 8000762:	607b      	str	r3, [r7, #4]
+ 8000764:	687b      	ldr	r3, [r7, #4]
+ 8000766:	2b00      	cmp	r3, #0
+ 8000768:	d101      	bne.n	800076e <Clock_Init+0x56>
+            Error_Handler();
+ 800076a:	f000 fb3b 	bl	8000de4 <Error_Handler>
+    while ((RCC_CFGR & (3U << 2)) != 0U) {
+ 800076e:	4b0d      	ldr	r3, [pc, #52]	@ (80007a4 <Clock_Init+0x8c>)
+ 8000770:	681b      	ldr	r3, [r3, #0]
+ 8000772:	f003 030c 	and.w	r3, r3, #12
+ 8000776:	2b00      	cmp	r3, #0
+ 8000778:	d1f1      	bne.n	800075e <Clock_Init+0x46>
+        }
+    }
+    //HCLK, PCLK1 and PCLK2 = HSI / 1 = 16 MHz.
+    RCC_CFGR &= ~((15U << 4) | (7U << 10) | (7U << 13));
+ 800077a:	4b0a      	ldr	r3, [pc, #40]	@ (80007a4 <Clock_Init+0x8c>)
+ 800077c:	681a      	ldr	r2, [r3, #0]
+ 800077e:	4909      	ldr	r1, [pc, #36]	@ (80007a4 <Clock_Init+0x8c>)
+ 8000780:	4b09      	ldr	r3, [pc, #36]	@ (80007a8 <Clock_Init+0x90>)
+ 8000782:	4013      	ands	r3, r2
+ 8000784:	600b      	str	r3, [r1, #0]
+    SystemCoreClock = 16000000U;
+ 8000786:	4b09      	ldr	r3, [pc, #36]	@ (80007ac <Clock_Init+0x94>)
+ 8000788:	4a09      	ldr	r2, [pc, #36]	@ (80007b0 <Clock_Init+0x98>)
+ 800078a:	601a      	str	r2, [r3, #0]
+    //No HAL tick or timer ISR is needed for this display stage.
+    SysTick->CTRL = 0U;
+ 800078c:	4b09      	ldr	r3, [pc, #36]	@ (80007b4 <Clock_Init+0x9c>)
+ 800078e:	2200      	movs	r2, #0
+ 8000790:	601a      	str	r2, [r3, #0]
+}
+ 8000792:	bf00      	nop
+ 8000794:	3708      	adds	r7, #8
+ 8000796:	46bd      	mov	sp, r7
+ 8000798:	bd80      	pop	{r7, pc}
+ 800079a:	bf00      	nop
+ 800079c:	000f4240 	.word	0x000f4240
+ 80007a0:	40023800 	.word	0x40023800
+ 80007a4:	40023808 	.word	0x40023808
+ 80007a8:	ffff030f 	.word	0xffff030f
+ 80007ac:	20000008 	.word	0x20000008
+ 80007b0:	00f42400 	.word	0x00f42400
+ 80007b4:	e000e010 	.word	0xe000e010
+
+080007b8 <Timebase_Init>:
+
+static void Timebase_Init(void)
+{
+ 80007b8:	b480      	push	{r7}
+ 80007ba:	af00      	add	r7, sp, #0
+    RCC_APB1ENR |= (1U << 0);             //TIM2 clock
+ 80007bc:	4b19      	ldr	r3, [pc, #100]	@ (8000824 <Timebase_Init+0x6c>)
+ 80007be:	681b      	ldr	r3, [r3, #0]
+ 80007c0:	4a18      	ldr	r2, [pc, #96]	@ (8000824 <Timebase_Init+0x6c>)
+ 80007c2:	f043 0301 	orr.w	r3, r3, #1
+ 80007c6:	6013      	str	r3, [r2, #0]
+    (void)RCC_APB1ENR;                    //Clock-enable readback
+ 80007c8:	4b16      	ldr	r3, [pc, #88]	@ (8000824 <Timebase_Init+0x6c>)
+ 80007ca:	681b      	ldr	r3, [r3, #0]
+    RCC_APB1RSTR |= (1U << 0);
+ 80007cc:	4b16      	ldr	r3, [pc, #88]	@ (8000828 <Timebase_Init+0x70>)
+ 80007ce:	681b      	ldr	r3, [r3, #0]
+ 80007d0:	4a15      	ldr	r2, [pc, #84]	@ (8000828 <Timebase_Init+0x70>)
+ 80007d2:	f043 0301 	orr.w	r3, r3, #1
+ 80007d6:	6013      	str	r3, [r2, #0]
+    RCC_APB1RSTR &= ~(1U << 0);
+ 80007d8:	4b13      	ldr	r3, [pc, #76]	@ (8000828 <Timebase_Init+0x70>)
+ 80007da:	681b      	ldr	r3, [r3, #0]
+ 80007dc:	4a12      	ldr	r2, [pc, #72]	@ (8000828 <Timebase_Init+0x70>)
+ 80007de:	f023 0301 	bic.w	r3, r3, #1
+ 80007e2:	6013      	str	r3, [r2, #0]
+    TIM2_CR1 = 0U;
+ 80007e4:	f04f 4380 	mov.w	r3, #1073741824	@ 0x40000000
+ 80007e8:	2200      	movs	r2, #0
+ 80007ea:	601a      	str	r2, [r3, #0]
+    TIM2_DIER = 0U;                      //No timer interrupts
+ 80007ec:	4b0f      	ldr	r3, [pc, #60]	@ (800082c <Timebase_Init+0x74>)
+ 80007ee:	2200      	movs	r2, #0
+ 80007f0:	601a      	str	r2, [r3, #0]
+    TIM2_PSC = 15U;                      //16 MHz / 16 = 1 MHz
+ 80007f2:	4b0f      	ldr	r3, [pc, #60]	@ (8000830 <Timebase_Init+0x78>)
+ 80007f4:	220f      	movs	r2, #15
+ 80007f6:	601a      	str	r2, [r3, #0]
+    TIM2_ARR = UINT32_MAX;               //Free-running 32-bit microseconds
+ 80007f8:	4b0e      	ldr	r3, [pc, #56]	@ (8000834 <Timebase_Init+0x7c>)
+ 80007fa:	f04f 32ff 	mov.w	r2, #4294967295	@ 0xffffffff
+ 80007fe:	601a      	str	r2, [r3, #0]
+    TIM2_EGR = 1U;                       //UG: load the buffered prescaler
+ 8000800:	4b0d      	ldr	r3, [pc, #52]	@ (8000838 <Timebase_Init+0x80>)
+ 8000802:	2201      	movs	r2, #1
+ 8000804:	601a      	str	r2, [r3, #0]
+    TIM2_SR = 0U;                        //Clear UIF caused by UG
+ 8000806:	4b0d      	ldr	r3, [pc, #52]	@ (800083c <Timebase_Init+0x84>)
+ 8000808:	2200      	movs	r2, #0
+ 800080a:	601a      	str	r2, [r3, #0]
+    TIM2_CNT = 0U;
+ 800080c:	4b0c      	ldr	r3, [pc, #48]	@ (8000840 <Timebase_Init+0x88>)
+ 800080e:	2200      	movs	r2, #0
+ 8000810:	601a      	str	r2, [r3, #0]
+    TIM2_CR1 = 1U;                       //CEN
+ 8000812:	f04f 4380 	mov.w	r3, #1073741824	@ 0x40000000
+ 8000816:	2201      	movs	r2, #1
+ 8000818:	601a      	str	r2, [r3, #0]
+}
+ 800081a:	bf00      	nop
+ 800081c:	46bd      	mov	sp, r7
+ 800081e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000822:	4770      	bx	lr
+ 8000824:	40023840 	.word	0x40023840
+ 8000828:	40023820 	.word	0x40023820
+ 800082c:	4000000c 	.word	0x4000000c
+ 8000830:	40000028 	.word	0x40000028
+ 8000834:	4000002c 	.word	0x4000002c
+ 8000838:	40000014 	.word	0x40000014
+ 800083c:	40000010 	.word	0x40000010
+ 8000840:	40000024 	.word	0x40000024
+
+08000844 <Delay_Ms>:
+
+static void Delay_Ms(uint32_t milliseconds)
+{
+ 8000844:	b480      	push	{r7}
+ 8000846:	b085      	sub	sp, #20
+ 8000848:	af00      	add	r7, sp, #0
+ 800084a:	6078      	str	r0, [r7, #4]
+    while (milliseconds-- != 0U) {
+ 800084c:	e00a      	b.n	8000864 <Delay_Ms+0x20>
+        uint32_t start = TIM2_CNT;
+ 800084e:	4b0b      	ldr	r3, [pc, #44]	@ (800087c <Delay_Ms+0x38>)
+ 8000850:	681b      	ldr	r3, [r3, #0]
+ 8000852:	60fb      	str	r3, [r7, #12]
+        //Unsigned subtraction also works across counter wraparound.
+        while ((uint32_t)(TIM2_CNT - start) < 1000U) {
+ 8000854:	bf00      	nop
+ 8000856:	4b09      	ldr	r3, [pc, #36]	@ (800087c <Delay_Ms+0x38>)
+ 8000858:	681a      	ldr	r2, [r3, #0]
+ 800085a:	68fb      	ldr	r3, [r7, #12]
+ 800085c:	1ad3      	subs	r3, r2, r3
+ 800085e:	f5b3 7f7a 	cmp.w	r3, #1000	@ 0x3e8
+ 8000862:	d3f8      	bcc.n	8000856 <Delay_Ms+0x12>
+    while (milliseconds-- != 0U) {
+ 8000864:	687b      	ldr	r3, [r7, #4]
+ 8000866:	1e5a      	subs	r2, r3, #1
+ 8000868:	607a      	str	r2, [r7, #4]
+ 800086a:	2b00      	cmp	r3, #0
+ 800086c:	d1ef      	bne.n	800084e <Delay_Ms+0xa>
+        }
+    }
+}
+ 800086e:	bf00      	nop
+ 8000870:	bf00      	nop
+ 8000872:	3714      	adds	r7, #20
+ 8000874:	46bd      	mov	sp, r7
+ 8000876:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800087a:	4770      	bx	lr
+ 800087c:	40000024 	.word	0x40000024
+
+08000880 <I2C1_Reset>:
+
+static void I2C1_Reset(void)
+{
+ 8000880:	b480      	push	{r7}
+ 8000882:	af00      	add	r7, sp, #0
+    RCC_APB1RSTR |= (1U << 21);           //Reset I2C1, including stale flags
+ 8000884:	4b0e      	ldr	r3, [pc, #56]	@ (80008c0 <I2C1_Reset+0x40>)
+ 8000886:	681b      	ldr	r3, [r3, #0]
+ 8000888:	4a0d      	ldr	r2, [pc, #52]	@ (80008c0 <I2C1_Reset+0x40>)
+ 800088a:	f443 1300 	orr.w	r3, r3, #2097152	@ 0x200000
+ 800088e:	6013      	str	r3, [r2, #0]
+    RCC_APB1RSTR &= ~(1U << 21);
+ 8000890:	4b0b      	ldr	r3, [pc, #44]	@ (80008c0 <I2C1_Reset+0x40>)
+ 8000892:	681b      	ldr	r3, [r3, #0]
+ 8000894:	4a0a      	ldr	r2, [pc, #40]	@ (80008c0 <I2C1_Reset+0x40>)
+ 8000896:	f423 1300 	bic.w	r3, r3, #2097152	@ 0x200000
+ 800089a:	6013      	str	r3, [r2, #0]
+    I2C1_CR1 = 0U;                       //PE=0; analog filter on, DNF=0
+ 800089c:	4b09      	ldr	r3, [pc, #36]	@ (80008c4 <I2C1_Reset+0x44>)
+ 800089e:	2200      	movs	r2, #0
+ 80008a0:	601a      	str	r2, [r3, #0]
+    I2C1_TIMINGR = I2C1_TIMING_100KHZ;
+ 80008a2:	4b09      	ldr	r3, [pc, #36]	@ (80008c8 <I2C1_Reset+0x48>)
+ 80008a4:	4a09      	ldr	r2, [pc, #36]	@ (80008cc <I2C1_Reset+0x4c>)
+ 80008a6:	601a      	str	r2, [r3, #0]
+    I2C1_ICR = I2C_CLEAR_FLAGS;
+ 80008a8:	4b09      	ldr	r3, [pc, #36]	@ (80008d0 <I2C1_Reset+0x50>)
+ 80008aa:	f44f 62e6 	mov.w	r2, #1840	@ 0x730
+ 80008ae:	601a      	str	r2, [r3, #0]
+    I2C1_CR1 = 1U;                       //PE=1
+ 80008b0:	4b04      	ldr	r3, [pc, #16]	@ (80008c4 <I2C1_Reset+0x44>)
+ 80008b2:	2201      	movs	r2, #1
+ 80008b4:	601a      	str	r2, [r3, #0]
+}
+ 80008b6:	bf00      	nop
+ 80008b8:	46bd      	mov	sp, r7
+ 80008ba:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80008be:	4770      	bx	lr
+ 80008c0:	40023820 	.word	0x40023820
+ 80008c4:	40005400 	.word	0x40005400
+ 80008c8:	40005410 	.word	0x40005410
+ 80008cc:	30421313 	.word	0x30421313
+ 80008d0:	4000541c 	.word	0x4000541c
+
+080008d4 <I2C1_Init>:
+
+static void I2C1_Init(void)
+{
+ 80008d4:	b580      	push	{r7, lr}
+ 80008d6:	af00      	add	r7, sp, #0
+    RCC_AHB1ENR |= (1U << 1);            //GPIOB clock
+ 80008d8:	4b22      	ldr	r3, [pc, #136]	@ (8000964 <I2C1_Init+0x90>)
+ 80008da:	681b      	ldr	r3, [r3, #0]
+ 80008dc:	4a21      	ldr	r2, [pc, #132]	@ (8000964 <I2C1_Init+0x90>)
+ 80008de:	f043 0302 	orr.w	r3, r3, #2
+ 80008e2:	6013      	str	r3, [r2, #0]
+    RCC_APB1ENR |= (1U << 21);           //I2C1 clock
+ 80008e4:	4b20      	ldr	r3, [pc, #128]	@ (8000968 <I2C1_Init+0x94>)
+ 80008e6:	681b      	ldr	r3, [r3, #0]
+ 80008e8:	4a1f      	ldr	r2, [pc, #124]	@ (8000968 <I2C1_Init+0x94>)
+ 80008ea:	f443 1300 	orr.w	r3, r3, #2097152	@ 0x200000
+ 80008ee:	6013      	str	r3, [r2, #0]
+    (void)RCC_AHB1ENR;
+ 80008f0:	4b1c      	ldr	r3, [pc, #112]	@ (8000964 <I2C1_Init+0x90>)
+ 80008f2:	681b      	ldr	r3, [r3, #0]
+    (void)RCC_APB1ENR;
+ 80008f4:	4b1c      	ldr	r3, [pc, #112]	@ (8000968 <I2C1_Init+0x94>)
+ 80008f6:	681b      	ldr	r3, [r3, #0]
+    I2C1_CR1 &= ~1U;
+ 80008f8:	4b1c      	ldr	r3, [pc, #112]	@ (800096c <I2C1_Init+0x98>)
+ 80008fa:	681b      	ldr	r3, [r3, #0]
+ 80008fc:	4a1b      	ldr	r2, [pc, #108]	@ (800096c <I2C1_Init+0x98>)
+ 80008fe:	f023 0301 	bic.w	r3, r3, #1
+ 8000902:	6013      	str	r3, [r2, #0]
+    RCC_DCKCFGR2 = (RCC_DCKCFGR2 & ~(3U << 16)) | (2U << 16);
+ 8000904:	4b1a      	ldr	r3, [pc, #104]	@ (8000970 <I2C1_Init+0x9c>)
+ 8000906:	681b      	ldr	r3, [r3, #0]
+ 8000908:	f423 3340 	bic.w	r3, r3, #196608	@ 0x30000
+ 800090c:	4a18      	ldr	r2, [pc, #96]	@ (8000970 <I2C1_Init+0x9c>)
+ 800090e:	f443 3300 	orr.w	r3, r3, #131072	@ 0x20000
+ 8000912:	6013      	str	r3, [r2, #0]
+
+    //Set electrical properties before connecting AF4 to the pads.
+    GPIOB_OTYPER |= (1U << 8) | (1U << 9);
+ 8000914:	4b17      	ldr	r3, [pc, #92]	@ (8000974 <I2C1_Init+0xa0>)
+ 8000916:	681b      	ldr	r3, [r3, #0]
+ 8000918:	4a16      	ldr	r2, [pc, #88]	@ (8000974 <I2C1_Init+0xa0>)
+ 800091a:	f443 7340 	orr.w	r3, r3, #768	@ 0x300
+ 800091e:	6013      	str	r3, [r2, #0]
+    GPIOB_OSPEEDR = (GPIOB_OSPEEDR & ~((3U << 16) | (3U << 18))) |
+ 8000920:	4b15      	ldr	r3, [pc, #84]	@ (8000978 <I2C1_Init+0xa4>)
+ 8000922:	681b      	ldr	r3, [r3, #0]
+ 8000924:	f423 2370 	bic.w	r3, r3, #983040	@ 0xf0000
+ 8000928:	4a13      	ldr	r2, [pc, #76]	@ (8000978 <I2C1_Init+0xa4>)
+                   (1U << 16) | (1U << 18); //Medium output speed
+ 800092a:	f443 23a0 	orr.w	r3, r3, #327680	@ 0x50000
+    GPIOB_OSPEEDR = (GPIOB_OSPEEDR & ~((3U << 16) | (3U << 18))) |
+ 800092e:	6013      	str	r3, [r2, #0]
+    GPIOB_PUPDR &= ~((3U << 16) | (3U << 18)); //External pull-ups required
+ 8000930:	4b12      	ldr	r3, [pc, #72]	@ (800097c <I2C1_Init+0xa8>)
+ 8000932:	681b      	ldr	r3, [r3, #0]
+ 8000934:	4a11      	ldr	r2, [pc, #68]	@ (800097c <I2C1_Init+0xa8>)
+ 8000936:	f423 2370 	bic.w	r3, r3, #983040	@ 0xf0000
+ 800093a:	6013      	str	r3, [r2, #0]
+    GPIOB_AFRH = (GPIOB_AFRH & ~0xFFU) | 0x44U;
+ 800093c:	4b10      	ldr	r3, [pc, #64]	@ (8000980 <I2C1_Init+0xac>)
+ 800093e:	681b      	ldr	r3, [r3, #0]
+ 8000940:	f023 03ff 	bic.w	r3, r3, #255	@ 0xff
+ 8000944:	4a0e      	ldr	r2, [pc, #56]	@ (8000980 <I2C1_Init+0xac>)
+ 8000946:	f043 0344 	orr.w	r3, r3, #68	@ 0x44
+ 800094a:	6013      	str	r3, [r2, #0]
+    GPIOB_MODER = (GPIOB_MODER & ~((3U << 16) | (3U << 18))) |
+ 800094c:	4b0d      	ldr	r3, [pc, #52]	@ (8000984 <I2C1_Init+0xb0>)
+ 800094e:	681b      	ldr	r3, [r3, #0]
+ 8000950:	f423 2370 	bic.w	r3, r3, #983040	@ 0xf0000
+ 8000954:	4a0b      	ldr	r2, [pc, #44]	@ (8000984 <I2C1_Init+0xb0>)
+                 (2U << 16) | (2U << 18);     //Alternate-function mode
+ 8000956:	f443 2320 	orr.w	r3, r3, #655360	@ 0xa0000
+    GPIOB_MODER = (GPIOB_MODER & ~((3U << 16) | (3U << 18))) |
+ 800095a:	6013      	str	r3, [r2, #0]
+    I2C1_Reset();
+ 800095c:	f7ff ff90 	bl	8000880 <I2C1_Reset>
+}
+ 8000960:	bf00      	nop
+ 8000962:	bd80      	pop	{r7, pc}
+ 8000964:	40023830 	.word	0x40023830
+ 8000968:	40023840 	.word	0x40023840
+ 800096c:	40005400 	.word	0x40005400
+ 8000970:	40023890 	.word	0x40023890
+ 8000974:	40020404 	.word	0x40020404
+ 8000978:	40020408 	.word	0x40020408
+ 800097c:	4002040c 	.word	0x4002040c
+ 8000980:	40020424 	.word	0x40020424
+ 8000984:	40020400 	.word	0x40020400
+
+08000988 <I2C1_Fail>:
+
+static int32_t I2C1_Fail(I2C_Error error, uint32_t status)
+{
+ 8000988:	b480      	push	{r7}
+ 800098a:	b083      	sub	sp, #12
+ 800098c:	af00      	add	r7, sp, #0
+ 800098e:	4603      	mov	r3, r0
+ 8000990:	6039      	str	r1, [r7, #0]
+ 8000992:	71fb      	strb	r3, [r7, #7]
+    g_i2c_error = error;
+ 8000994:	4a0c      	ldr	r2, [pc, #48]	@ (80009c8 <I2C1_Fail+0x40>)
+ 8000996:	79fb      	ldrb	r3, [r7, #7]
+ 8000998:	7013      	strb	r3, [r2, #0]
+    g_i2c_last_error = error;
+ 800099a:	4a0c      	ldr	r2, [pc, #48]	@ (80009cc <I2C1_Fail+0x44>)
+ 800099c:	79fb      	ldrb	r3, [r7, #7]
+ 800099e:	7013      	strb	r3, [r2, #0]
+    g_i2c_last_isr = status;
+ 80009a0:	4a0b      	ldr	r2, [pc, #44]	@ (80009d0 <I2C1_Fail+0x48>)
+ 80009a2:	683b      	ldr	r3, [r7, #0]
+ 80009a4:	6013      	str	r3, [r2, #0]
+    g_i2c_last_address = current_i2c_address;
+ 80009a6:	4b0b      	ldr	r3, [pc, #44]	@ (80009d4 <I2C1_Fail+0x4c>)
+ 80009a8:	781a      	ldrb	r2, [r3, #0]
+ 80009aa:	4b0b      	ldr	r3, [pc, #44]	@ (80009d8 <I2C1_Fail+0x50>)
+ 80009ac:	701a      	strb	r2, [r3, #0]
+    g_i2c_last_length = current_i2c_length;
+ 80009ae:	4b0b      	ldr	r3, [pc, #44]	@ (80009dc <I2C1_Fail+0x54>)
+ 80009b0:	681b      	ldr	r3, [r3, #0]
+ 80009b2:	4a0b      	ldr	r2, [pc, #44]	@ (80009e0 <I2C1_Fail+0x58>)
+ 80009b4:	6013      	str	r3, [r2, #0]
+    return I2C_LCD_ERR_IO;
+ 80009b6:	f06f 0301 	mvn.w	r3, #1
+}
+ 80009ba:	4618      	mov	r0, r3
+ 80009bc:	370c      	adds	r7, #12
+ 80009be:	46bd      	mov	sp, r7
+ 80009c0:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80009c4:	4770      	bx	lr
+ 80009c6:	bf00      	nop
+ 80009c8:	20000029 	.word	0x20000029
+ 80009cc:	2000002a 	.word	0x2000002a
+ 80009d0:	2000002c 	.word	0x2000002c
+ 80009d4:	20000034 	.word	0x20000034
+ 80009d8:	2000003c 	.word	0x2000003c
+ 80009dc:	20000038 	.word	0x20000038
+ 80009e0:	20000040 	.word	0x20000040
+
+080009e4 <I2C1_Wait>:
+
+static int32_t I2C1_Wait(uint32_t flag, uint32_t start, uint32_t timeout)
+{
+ 80009e4:	b580      	push	{r7, lr}
+ 80009e6:	b086      	sub	sp, #24
+ 80009e8:	af00      	add	r7, sp, #0
+ 80009ea:	60f8      	str	r0, [r7, #12]
+ 80009ec:	60b9      	str	r1, [r7, #8]
+ 80009ee:	607a      	str	r2, [r7, #4]
+    for (;;) {
+        uint32_t status = I2C1_ISR;
+ 80009f0:	4b24      	ldr	r3, [pc, #144]	@ (8000a84 <I2C1_Wait+0xa0>)
+ 80009f2:	681b      	ldr	r3, [r3, #0]
+ 80009f4:	613b      	str	r3, [r7, #16]
+        //Check errors first: NACK and STOP can arrive together.
+        if ((status & I2C_ERROR_FLAGS) != 0U) {
+ 80009f6:	693b      	ldr	r3, [r7, #16]
+ 80009f8:	f403 63e2 	and.w	r3, r3, #1808	@ 0x710
+ 80009fc:	2b00      	cmp	r3, #0
+ 80009fe:	d01f      	beq.n	8000a40 <I2C1_Wait+0x5c>
+            I2C_Error error = I2C_ERROR_BUS;
+ 8000a00:	2303      	movs	r3, #3
+ 8000a02:	75fb      	strb	r3, [r7, #23]
+            if ((status & I2C_ISR_ARLO) != 0U) {
+ 8000a04:	693b      	ldr	r3, [r7, #16]
+ 8000a06:	f403 7300 	and.w	r3, r3, #512	@ 0x200
+ 8000a0a:	2b00      	cmp	r3, #0
+ 8000a0c:	d002      	beq.n	8000a14 <I2C1_Wait+0x30>
+                error = I2C_ERROR_ARBITRATION;
+ 8000a0e:	2304      	movs	r3, #4
+ 8000a10:	75fb      	strb	r3, [r7, #23]
+ 8000a12:	e00e      	b.n	8000a32 <I2C1_Wait+0x4e>
+            } else if ((status & I2C_ISR_NACKF) != 0U) {
+ 8000a14:	693b      	ldr	r3, [r7, #16]
+ 8000a16:	f003 0310 	and.w	r3, r3, #16
+ 8000a1a:	2b00      	cmp	r3, #0
+ 8000a1c:	d002      	beq.n	8000a24 <I2C1_Wait+0x40>
+                error = I2C_ERROR_NACK;
+ 8000a1e:	2301      	movs	r3, #1
+ 8000a20:	75fb      	strb	r3, [r7, #23]
+ 8000a22:	e006      	b.n	8000a32 <I2C1_Wait+0x4e>
+            } else if ((status & I2C_ISR_OVR) != 0U) {
+ 8000a24:	693b      	ldr	r3, [r7, #16]
+ 8000a26:	f403 6380 	and.w	r3, r3, #1024	@ 0x400
+ 8000a2a:	2b00      	cmp	r3, #0
+ 8000a2c:	d001      	beq.n	8000a32 <I2C1_Wait+0x4e>
+                error = I2C_ERROR_OVERRUN;
+ 8000a2e:	2305      	movs	r3, #5
+ 8000a30:	75fb      	strb	r3, [r7, #23]
+            }
+            return I2C1_Fail(error, status);
+ 8000a32:	7dfb      	ldrb	r3, [r7, #23]
+ 8000a34:	6939      	ldr	r1, [r7, #16]
+ 8000a36:	4618      	mov	r0, r3
+ 8000a38:	f7ff ffa6 	bl	8000988 <I2C1_Fail>
+ 8000a3c:	4603      	mov	r3, r0
+ 8000a3e:	e01d      	b.n	8000a7c <I2C1_Wait+0x98>
+        }
+        if ((status & flag) != 0U) {
+ 8000a40:	693a      	ldr	r2, [r7, #16]
+ 8000a42:	68fb      	ldr	r3, [r7, #12]
+ 8000a44:	4013      	ands	r3, r2
+ 8000a46:	2b00      	cmp	r3, #0
+ 8000a48:	d001      	beq.n	8000a4e <I2C1_Wait+0x6a>
+            return I2C_LCD_OK;
+ 8000a4a:	2300      	movs	r3, #0
+ 8000a4c:	e016      	b.n	8000a7c <I2C1_Wait+0x98>
+        }
+        if ((status & I2C_ISR_STOPF) != 0U) {
+ 8000a4e:	693b      	ldr	r3, [r7, #16]
+ 8000a50:	f003 0320 	and.w	r3, r3, #32
+ 8000a54:	2b00      	cmp	r3, #0
+ 8000a56:	d005      	beq.n	8000a64 <I2C1_Wait+0x80>
+            return I2C1_Fail(I2C_ERROR_EARLY_STOP, status);
+ 8000a58:	6939      	ldr	r1, [r7, #16]
+ 8000a5a:	2006      	movs	r0, #6
+ 8000a5c:	f7ff ff94 	bl	8000988 <I2C1_Fail>
+ 8000a60:	4603      	mov	r3, r0
+ 8000a62:	e00b      	b.n	8000a7c <I2C1_Wait+0x98>
+        }
+        if ((uint32_t)(TIM2_CNT - start) >= timeout) {
+ 8000a64:	4b08      	ldr	r3, [pc, #32]	@ (8000a88 <I2C1_Wait+0xa4>)
+ 8000a66:	681a      	ldr	r2, [r3, #0]
+ 8000a68:	68bb      	ldr	r3, [r7, #8]
+ 8000a6a:	1ad3      	subs	r3, r2, r3
+ 8000a6c:	687a      	ldr	r2, [r7, #4]
+ 8000a6e:	429a      	cmp	r2, r3
+ 8000a70:	d8be      	bhi.n	80009f0 <I2C1_Wait+0xc>
+            return I2C1_Fail(I2C_ERROR_TIMEOUT, status);
+ 8000a72:	6939      	ldr	r1, [r7, #16]
+ 8000a74:	2002      	movs	r0, #2
+ 8000a76:	f7ff ff87 	bl	8000988 <I2C1_Fail>
+ 8000a7a:	4603      	mov	r3, r0
+        }
+    }
+}
+ 8000a7c:	4618      	mov	r0, r3
+ 8000a7e:	3718      	adds	r7, #24
+ 8000a80:	46bd      	mov	sp, r7
+ 8000a82:	bd80      	pop	{r7, pc}
+ 8000a84:	40005418 	.word	0x40005418
+ 8000a88:	40000024 	.word	0x40000024
+
+08000a8c <I2C1_Abort>:
+
+static void I2C1_Abort(void)
+{
+ 8000a8c:	b580      	push	{r7, lr}
+ 8000a8e:	b082      	sub	sp, #8
+ 8000a90:	af00      	add	r7, sp, #0
+    uint32_t status = I2C1_ISR;
+ 8000a92:	4b16      	ldr	r3, [pc, #88]	@ (8000aec <I2C1_Abort+0x60>)
+ 8000a94:	681b      	ldr	r3, [r3, #0]
+ 8000a96:	607b      	str	r3, [r7, #4]
+    //After arbitration loss we no longer own the bus: do not send STOP.
+//A received NACK already causes the hardware to generate STOP.
+    if (((status & I2C_ISR_BUSY) != 0U) &&
+ 8000a98:	687b      	ldr	r3, [r7, #4]
+ 8000a9a:	f403 4300 	and.w	r3, r3, #32768	@ 0x8000
+ 8000a9e:	2b00      	cmp	r3, #0
+ 8000aa0:	d00a      	beq.n	8000ab8 <I2C1_Abort+0x2c>
+        ((status & (I2C_ISR_ARLO | I2C_ISR_NACKF)) == 0U)) {
+ 8000aa2:	687b      	ldr	r3, [r7, #4]
+ 8000aa4:	f403 7304 	and.w	r3, r3, #528	@ 0x210
+    if (((status & I2C_ISR_BUSY) != 0U) &&
+ 8000aa8:	2b00      	cmp	r3, #0
+ 8000aaa:	d105      	bne.n	8000ab8 <I2C1_Abort+0x2c>
+        I2C1_CR2 |= I2C_CR2_STOP;
+ 8000aac:	4b10      	ldr	r3, [pc, #64]	@ (8000af0 <I2C1_Abort+0x64>)
+ 8000aae:	681b      	ldr	r3, [r3, #0]
+ 8000ab0:	4a0f      	ldr	r2, [pc, #60]	@ (8000af0 <I2C1_Abort+0x64>)
+ 8000ab2:	f443 4380 	orr.w	r3, r3, #16384	@ 0x4000
+ 8000ab6:	6013      	str	r3, [r2, #0]
+    }
+    uint32_t start = TIM2_CNT;
+ 8000ab8:	4b0e      	ldr	r3, [pc, #56]	@ (8000af4 <I2C1_Abort+0x68>)
+ 8000aba:	681b      	ldr	r3, [r3, #0]
+ 8000abc:	603b      	str	r3, [r7, #0]
+    while ((I2C1_ISR & I2C_ISR_BUSY) != 0U) {
+ 8000abe:	e006      	b.n	8000ace <I2C1_Abort+0x42>
+        if ((uint32_t)(TIM2_CNT - start) >= 2000U) {
+ 8000ac0:	4b0c      	ldr	r3, [pc, #48]	@ (8000af4 <I2C1_Abort+0x68>)
+ 8000ac2:	681a      	ldr	r2, [r3, #0]
+ 8000ac4:	683b      	ldr	r3, [r7, #0]
+ 8000ac6:	1ad3      	subs	r3, r2, r3
+ 8000ac8:	f5b3 6ffa 	cmp.w	r3, #2000	@ 0x7d0
+ 8000acc:	d206      	bcs.n	8000adc <I2C1_Abort+0x50>
+    while ((I2C1_ISR & I2C_ISR_BUSY) != 0U) {
+ 8000ace:	4b07      	ldr	r3, [pc, #28]	@ (8000aec <I2C1_Abort+0x60>)
+ 8000ad0:	681b      	ldr	r3, [r3, #0]
+ 8000ad2:	f403 4300 	and.w	r3, r3, #32768	@ 0x8000
+ 8000ad6:	2b00      	cmp	r3, #0
+ 8000ad8:	d1f2      	bne.n	8000ac0 <I2C1_Abort+0x34>
+ 8000ada:	e000      	b.n	8000ade <I2C1_Abort+0x52>
+            break;
+ 8000adc:	bf00      	nop
+        }
+    }
+    I2C1_Reset();
+ 8000ade:	f7ff fecf 	bl	8000880 <I2C1_Reset>
+}
+ 8000ae2:	bf00      	nop
+ 8000ae4:	3708      	adds	r7, #8
+ 8000ae6:	46bd      	mov	sp, r7
+ 8000ae8:	bd80      	pop	{r7, pc}
+ 8000aea:	bf00      	nop
+ 8000aec:	40005418 	.word	0x40005418
+ 8000af0:	40005404 	.word	0x40005404
+ 8000af4:	40000024 	.word	0x40000024
+
+08000af8 <I2C1_Write>:
+
+static int32_t I2C1_Write(void *context, uint8_t address,
+                         const uint8_t *data, size_t length)
+{
+ 8000af8:	b580      	push	{r7, lr}
+ 8000afa:	b088      	sub	sp, #32
+ 8000afc:	af00      	add	r7, sp, #0
+ 8000afe:	60f8      	str	r0, [r7, #12]
+ 8000b00:	607a      	str	r2, [r7, #4]
+ 8000b02:	603b      	str	r3, [r7, #0]
+ 8000b04:	460b      	mov	r3, r1
+ 8000b06:	72fb      	strb	r3, [r7, #11]
+    (void)context;
+    //The LCD driver writes one expander byte at a time. Also support up to
+//255 bytes; zero bytes intentionally performs an address-only probe.
+    if ((address < 0x08U) || (address > 0x77U) || (length > 255U) ||
+ 8000b08:	7afb      	ldrb	r3, [r7, #11]
+ 8000b0a:	2b07      	cmp	r3, #7
+ 8000b0c:	d90b      	bls.n	8000b26 <I2C1_Write+0x2e>
+ 8000b0e:	7afb      	ldrb	r3, [r7, #11]
+ 8000b10:	2b77      	cmp	r3, #119	@ 0x77
+ 8000b12:	d808      	bhi.n	8000b26 <I2C1_Write+0x2e>
+ 8000b14:	683b      	ldr	r3, [r7, #0]
+ 8000b16:	2bff      	cmp	r3, #255	@ 0xff
+ 8000b18:	d805      	bhi.n	8000b26 <I2C1_Write+0x2e>
+ 8000b1a:	683b      	ldr	r3, [r7, #0]
+ 8000b1c:	2b00      	cmp	r3, #0
+ 8000b1e:	d005      	beq.n	8000b2c <I2C1_Write+0x34>
+        ((length != 0U) && (data == NULL))) {
+ 8000b20:	687b      	ldr	r3, [r7, #4]
+ 8000b22:	2b00      	cmp	r3, #0
+ 8000b24:	d102      	bne.n	8000b2c <I2C1_Write+0x34>
+        return I2C_LCD_ERR_INVALID_ARG;
+ 8000b26:	f04f 33ff 	mov.w	r3, #4294967295	@ 0xffffffff
+ 8000b2a:	e06f      	b.n	8000c0c <I2C1_Write+0x114>
+    }
+
+    current_i2c_address = address;
+ 8000b2c:	4a39      	ldr	r2, [pc, #228]	@ (8000c14 <I2C1_Write+0x11c>)
+ 8000b2e:	7afb      	ldrb	r3, [r7, #11]
+ 8000b30:	7013      	strb	r3, [r2, #0]
+    current_i2c_length = (uint32_t)length;
+ 8000b32:	4a39      	ldr	r2, [pc, #228]	@ (8000c18 <I2C1_Write+0x120>)
+ 8000b34:	683b      	ldr	r3, [r7, #0]
+ 8000b36:	6013      	str	r3, [r2, #0]
+    g_i2c_error = I2C_ERROR_NONE;
+ 8000b38:	4b38      	ldr	r3, [pc, #224]	@ (8000c1c <I2C1_Write+0x124>)
+ 8000b3a:	2200      	movs	r2, #0
+ 8000b3c:	701a      	strb	r2, [r3, #0]
+    uint32_t start = TIM2_CNT;
+ 8000b3e:	4b38      	ldr	r3, [pc, #224]	@ (8000c20 <I2C1_Write+0x128>)
+ 8000b40:	681b      	ldr	r3, [r3, #0]
+ 8000b42:	61bb      	str	r3, [r7, #24]
+    while ((I2C1_ISR & I2C_ISR_BUSY) != 0U) {
+ 8000b44:	e012      	b.n	8000b6c <I2C1_Write+0x74>
+        if ((uint32_t)(TIM2_CNT - start) >= I2C_TIMEOUT_US) {
+ 8000b46:	4b36      	ldr	r3, [pc, #216]	@ (8000c20 <I2C1_Write+0x128>)
+ 8000b48:	681a      	ldr	r2, [r3, #0]
+ 8000b4a:	69bb      	ldr	r3, [r7, #24]
+ 8000b4c:	1ad3      	subs	r3, r2, r3
+ 8000b4e:	f644 621f 	movw	r2, #19999	@ 0x4e1f
+ 8000b52:	4293      	cmp	r3, r2
+ 8000b54:	d90a      	bls.n	8000b6c <I2C1_Write+0x74>
+            //No START was sent; do not force STOP onto someone else's bus.
+            I2C1_Fail(I2C_ERROR_TIMEOUT, I2C1_ISR);
+ 8000b56:	4b33      	ldr	r3, [pc, #204]	@ (8000c24 <I2C1_Write+0x12c>)
+ 8000b58:	681b      	ldr	r3, [r3, #0]
+ 8000b5a:	4619      	mov	r1, r3
+ 8000b5c:	2002      	movs	r0, #2
+ 8000b5e:	f7ff ff13 	bl	8000988 <I2C1_Fail>
+            I2C1_Reset();
+ 8000b62:	f7ff fe8d 	bl	8000880 <I2C1_Reset>
+            return I2C_LCD_ERR_IO;
+ 8000b66:	f06f 0301 	mvn.w	r3, #1
+ 8000b6a:	e04f      	b.n	8000c0c <I2C1_Write+0x114>
+    while ((I2C1_ISR & I2C_ISR_BUSY) != 0U) {
+ 8000b6c:	4b2d      	ldr	r3, [pc, #180]	@ (8000c24 <I2C1_Write+0x12c>)
+ 8000b6e:	681b      	ldr	r3, [r3, #0]
+ 8000b70:	f403 4300 	and.w	r3, r3, #32768	@ 0x8000
+ 8000b74:	2b00      	cmp	r3, #0
+ 8000b76:	d1e6      	bne.n	8000b46 <I2C1_Write+0x4e>
+        }
+    }
+
+    I2C1_ICR = I2C_CLEAR_FLAGS;           //W1C flags, never read-modify-write
+ 8000b78:	4b2b      	ldr	r3, [pc, #172]	@ (8000c28 <I2C1_Write+0x130>)
+ 8000b7a:	f44f 62e6 	mov.w	r2, #1840	@ 0x730
+ 8000b7e:	601a      	str	r2, [r3, #0]
+    start = TIM2_CNT;
+ 8000b80:	4b27      	ldr	r3, [pc, #156]	@ (8000c20 <I2C1_Write+0x128>)
+ 8000b82:	681b      	ldr	r3, [r3, #0]
+ 8000b84:	61bb      	str	r3, [r7, #24]
+    uint32_t timeout = I2C_TIMEOUT_US + (uint32_t)length * 1000U;
+ 8000b86:	683b      	ldr	r3, [r7, #0]
+ 8000b88:	f44f 727a 	mov.w	r2, #1000	@ 0x3e8
+ 8000b8c:	fb03 f202 	mul.w	r2, r3, r2
+ 8000b90:	f644 6320 	movw	r3, #20000	@ 0x4e20
+ 8000b94:	4413      	add	r3, r2
+ 8000b96:	617b      	str	r3, [r7, #20]
+    //SADD[7:1] holds the 7-bit address; RD_WRN=0 means write.
+//NBYTES[23:16], AUTOEND[25], START[13]. No reload or 10-bit addressing.
+    I2C1_CR2 = ((uint32_t)address << 1) | ((uint32_t)length << 16) |
+ 8000b98:	7afb      	ldrb	r3, [r7, #11]
+ 8000b9a:	005a      	lsls	r2, r3, #1
+ 8000b9c:	683b      	ldr	r3, [r7, #0]
+ 8000b9e:	041b      	lsls	r3, r3, #16
+ 8000ba0:	431a      	orrs	r2, r3
+ 8000ba2:	4922      	ldr	r1, [pc, #136]	@ (8000c2c <I2C1_Write+0x134>)
+               I2C_CR2_AUTOEND | I2C_CR2_START;
+ 8000ba4:	4b22      	ldr	r3, [pc, #136]	@ (8000c30 <I2C1_Write+0x138>)
+ 8000ba6:	4313      	orrs	r3, r2
+    I2C1_CR2 = ((uint32_t)address << 1) | ((uint32_t)length << 16) |
+ 8000ba8:	600b      	str	r3, [r1, #0]
+
+    for (size_t index = 0U; index < length; ++index) {
+ 8000baa:	2300      	movs	r3, #0
+ 8000bac:	61fb      	str	r3, [r7, #28]
+ 8000bae:	e015      	b.n	8000bdc <I2C1_Write+0xe4>
+        if (I2C1_Wait(I2C_ISR_TXIS, start, timeout) != I2C_LCD_OK) {
+ 8000bb0:	697a      	ldr	r2, [r7, #20]
+ 8000bb2:	69b9      	ldr	r1, [r7, #24]
+ 8000bb4:	2002      	movs	r0, #2
+ 8000bb6:	f7ff ff15 	bl	80009e4 <I2C1_Wait>
+ 8000bba:	4603      	mov	r3, r0
+ 8000bbc:	2b00      	cmp	r3, #0
+ 8000bbe:	d004      	beq.n	8000bca <I2C1_Write+0xd2>
+            I2C1_Abort();
+ 8000bc0:	f7ff ff64 	bl	8000a8c <I2C1_Abort>
+            return I2C_LCD_ERR_IO;
+ 8000bc4:	f06f 0301 	mvn.w	r3, #1
+ 8000bc8:	e020      	b.n	8000c0c <I2C1_Write+0x114>
+        }
+        I2C1_TXDR = data[index];
+ 8000bca:	687a      	ldr	r2, [r7, #4]
+ 8000bcc:	69fb      	ldr	r3, [r7, #28]
+ 8000bce:	4413      	add	r3, r2
+ 8000bd0:	781a      	ldrb	r2, [r3, #0]
+ 8000bd2:	4b18      	ldr	r3, [pc, #96]	@ (8000c34 <I2C1_Write+0x13c>)
+ 8000bd4:	601a      	str	r2, [r3, #0]
+    for (size_t index = 0U; index < length; ++index) {
+ 8000bd6:	69fb      	ldr	r3, [r7, #28]
+ 8000bd8:	3301      	adds	r3, #1
+ 8000bda:	61fb      	str	r3, [r7, #28]
+ 8000bdc:	69fa      	ldr	r2, [r7, #28]
+ 8000bde:	683b      	ldr	r3, [r7, #0]
+ 8000be0:	429a      	cmp	r2, r3
+ 8000be2:	d3e5      	bcc.n	8000bb0 <I2C1_Write+0xb8>
+    }
+    if (I2C1_Wait(I2C_ISR_STOPF, start, timeout) != I2C_LCD_OK) {
+ 8000be4:	697a      	ldr	r2, [r7, #20]
+ 8000be6:	69b9      	ldr	r1, [r7, #24]
+ 8000be8:	2020      	movs	r0, #32
+ 8000bea:	f7ff fefb 	bl	80009e4 <I2C1_Wait>
+ 8000bee:	4603      	mov	r3, r0
+ 8000bf0:	2b00      	cmp	r3, #0
+ 8000bf2:	d004      	beq.n	8000bfe <I2C1_Write+0x106>
+        I2C1_Abort();
+ 8000bf4:	f7ff ff4a 	bl	8000a8c <I2C1_Abort>
+        return I2C_LCD_ERR_IO;
+ 8000bf8:	f06f 0301 	mvn.w	r3, #1
+ 8000bfc:	e006      	b.n	8000c0c <I2C1_Write+0x114>
+    }
+    I2C1_ICR = I2C_ICR_STOPCF;
+ 8000bfe:	4b0a      	ldr	r3, [pc, #40]	@ (8000c28 <I2C1_Write+0x130>)
+ 8000c00:	2220      	movs	r2, #32
+ 8000c02:	601a      	str	r2, [r3, #0]
+    I2C1_CR2 = 0U;
+ 8000c04:	4b09      	ldr	r3, [pc, #36]	@ (8000c2c <I2C1_Write+0x134>)
+ 8000c06:	2200      	movs	r2, #0
+ 8000c08:	601a      	str	r2, [r3, #0]
+    return I2C_LCD_OK;
+ 8000c0a:	2300      	movs	r3, #0
+}
+ 8000c0c:	4618      	mov	r0, r3
+ 8000c0e:	3720      	adds	r7, #32
+ 8000c10:	46bd      	mov	sp, r7
+ 8000c12:	bd80      	pop	{r7, pc}
+ 8000c14:	20000034 	.word	0x20000034
+ 8000c18:	20000038 	.word	0x20000038
+ 8000c1c:	20000029 	.word	0x20000029
+ 8000c20:	40000024 	.word	0x40000024
+ 8000c24:	40005418 	.word	0x40005418
+ 8000c28:	4000541c 	.word	0x4000541c
+ 8000c2c:	40005404 	.word	0x40005404
+ 8000c30:	02002000 	.word	0x02002000
+ 8000c34:	40005428 	.word	0x40005428
+
+08000c38 <LCD_Delay>:
+
+static void LCD_Delay(void *context, uint32_t milliseconds)
+{
+ 8000c38:	b580      	push	{r7, lr}
+ 8000c3a:	b082      	sub	sp, #8
+ 8000c3c:	af00      	add	r7, sp, #0
+ 8000c3e:	6078      	str	r0, [r7, #4]
+ 8000c40:	6039      	str	r1, [r7, #0]
+    (void)context;
+    Delay_Ms(milliseconds);
+ 8000c42:	6838      	ldr	r0, [r7, #0]
+ 8000c44:	f7ff fdfe 	bl	8000844 <Delay_Ms>
+}
+ 8000c48:	bf00      	nop
+ 8000c4a:	3708      	adds	r7, #8
+ 8000c4c:	46bd      	mov	sp, r7
+ 8000c4e:	bd80      	pop	{r7, pc}
+
+08000c50 <LCD_Start>:
+
+static int32_t LCD_Start(I2C_LCD_HandleTypeDef *lcd)
+{
+ 8000c50:	b590      	push	{r4, r7, lr}
+ 8000c52:	b091      	sub	sp, #68	@ 0x44
+ 8000c54:	af00      	add	r7, sp, #0
+ 8000c56:	6078      	str	r0, [r7, #4]
+    //A0-A2 jumpers can select any of these 16 backpack addresses.
+    //Probe without sending data so scanning does not change expander outputs.
+    const uint8_t candidates[] = {
+ 8000c58:	4b58      	ldr	r3, [pc, #352]	@ (8000dbc <LCD_Start+0x16c>)
+ 8000c5a:	f107 041c 	add.w	r4, r7, #28
+ 8000c5e:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
+ 8000c60:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
+        0x27U, 0x3FU, 0x20U, 0x21U, 0x22U, 0x23U, 0x24U, 0x25U,
+        0x26U, 0x38U, 0x39U, 0x3AU, 0x3BU, 0x3CU, 0x3DU, 0x3EU
+    };
+    uint8_t address = LCD_ADDRESS_7BIT;
+ 8000c64:	2300      	movs	r3, #0
+ 8000c66:	f887 303f 	strb.w	r3, [r7, #63]	@ 0x3f
+    g_lcd_address = 0U;
+ 8000c6a:	4b55      	ldr	r3, [pc, #340]	@ (8000dc0 <LCD_Start+0x170>)
+ 8000c6c:	2200      	movs	r2, #0
+ 8000c6e:	701a      	strb	r2, [r3, #0]
+    g_lcd_detected_address = 0U;
+ 8000c70:	4b54      	ldr	r3, [pc, #336]	@ (8000dc4 <LCD_Start+0x174>)
+ 8000c72:	2200      	movs	r2, #0
+ 8000c74:	701a      	strb	r2, [r3, #0]
+    g_lcd_scan_acks = 0U;
+ 8000c76:	4b54      	ldr	r3, [pc, #336]	@ (8000dc8 <LCD_Start+0x178>)
+ 8000c78:	2200      	movs	r2, #0
+ 8000c7a:	601a      	str	r2, [r3, #0]
+    g_lcd_scan_complete = 0U;
+ 8000c7c:	4b53      	ldr	r3, [pc, #332]	@ (8000dcc <LCD_Start+0x17c>)
+ 8000c7e:	2200      	movs	r2, #0
+ 8000c80:	701a      	strb	r2, [r3, #0]
+    //Allow the external LCD/backpack supply to settle before probing.
+    Delay_Ms(50U);
+ 8000c82:	2032      	movs	r0, #50	@ 0x32
+ 8000c84:	f7ff fdde 	bl	8000844 <Delay_Ms>
+
+    if (address == 0U) {
+ 8000c88:	f897 303f 	ldrb.w	r3, [r7, #63]	@ 0x3f
+ 8000c8c:	2b00      	cmp	r3, #0
+ 8000c8e:	d14f      	bne.n	8000d30 <LCD_Start+0xe0>
+        for (size_t index = 0U; index < sizeof(candidates); ++index) {
+ 8000c90:	2300      	movs	r3, #0
+ 8000c92:	63bb      	str	r3, [r7, #56]	@ 0x38
+ 8000c94:	e03f      	b.n	8000d16 <LCD_Start+0xc6>
+            if (I2C1_Write(NULL, candidates[index], NULL, 0U) == I2C_LCD_OK) {
+ 8000c96:	f107 021c 	add.w	r2, r7, #28
+ 8000c9a:	6bbb      	ldr	r3, [r7, #56]	@ 0x38
+ 8000c9c:	4413      	add	r3, r2
+ 8000c9e:	7819      	ldrb	r1, [r3, #0]
+ 8000ca0:	2300      	movs	r3, #0
+ 8000ca2:	2200      	movs	r2, #0
+ 8000ca4:	2000      	movs	r0, #0
+ 8000ca6:	f7ff ff27 	bl	8000af8 <I2C1_Write>
+ 8000caa:	4603      	mov	r3, r0
+ 8000cac:	2b00      	cmp	r3, #0
+ 8000cae:	d127      	bne.n	8000d00 <LCD_Start+0xb0>
+                uint8_t found = candidates[index];
+ 8000cb0:	f107 021c 	add.w	r2, r7, #28
+ 8000cb4:	6bbb      	ldr	r3, [r7, #56]	@ 0x38
+ 8000cb6:	4413      	add	r3, r2
+ 8000cb8:	781b      	ldrb	r3, [r3, #0]
+ 8000cba:	f887 3037 	strb.w	r3, [r7, #55]	@ 0x37
+                uint32_t bit = found < 0x30U ? (uint32_t)found - 0x20U :
+ 8000cbe:	f897 3037 	ldrb.w	r3, [r7, #55]	@ 0x37
+ 8000cc2:	2b2f      	cmp	r3, #47	@ 0x2f
+ 8000cc4:	d803      	bhi.n	8000cce <LCD_Start+0x7e>
+ 8000cc6:	f897 3037 	ldrb.w	r3, [r7, #55]	@ 0x37
+ 8000cca:	3b20      	subs	r3, #32
+ 8000ccc:	e002      	b.n	8000cd4 <LCD_Start+0x84>
+                                               (uint32_t)found - 0x38U + 8U;
+ 8000cce:	f897 3037 	ldrb.w	r3, [r7, #55]	@ 0x37
+                uint32_t bit = found < 0x30U ? (uint32_t)found - 0x20U :
+ 8000cd2:	3b30      	subs	r3, #48	@ 0x30
+ 8000cd4:	633b      	str	r3, [r7, #48]	@ 0x30
+                g_lcd_scan_acks |= (1U << bit);
+ 8000cd6:	2201      	movs	r2, #1
+ 8000cd8:	6b3b      	ldr	r3, [r7, #48]	@ 0x30
+ 8000cda:	409a      	lsls	r2, r3
+ 8000cdc:	4b3a      	ldr	r3, [pc, #232]	@ (8000dc8 <LCD_Start+0x178>)
+ 8000cde:	681b      	ldr	r3, [r3, #0]
+ 8000ce0:	4313      	orrs	r3, r2
+ 8000ce2:	4a39      	ldr	r2, [pc, #228]	@ (8000dc8 <LCD_Start+0x178>)
+ 8000ce4:	6013      	str	r3, [r2, #0]
+                //Keep the first responder, but finish scanning for diagnosis.
+                if (address == 0U) {
+ 8000ce6:	f897 303f 	ldrb.w	r3, [r7, #63]	@ 0x3f
+ 8000cea:	2b00      	cmp	r3, #0
+ 8000cec:	d110      	bne.n	8000d10 <LCD_Start+0xc0>
+                    address = found;
+ 8000cee:	f897 3037 	ldrb.w	r3, [r7, #55]	@ 0x37
+ 8000cf2:	f887 303f 	strb.w	r3, [r7, #63]	@ 0x3f
+                    g_lcd_detected_address = found;
+ 8000cf6:	4a33      	ldr	r2, [pc, #204]	@ (8000dc4 <LCD_Start+0x174>)
+ 8000cf8:	f897 3037 	ldrb.w	r3, [r7, #55]	@ 0x37
+ 8000cfc:	7013      	strb	r3, [r2, #0]
+ 8000cfe:	e007      	b.n	8000d10 <LCD_Start+0xc0>
+                }
+            } else if (g_i2c_error != I2C_ERROR_NACK) {
+ 8000d00:	4b33      	ldr	r3, [pc, #204]	@ (8000dd0 <LCD_Start+0x180>)
+ 8000d02:	781b      	ldrb	r3, [r3, #0]
+ 8000d04:	b2db      	uxtb	r3, r3
+ 8000d06:	2b01      	cmp	r3, #1
+ 8000d08:	d002      	beq.n	8000d10 <LCD_Start+0xc0>
+                return I2C_LCD_ERR_IO;
+ 8000d0a:	f06f 0301 	mvn.w	r3, #1
+ 8000d0e:	e050      	b.n	8000db2 <LCD_Start+0x162>
+        for (size_t index = 0U; index < sizeof(candidates); ++index) {
+ 8000d10:	6bbb      	ldr	r3, [r7, #56]	@ 0x38
+ 8000d12:	3301      	adds	r3, #1
+ 8000d14:	63bb      	str	r3, [r7, #56]	@ 0x38
+ 8000d16:	6bbb      	ldr	r3, [r7, #56]	@ 0x38
+ 8000d18:	2b0f      	cmp	r3, #15
+ 8000d1a:	d9bc      	bls.n	8000c96 <LCD_Start+0x46>
+            }
+        }
+        g_lcd_scan_complete = 1U;
+ 8000d1c:	4b2b      	ldr	r3, [pc, #172]	@ (8000dcc <LCD_Start+0x17c>)
+ 8000d1e:	2201      	movs	r2, #1
+ 8000d20:	701a      	strb	r2, [r3, #0]
+        if (address == 0U) {
+ 8000d22:	f897 303f 	ldrb.w	r3, [r7, #63]	@ 0x3f
+ 8000d26:	2b00      	cmp	r3, #0
+ 8000d28:	d102      	bne.n	8000d30 <LCD_Start+0xe0>
+            return I2C_LCD_ERR_IO;
+ 8000d2a:	f06f 0301 	mvn.w	r3, #1
+ 8000d2e:	e040      	b.n	8000db2 <LCD_Start+0x162>
+        }
+    }
+
+    I2C_LCD_Config config = {
+ 8000d30:	f897 303f 	ldrb.w	r3, [r7, #63]	@ 0x3f
+ 8000d34:	733b      	strb	r3, [r7, #12]
+ 8000d36:	2302      	movs	r3, #2
+ 8000d38:	737b      	strb	r3, [r7, #13]
+ 8000d3a:	2310      	movs	r3, #16
+ 8000d3c:	73bb      	strb	r3, [r7, #14]
+ 8000d3e:	2301      	movs	r3, #1
+ 8000d40:	73fb      	strb	r3, [r7, #15]
+ 8000d42:	2300      	movs	r3, #0
+ 8000d44:	613b      	str	r3, [r7, #16]
+ 8000d46:	4b23      	ldr	r3, [pc, #140]	@ (8000dd4 <LCD_Start+0x184>)
+ 8000d48:	617b      	str	r3, [r7, #20]
+ 8000d4a:	4b23      	ldr	r3, [pc, #140]	@ (8000dd8 <LCD_Start+0x188>)
+ 8000d4c:	61bb      	str	r3, [r7, #24]
+        .backlight_on = 1U,
+        .user_context = NULL,
+        .write_fn = I2C1_Write,
+        .delay_ms_fn = LCD_Delay
+    };
+    int32_t result = I2C_LCD_Init(lcd, &config);
+ 8000d4e:	f107 030c 	add.w	r3, r7, #12
+ 8000d52:	4619      	mov	r1, r3
+ 8000d54:	6878      	ldr	r0, [r7, #4]
+ 8000d56:	f7ff fb95 	bl	8000484 <I2C_LCD_Init>
+ 8000d5a:	62f8      	str	r0, [r7, #44]	@ 0x2c
+    if (result != I2C_LCD_OK) {
+ 8000d5c:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+ 8000d5e:	2b00      	cmp	r3, #0
+ 8000d60:	d001      	beq.n	8000d66 <LCD_Start+0x116>
+        return result;
+ 8000d62:	6afb      	ldr	r3, [r7, #44]	@ 0x2c
+ 8000d64:	e025      	b.n	8000db2 <LCD_Start+0x162>
+    }
+    g_lcd_address = address;
+ 8000d66:	4a16      	ldr	r2, [pc, #88]	@ (8000dc0 <LCD_Start+0x170>)
+ 8000d68:	f897 303f 	ldrb.w	r3, [r7, #63]	@ 0x3f
+ 8000d6c:	7013      	strb	r3, [r2, #0]
+
+    if ((I2C_LCD_SetCursor(lcd, 0U, 0U) != I2C_LCD_OK) ||
+ 8000d6e:	2200      	movs	r2, #0
+ 8000d70:	2100      	movs	r1, #0
+ 8000d72:	6878      	ldr	r0, [r7, #4]
+ 8000d74:	f7ff fc4f 	bl	8000616 <I2C_LCD_SetCursor>
+ 8000d78:	4603      	mov	r3, r0
+ 8000d7a:	2b00      	cmp	r3, #0
+ 8000d7c:	d115      	bne.n	8000daa <LCD_Start+0x15a>
+        (I2C_LCD_WriteString(lcd, "Lab 5 I2C LCD") != I2C_LCD_OK) ||
+ 8000d7e:	4917      	ldr	r1, [pc, #92]	@ (8000ddc <LCD_Start+0x18c>)
+ 8000d80:	6878      	ldr	r0, [r7, #4]
+ 8000d82:	f7ff fc99 	bl	80006b8 <I2C_LCD_WriteString>
+ 8000d86:	4603      	mov	r3, r0
+    if ((I2C_LCD_SetCursor(lcd, 0U, 0U) != I2C_LCD_OK) ||
+ 8000d88:	2b00      	cmp	r3, #0
+ 8000d8a:	d10e      	bne.n	8000daa <LCD_Start+0x15a>
+        (I2C_LCD_SetCursor(lcd, 1U, 0U) != I2C_LCD_OK) ||
+ 8000d8c:	2200      	movs	r2, #0
+ 8000d8e:	2101      	movs	r1, #1
+ 8000d90:	6878      	ldr	r0, [r7, #4]
+ 8000d92:	f7ff fc40 	bl	8000616 <I2C_LCD_SetCursor>
+ 8000d96:	4603      	mov	r3, r0
+        (I2C_LCD_WriteString(lcd, "Lab 5 I2C LCD") != I2C_LCD_OK) ||
+ 8000d98:	2b00      	cmp	r3, #0
+ 8000d9a:	d106      	bne.n	8000daa <LCD_Start+0x15a>
+        (I2C_LCD_WriteString(lcd, "Display ready!") != I2C_LCD_OK)) {
+ 8000d9c:	4910      	ldr	r1, [pc, #64]	@ (8000de0 <LCD_Start+0x190>)
+ 8000d9e:	6878      	ldr	r0, [r7, #4]
+ 8000da0:	f7ff fc8a 	bl	80006b8 <I2C_LCD_WriteString>
+ 8000da4:	4603      	mov	r3, r0
+        (I2C_LCD_SetCursor(lcd, 1U, 0U) != I2C_LCD_OK) ||
+ 8000da6:	2b00      	cmp	r3, #0
+ 8000da8:	d002      	beq.n	8000db0 <LCD_Start+0x160>
+        return I2C_LCD_ERR_IO;
+ 8000daa:	f06f 0301 	mvn.w	r3, #1
+ 8000dae:	e000      	b.n	8000db2 <LCD_Start+0x162>
+    }
+    return I2C_LCD_OK;
+ 8000db0:	2300      	movs	r3, #0
+}
+ 8000db2:	4618      	mov	r0, r3
+ 8000db4:	3744      	adds	r7, #68	@ 0x44
+ 8000db6:	46bd      	mov	sp, r7
+ 8000db8:	bd90      	pop	{r4, r7, pc}
+ 8000dba:	bf00      	nop
+ 8000dbc:	08001c64 	.word	0x08001c64
+ 8000dc0:	20000028 	.word	0x20000028
+ 8000dc4:	20000044 	.word	0x20000044
+ 8000dc8:	20000048 	.word	0x20000048
+ 8000dcc:	2000004c 	.word	0x2000004c
+ 8000dd0:	20000029 	.word	0x20000029
+ 8000dd4:	08000af9 	.word	0x08000af9
+ 8000dd8:	08000c39 	.word	0x08000c39
+ 8000ddc:	08001c44 	.word	0x08001c44
+ 8000de0:	08001c54 	.word	0x08001c54
+
+08000de4 <Error_Handler>:
+
+void Error_Handler(void)
+{
+ 8000de4:	b480      	push	{r7}
+ 8000de6:	af00      	add	r7, sp, #0
+    //Clock startup failure; inspect RCC_CR/RCC_CFGR with the debugger.
+    g_lcd_status = -3;
+ 8000de8:	4b02      	ldr	r3, [pc, #8]	@ (8000df4 <Error_Handler+0x10>)
+ 8000dea:	f06f 0202 	mvn.w	r2, #2
+ 8000dee:	601a      	str	r2, [r3, #0]
+    for (;;) {
+ 8000df0:	bf00      	nop
+ 8000df2:	e7fd      	b.n	8000df0 <Error_Handler+0xc>
+ 8000df4:	20000000 	.word	0x20000000
+
+08000df8 <Pin_InputPullup>:
+static uint8_t display_dirty = 1U;
+static uint32_t display_retry_at = 0U;
+static uint8_t display_retry_wait = 0U;
+
+static void Pin_InputPullup(uint32_t base, uint8_t pin)
+{
+ 8000df8:	b480      	push	{r7}
+ 8000dfa:	b085      	sub	sp, #20
+ 8000dfc:	af00      	add	r7, sp, #0
+ 8000dfe:	6078      	str	r0, [r7, #4]
+ 8000e00:	460b      	mov	r3, r1
+ 8000e02:	70fb      	strb	r3, [r7, #3]
+    //Each MODER/PUPDR pin takes 2 bits. MODER=00 input, PUPDR=01 pull-up.
+    uint32_t shift = (uint32_t)pin * 2U;
+ 8000e04:	78fb      	ldrb	r3, [r7, #3]
+ 8000e06:	005b      	lsls	r3, r3, #1
+ 8000e08:	60fb      	str	r3, [r7, #12]
+    GPIO_MODE(base) &= ~(3U << shift);
+ 8000e0a:	687b      	ldr	r3, [r7, #4]
+ 8000e0c:	6819      	ldr	r1, [r3, #0]
+ 8000e0e:	2203      	movs	r2, #3
+ 8000e10:	68fb      	ldr	r3, [r7, #12]
+ 8000e12:	fa02 f303 	lsl.w	r3, r2, r3
+ 8000e16:	43da      	mvns	r2, r3
+ 8000e18:	687b      	ldr	r3, [r7, #4]
+ 8000e1a:	400a      	ands	r2, r1
+ 8000e1c:	601a      	str	r2, [r3, #0]
+    GPIO_PULL(base) = (GPIO_PULL(base) & ~(3U << shift)) | (1U << shift);
+ 8000e1e:	687b      	ldr	r3, [r7, #4]
+ 8000e20:	330c      	adds	r3, #12
+ 8000e22:	681a      	ldr	r2, [r3, #0]
+ 8000e24:	2103      	movs	r1, #3
+ 8000e26:	68fb      	ldr	r3, [r7, #12]
+ 8000e28:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000e2c:	43db      	mvns	r3, r3
+ 8000e2e:	401a      	ands	r2, r3
+ 8000e30:	2101      	movs	r1, #1
+ 8000e32:	68fb      	ldr	r3, [r7, #12]
+ 8000e34:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000e38:	6879      	ldr	r1, [r7, #4]
+ 8000e3a:	310c      	adds	r1, #12
+ 8000e3c:	4313      	orrs	r3, r2
+ 8000e3e:	600b      	str	r3, [r1, #0]
+}
+ 8000e40:	bf00      	nop
+ 8000e42:	3714      	adds	r7, #20
+ 8000e44:	46bd      	mov	sp, r7
+ 8000e46:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000e4a:	4770      	bx	lr
+
+08000e4c <Pin_OutputLow>:
+
+static void Pin_OutputLow(uint32_t base, uint8_t pin)
+{
+ 8000e4c:	b480      	push	{r7}
+ 8000e4e:	b085      	sub	sp, #20
+ 8000e50:	af00      	add	r7, sp, #0
+ 8000e52:	6078      	str	r0, [r7, #4]
+ 8000e54:	460b      	mov	r3, r1
+ 8000e56:	70fb      	strb	r3, [r7, #3]
+    uint32_t shift = (uint32_t)pin * 2U;
+ 8000e58:	78fb      	ldrb	r3, [r7, #3]
+ 8000e5a:	005b      	lsls	r3, r3, #1
+ 8000e5c:	60fb      	str	r3, [r7, #12]
+    //Preload LOW before turning on the output so we never briefly drive HIGH.
+    //BSRR upper 16 bits reset pins; lower 16 bits set pins.
+    GPIO_SET_RESET(base) = (1U << ((uint32_t)pin + 16U));
+ 8000e5e:	78fb      	ldrb	r3, [r7, #3]
+ 8000e60:	3310      	adds	r3, #16
+ 8000e62:	687a      	ldr	r2, [r7, #4]
+ 8000e64:	3218      	adds	r2, #24
+ 8000e66:	4611      	mov	r1, r2
+ 8000e68:	2201      	movs	r2, #1
+ 8000e6a:	fa02 f303 	lsl.w	r3, r2, r3
+ 8000e6e:	600b      	str	r3, [r1, #0]
+    GPIO_TYPE(base) &= ~(1U << pin);
+ 8000e70:	687b      	ldr	r3, [r7, #4]
+ 8000e72:	3304      	adds	r3, #4
+ 8000e74:	681a      	ldr	r2, [r3, #0]
+ 8000e76:	78fb      	ldrb	r3, [r7, #3]
+ 8000e78:	2101      	movs	r1, #1
+ 8000e7a:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000e7e:	43db      	mvns	r3, r3
+ 8000e80:	6879      	ldr	r1, [r7, #4]
+ 8000e82:	3104      	adds	r1, #4
+ 8000e84:	4013      	ands	r3, r2
+ 8000e86:	600b      	str	r3, [r1, #0]
+    GPIO_PULL(base) &= ~(3U << shift);
+ 8000e88:	687b      	ldr	r3, [r7, #4]
+ 8000e8a:	330c      	adds	r3, #12
+ 8000e8c:	681a      	ldr	r2, [r3, #0]
+ 8000e8e:	2103      	movs	r1, #3
+ 8000e90:	68fb      	ldr	r3, [r7, #12]
+ 8000e92:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000e96:	43db      	mvns	r3, r3
+ 8000e98:	6879      	ldr	r1, [r7, #4]
+ 8000e9a:	310c      	adds	r1, #12
+ 8000e9c:	4013      	ands	r3, r2
+ 8000e9e:	600b      	str	r3, [r1, #0]
+    GPIO_MODE(base) = (GPIO_MODE(base) & ~(3U << shift)) | (1U << shift);
+ 8000ea0:	687b      	ldr	r3, [r7, #4]
+ 8000ea2:	681a      	ldr	r2, [r3, #0]
+ 8000ea4:	2103      	movs	r1, #3
+ 8000ea6:	68fb      	ldr	r3, [r7, #12]
+ 8000ea8:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000eac:	43db      	mvns	r3, r3
+ 8000eae:	ea02 0103 	and.w	r1, r2, r3
+ 8000eb2:	2201      	movs	r2, #1
+ 8000eb4:	68fb      	ldr	r3, [r7, #12]
+ 8000eb6:	409a      	lsls	r2, r3
+ 8000eb8:	687b      	ldr	r3, [r7, #4]
+ 8000eba:	430a      	orrs	r2, r1
+ 8000ebc:	601a      	str	r2, [r3, #0]
+}
+ 8000ebe:	bf00      	nop
+ 8000ec0:	3714      	adds	r7, #20
+ 8000ec2:	46bd      	mov	sp, r7
+ 8000ec4:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000ec8:	4770      	bx	lr
+	...
+
+08000ecc <Keypad_Settle>:
+
+static void Keypad_Settle(void)
+{
+ 8000ecc:	b480      	push	{r7}
+ 8000ece:	b083      	sub	sp, #12
+ 8000ed0:	af00      	add	r7, sp, #0
+    //Give the pull-ups and wiring 10us to settle after changing directions.
+    //This short electrical settling time is separate from 20ms key debounce.
+    uint32_t start = TIM2_CNT;
+ 8000ed2:	4b08      	ldr	r3, [pc, #32]	@ (8000ef4 <Keypad_Settle+0x28>)
+ 8000ed4:	681b      	ldr	r3, [r3, #0]
+ 8000ed6:	607b      	str	r3, [r7, #4]
+    while ((uint32_t)(TIM2_CNT - start) < 10U) {
+ 8000ed8:	bf00      	nop
+ 8000eda:	4b06      	ldr	r3, [pc, #24]	@ (8000ef4 <Keypad_Settle+0x28>)
+ 8000edc:	681a      	ldr	r2, [r3, #0]
+ 8000ede:	687b      	ldr	r3, [r7, #4]
+ 8000ee0:	1ad3      	subs	r3, r2, r3
+ 8000ee2:	2b09      	cmp	r3, #9
+ 8000ee4:	d9f9      	bls.n	8000eda <Keypad_Settle+0xe>
+    }
+}
+ 8000ee6:	bf00      	nop
+ 8000ee8:	bf00      	nop
+ 8000eea:	370c      	adds	r7, #12
+ 8000eec:	46bd      	mov	sp, r7
+ 8000eee:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000ef2:	4770      	bx	lr
+ 8000ef4:	40000024 	.word	0x40000024
+
+08000ef8 <Keypad_Idle>:
+
+static void Keypad_Idle(void)
+{
+ 8000ef8:	b580      	push	{r7, lr}
+ 8000efa:	b082      	sub	sp, #8
+ 8000efc:	af00      	add	r7, sp, #0
+    //Release every column BEFORE making the rows LOW outputs.
+    for (uint8_t column = 0U; column < 4U; ++column) {
+ 8000efe:	2300      	movs	r3, #0
+ 8000f00:	71fb      	strb	r3, [r7, #7]
+ 8000f02:	e00d      	b.n	8000f20 <Keypad_Idle+0x28>
+        Pin_InputPullup(column_port[column], column_pin[column]);
+ 8000f04:	79fb      	ldrb	r3, [r7, #7]
+ 8000f06:	4a14      	ldr	r2, [pc, #80]	@ (8000f58 <Keypad_Idle+0x60>)
+ 8000f08:	f852 2023 	ldr.w	r2, [r2, r3, lsl #2]
+ 8000f0c:	79fb      	ldrb	r3, [r7, #7]
+ 8000f0e:	4913      	ldr	r1, [pc, #76]	@ (8000f5c <Keypad_Idle+0x64>)
+ 8000f10:	5ccb      	ldrb	r3, [r1, r3]
+ 8000f12:	4619      	mov	r1, r3
+ 8000f14:	4610      	mov	r0, r2
+ 8000f16:	f7ff ff6f 	bl	8000df8 <Pin_InputPullup>
+    for (uint8_t column = 0U; column < 4U; ++column) {
+ 8000f1a:	79fb      	ldrb	r3, [r7, #7]
+ 8000f1c:	3301      	adds	r3, #1
+ 8000f1e:	71fb      	strb	r3, [r7, #7]
+ 8000f20:	79fb      	ldrb	r3, [r7, #7]
+ 8000f22:	2b03      	cmp	r3, #3
+ 8000f24:	d9ee      	bls.n	8000f04 <Keypad_Idle+0xc>
+    }
+    for (uint8_t row = 0U; row < 4U; ++row) {
+ 8000f26:	2300      	movs	r3, #0
+ 8000f28:	71bb      	strb	r3, [r7, #6]
+ 8000f2a:	e00d      	b.n	8000f48 <Keypad_Idle+0x50>
+        Pin_OutputLow(row_port[row], row_pin[row]);
+ 8000f2c:	79bb      	ldrb	r3, [r7, #6]
+ 8000f2e:	4a0c      	ldr	r2, [pc, #48]	@ (8000f60 <Keypad_Idle+0x68>)
+ 8000f30:	f852 2023 	ldr.w	r2, [r2, r3, lsl #2]
+ 8000f34:	79bb      	ldrb	r3, [r7, #6]
+ 8000f36:	490b      	ldr	r1, [pc, #44]	@ (8000f64 <Keypad_Idle+0x6c>)
+ 8000f38:	5ccb      	ldrb	r3, [r1, r3]
+ 8000f3a:	4619      	mov	r1, r3
+ 8000f3c:	4610      	mov	r0, r2
+ 8000f3e:	f7ff ff85 	bl	8000e4c <Pin_OutputLow>
+    for (uint8_t row = 0U; row < 4U; ++row) {
+ 8000f42:	79bb      	ldrb	r3, [r7, #6]
+ 8000f44:	3301      	adds	r3, #1
+ 8000f46:	71bb      	strb	r3, [r7, #6]
+ 8000f48:	79bb      	ldrb	r3, [r7, #6]
+ 8000f4a:	2b03      	cmp	r3, #3
+ 8000f4c:	d9ee      	bls.n	8000f2c <Keypad_Idle+0x34>
+    }
+}
+ 8000f4e:	bf00      	nop
+ 8000f50:	bf00      	nop
+ 8000f52:	3708      	adds	r7, #8
+ 8000f54:	46bd      	mov	sp, r7
+ 8000f56:	bd80      	pop	{r7, pc}
+ 8000f58:	08001d18 	.word	0x08001d18
+ 8000f5c:	08001d28 	.word	0x08001d28
+ 8000f60:	08001d04 	.word	0x08001d04
+ 8000f64:	08001d14 	.word	0x08001d14
+
+08000f68 <Keypad_LowColumns>:
+
+static uint8_t Keypad_LowColumns(void)
+{
+ 8000f68:	b480      	push	{r7}
+ 8000f6a:	b083      	sub	sp, #12
+ 8000f6c:	af00      	add	r7, sp, #0
+    uint8_t low = 0U;
+ 8000f6e:	2300      	movs	r3, #0
+ 8000f70:	71fb      	strb	r3, [r7, #7]
+    for (uint8_t column = 0U; column < 4U; ++column) {
+ 8000f72:	2300      	movs	r3, #0
+ 8000f74:	71bb      	strb	r3, [r7, #6]
+ 8000f76:	e019      	b.n	8000fac <Keypad_LowColumns+0x44>
+        if ((GPIO_INPUT(column_port[column]) & (1U << column_pin[column])) == 0U) {
+ 8000f78:	79bb      	ldrb	r3, [r7, #6]
+ 8000f7a:	4a11      	ldr	r2, [pc, #68]	@ (8000fc0 <Keypad_LowColumns+0x58>)
+ 8000f7c:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
+ 8000f80:	3310      	adds	r3, #16
+ 8000f82:	681a      	ldr	r2, [r3, #0]
+ 8000f84:	79bb      	ldrb	r3, [r7, #6]
+ 8000f86:	490f      	ldr	r1, [pc, #60]	@ (8000fc4 <Keypad_LowColumns+0x5c>)
+ 8000f88:	5ccb      	ldrb	r3, [r1, r3]
+ 8000f8a:	4619      	mov	r1, r3
+ 8000f8c:	2301      	movs	r3, #1
+ 8000f8e:	408b      	lsls	r3, r1
+ 8000f90:	4013      	ands	r3, r2
+ 8000f92:	2b00      	cmp	r3, #0
+ 8000f94:	d107      	bne.n	8000fa6 <Keypad_LowColumns+0x3e>
+            low |= (uint8_t)(1U << column);
+ 8000f96:	79bb      	ldrb	r3, [r7, #6]
+ 8000f98:	2201      	movs	r2, #1
+ 8000f9a:	fa02 f303 	lsl.w	r3, r2, r3
+ 8000f9e:	b2da      	uxtb	r2, r3
+ 8000fa0:	79fb      	ldrb	r3, [r7, #7]
+ 8000fa2:	4313      	orrs	r3, r2
+ 8000fa4:	71fb      	strb	r3, [r7, #7]
+    for (uint8_t column = 0U; column < 4U; ++column) {
+ 8000fa6:	79bb      	ldrb	r3, [r7, #6]
+ 8000fa8:	3301      	adds	r3, #1
+ 8000faa:	71bb      	strb	r3, [r7, #6]
+ 8000fac:	79bb      	ldrb	r3, [r7, #6]
+ 8000fae:	2b03      	cmp	r3, #3
+ 8000fb0:	d9e2      	bls.n	8000f78 <Keypad_LowColumns+0x10>
+        }
+    }
+    return low;
+ 8000fb2:	79fb      	ldrb	r3, [r7, #7]
+}
+ 8000fb4:	4618      	mov	r0, r3
+ 8000fb6:	370c      	adds	r7, #12
+ 8000fb8:	46bd      	mov	sp, r7
+ 8000fba:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000fbe:	4770      	bx	lr
+ 8000fc0:	08001d18 	.word	0x08001d18
+ 8000fc4:	08001d28 	.word	0x08001d28
+
+08000fc8 <Keypad_FindRow>:
+
+static char Keypad_FindRow(uint8_t column)
+{
+ 8000fc8:	b580      	push	{r7, lr}
+ 8000fca:	b084      	sub	sp, #16
+ 8000fcc:	af00      	add	r7, sp, #0
+ 8000fce:	4603      	mov	r3, r0
+ 8000fd0:	71fb      	strb	r3, [r7, #7]
+    //The lab requires reversing directions to identify the row.
+    //Rows become pull-up inputs. Only the triggered column becomes LOW output.
+    for (uint8_t row = 0U; row < 4U; ++row) {
+ 8000fd2:	2300      	movs	r3, #0
+ 8000fd4:	73fb      	strb	r3, [r7, #15]
+ 8000fd6:	e00d      	b.n	8000ff4 <Keypad_FindRow+0x2c>
+        Pin_InputPullup(row_port[row], row_pin[row]);
+ 8000fd8:	7bfb      	ldrb	r3, [r7, #15]
+ 8000fda:	4a29      	ldr	r2, [pc, #164]	@ (8001080 <Keypad_FindRow+0xb8>)
+ 8000fdc:	f852 2023 	ldr.w	r2, [r2, r3, lsl #2]
+ 8000fe0:	7bfb      	ldrb	r3, [r7, #15]
+ 8000fe2:	4928      	ldr	r1, [pc, #160]	@ (8001084 <Keypad_FindRow+0xbc>)
+ 8000fe4:	5ccb      	ldrb	r3, [r1, r3]
+ 8000fe6:	4619      	mov	r1, r3
+ 8000fe8:	4610      	mov	r0, r2
+ 8000fea:	f7ff ff05 	bl	8000df8 <Pin_InputPullup>
+    for (uint8_t row = 0U; row < 4U; ++row) {
+ 8000fee:	7bfb      	ldrb	r3, [r7, #15]
+ 8000ff0:	3301      	adds	r3, #1
+ 8000ff2:	73fb      	strb	r3, [r7, #15]
+ 8000ff4:	7bfb      	ldrb	r3, [r7, #15]
+ 8000ff6:	2b03      	cmp	r3, #3
+ 8000ff8:	d9ee      	bls.n	8000fd8 <Keypad_FindRow+0x10>
+    }
+    Pin_OutputLow(column_port[column], column_pin[column]);
+ 8000ffa:	79fb      	ldrb	r3, [r7, #7]
+ 8000ffc:	4a22      	ldr	r2, [pc, #136]	@ (8001088 <Keypad_FindRow+0xc0>)
+ 8000ffe:	f852 2023 	ldr.w	r2, [r2, r3, lsl #2]
+ 8001002:	79fb      	ldrb	r3, [r7, #7]
+ 8001004:	4921      	ldr	r1, [pc, #132]	@ (800108c <Keypad_FindRow+0xc4>)
+ 8001006:	5ccb      	ldrb	r3, [r1, r3]
+ 8001008:	4619      	mov	r1, r3
+ 800100a:	4610      	mov	r0, r2
+ 800100c:	f7ff ff1e 	bl	8000e4c <Pin_OutputLow>
+    Keypad_Settle();
+ 8001010:	f7ff ff5c 	bl	8000ecc <Keypad_Settle>
+    char key = '\0';
+ 8001014:	2300      	movs	r3, #0
+ 8001016:	73bb      	strb	r3, [r7, #14]
+    uint8_t matches = 0U;
+ 8001018:	2300      	movs	r3, #0
+ 800101a:	737b      	strb	r3, [r7, #13]
+    for (uint8_t row = 0U; row < 4U; ++row) {
+ 800101c:	2300      	movs	r3, #0
+ 800101e:	733b      	strb	r3, [r7, #12]
+ 8001020:	e01c      	b.n	800105c <Keypad_FindRow+0x94>
+        if ((GPIO_INPUT(row_port[row]) & (1U << row_pin[row])) == 0U) {
+ 8001022:	7b3b      	ldrb	r3, [r7, #12]
+ 8001024:	4a16      	ldr	r2, [pc, #88]	@ (8001080 <Keypad_FindRow+0xb8>)
+ 8001026:	f852 3023 	ldr.w	r3, [r2, r3, lsl #2]
+ 800102a:	3310      	adds	r3, #16
+ 800102c:	681a      	ldr	r2, [r3, #0]
+ 800102e:	7b3b      	ldrb	r3, [r7, #12]
+ 8001030:	4914      	ldr	r1, [pc, #80]	@ (8001084 <Keypad_FindRow+0xbc>)
+ 8001032:	5ccb      	ldrb	r3, [r1, r3]
+ 8001034:	4619      	mov	r1, r3
+ 8001036:	2301      	movs	r3, #1
+ 8001038:	408b      	lsls	r3, r1
+ 800103a:	4013      	ands	r3, r2
+ 800103c:	2b00      	cmp	r3, #0
+ 800103e:	d10a      	bne.n	8001056 <Keypad_FindRow+0x8e>
+            key = key_map[row][column];
+ 8001040:	7b3a      	ldrb	r2, [r7, #12]
+ 8001042:	79fb      	ldrb	r3, [r7, #7]
+ 8001044:	4912      	ldr	r1, [pc, #72]	@ (8001090 <Keypad_FindRow+0xc8>)
+ 8001046:	0092      	lsls	r2, r2, #2
+ 8001048:	440a      	add	r2, r1
+ 800104a:	4413      	add	r3, r2
+ 800104c:	781b      	ldrb	r3, [r3, #0]
+ 800104e:	73bb      	strb	r3, [r7, #14]
+            ++matches;
+ 8001050:	7b7b      	ldrb	r3, [r7, #13]
+ 8001052:	3301      	adds	r3, #1
+ 8001054:	737b      	strb	r3, [r7, #13]
+    for (uint8_t row = 0U; row < 4U; ++row) {
+ 8001056:	7b3b      	ldrb	r3, [r7, #12]
+ 8001058:	3301      	adds	r3, #1
+ 800105a:	733b      	strb	r3, [r7, #12]
+ 800105c:	7b3b      	ldrb	r3, [r7, #12]
+ 800105e:	2b03      	cmp	r3, #3
+ 8001060:	d9df      	bls.n	8001022 <Keypad_FindRow+0x5a>
+        }
+    }
+    Keypad_Idle();
+ 8001062:	f7ff ff49 	bl	8000ef8 <Keypad_Idle>
+    Keypad_Settle();
+ 8001066:	f7ff ff31 	bl	8000ecc <Keypad_Settle>
+    //Reject ambiguous presses instead of guessing a PIN character.
+    return matches == 1U ? key : '\0';
+ 800106a:	7b7b      	ldrb	r3, [r7, #13]
+ 800106c:	2b01      	cmp	r3, #1
+ 800106e:	d101      	bne.n	8001074 <Keypad_FindRow+0xac>
+ 8001070:	7bbb      	ldrb	r3, [r7, #14]
+ 8001072:	e000      	b.n	8001076 <Keypad_FindRow+0xae>
+ 8001074:	2300      	movs	r3, #0
+}
+ 8001076:	4618      	mov	r0, r3
+ 8001078:	3710      	adds	r7, #16
+ 800107a:	46bd      	mov	sp, r7
+ 800107c:	bd80      	pop	{r7, pc}
+ 800107e:	bf00      	nop
+ 8001080:	08001d04 	.word	0x08001d04
+ 8001084:	08001d14 	.word	0x08001d14
+ 8001088:	08001d18 	.word	0x08001d18
+ 800108c:	08001d28 	.word	0x08001d28
+ 8001090:	08001d2c 	.word	0x08001d2c
+
+08001094 <Keypad_Interrupt>:
+
+static void Keypad_Interrupt(uint8_t column)
+{
+ 8001094:	b580      	push	{r7, lr}
+ 8001096:	b086      	sub	sp, #24
+ 8001098:	af00      	add	r7, sp, #0
+ 800109a:	4603      	mov	r3, r0
+ 800109c:	71fb      	strb	r3, [r7, #7]
+    uint32_t line = (1U << column);
+ 800109e:	79fb      	ldrb	r3, [r7, #7]
+ 80010a0:	2201      	movs	r2, #1
+ 80010a2:	fa02 f303 	lsl.w	r3, r2, r3
+ 80010a6:	613b      	str	r3, [r7, #16]
+    if ((EXTI_PR & line) == 0U) {
+ 80010a8:	4b24      	ldr	r3, [pc, #144]	@ (800113c <Keypad_Interrupt+0xa8>)
+ 80010aa:	681a      	ldr	r2, [r3, #0]
+ 80010ac:	693b      	ldr	r3, [r7, #16]
+ 80010ae:	4013      	ands	r3, r2
+ 80010b0:	2b00      	cmp	r3, #0
+ 80010b2:	d03f      	beq.n	8001134 <Keypad_Interrupt+0xa0>
+        return;
+    }
+    if (keypad_armed == 0U) {
+ 80010b4:	4b22      	ldr	r3, [pc, #136]	@ (8001140 <Keypad_Interrupt+0xac>)
+ 80010b6:	781b      	ldrb	r3, [r3, #0]
+ 80010b8:	b2db      	uxtb	r3, r3
+ 80010ba:	2b00      	cmp	r3, #0
+ 80010bc:	d103      	bne.n	80010c6 <Keypad_Interrupt+0x32>
+        EXTI_PR = line;
+ 80010be:	4a1f      	ldr	r2, [pc, #124]	@ (800113c <Keypad_Interrupt+0xa8>)
+ 80010c0:	693b      	ldr	r3, [r7, #16]
+ 80010c2:	6013      	str	r3, [r2, #0]
+        return;
+ 80010c4:	e037      	b.n	8001136 <Keypad_Interrupt+0xa2>
+    }
+    //Mask all four lines while scanning and while the key is held.
+    //This stops contact bounce and direction changes from flooding the CPU.
+    EXTI_IMR &= ~0x0FU;
+ 80010c6:	4b1f      	ldr	r3, [pc, #124]	@ (8001144 <Keypad_Interrupt+0xb0>)
+ 80010c8:	681b      	ldr	r3, [r3, #0]
+ 80010ca:	4a1e      	ldr	r2, [pc, #120]	@ (8001144 <Keypad_Interrupt+0xb0>)
+ 80010cc:	f023 030f 	bic.w	r3, r3, #15
+ 80010d0:	6013      	str	r3, [r2, #0]
+    keypad_armed = 0U;
+ 80010d2:	4b1b      	ldr	r3, [pc, #108]	@ (8001140 <Keypad_Interrupt+0xac>)
+ 80010d4:	2200      	movs	r2, #0
+ 80010d6:	701a      	strb	r2, [r3, #0]
+    uint8_t low = Keypad_LowColumns();
+ 80010d8:	f7ff ff46 	bl	8000f68 <Keypad_LowColumns>
+ 80010dc:	4603      	mov	r3, r0
+ 80010de:	73fb      	strb	r3, [r7, #15]
+    char key = '\0';
+ 80010e0:	2300      	movs	r3, #0
+ 80010e2:	75fb      	strb	r3, [r7, #23]
+    if (low == (uint8_t)line) {
+ 80010e4:	693b      	ldr	r3, [r7, #16]
+ 80010e6:	b2db      	uxtb	r3, r3
+ 80010e8:	7bfa      	ldrb	r2, [r7, #15]
+ 80010ea:	429a      	cmp	r2, r3
+ 80010ec:	d105      	bne.n	80010fa <Keypad_Interrupt+0x66>
+        key = Keypad_FindRow(column);
+ 80010ee:	79fb      	ldrb	r3, [r7, #7]
+ 80010f0:	4618      	mov	r0, r3
+ 80010f2:	f7ff ff69 	bl	8000fc8 <Keypad_FindRow>
+ 80010f6:	4603      	mov	r3, r0
+ 80010f8:	75fb      	strb	r3, [r7, #23]
+    }
+    captured_key = key;
+ 80010fa:	4a13      	ldr	r2, [pc, #76]	@ (8001148 <Keypad_Interrupt+0xb4>)
+ 80010fc:	7dfb      	ldrb	r3, [r7, #23]
+ 80010fe:	7013      	strb	r3, [r2, #0]
+    captured_column = column;
+ 8001100:	4a12      	ldr	r2, [pc, #72]	@ (800114c <Keypad_Interrupt+0xb8>)
+ 8001102:	79fb      	ldrb	r3, [r7, #7]
+ 8001104:	7013      	strb	r3, [r2, #0]
+    captured_at = TIM2_CNT;
+ 8001106:	4b12      	ldr	r3, [pc, #72]	@ (8001150 <Keypad_Interrupt+0xbc>)
+ 8001108:	681b      	ldr	r3, [r3, #0]
+ 800110a:	4a12      	ldr	r2, [pc, #72]	@ (8001154 <Keypad_Interrupt+0xc0>)
+ 800110c:	6013      	str	r3, [r2, #0]
+    captured_during_entry = (safe_state == PIN_ENTRY) ? 1U : 0U;
+ 800110e:	4b12      	ldr	r3, [pc, #72]	@ (8001158 <Keypad_Interrupt+0xc4>)
+ 8001110:	781b      	ldrb	r3, [r3, #0]
+ 8001112:	b2db      	uxtb	r3, r3
+ 8001114:	2b00      	cmp	r3, #0
+ 8001116:	d101      	bne.n	800111c <Keypad_Interrupt+0x88>
+ 8001118:	2201      	movs	r2, #1
+ 800111a:	e000      	b.n	800111e <Keypad_Interrupt+0x8a>
+ 800111c:	2200      	movs	r2, #0
+ 800111e:	4b0f      	ldr	r3, [pc, #60]	@ (800115c <Keypad_Interrupt+0xc8>)
+ 8001120:	701a      	strb	r2, [r3, #0]
+    key_waiting = 1U;
+ 8001122:	4b0f      	ldr	r3, [pc, #60]	@ (8001160 <Keypad_Interrupt+0xcc>)
+ 8001124:	2201      	movs	r2, #1
+ 8001126:	701a      	strb	r2, [r3, #0]
+    //EXTI pending bits clear by WRITING 1. Never use &= to clear them.
+    //GPIO directions are back to idle before we acknowledge these events.
+    EXTI_PR = 0x0FU;
+ 8001128:	4b04      	ldr	r3, [pc, #16]	@ (800113c <Keypad_Interrupt+0xa8>)
+ 800112a:	220f      	movs	r2, #15
+ 800112c:	601a      	str	r2, [r3, #0]
+  \details Acts as a special kind of Data Memory Barrier.
+           It completes when all explicit memory accesses before this instruction complete.
+ */
+__STATIC_FORCEINLINE void __DSB(void)
+{
+  __ASM volatile ("dsb 0xF":::"memory");
+ 800112e:	f3bf 8f4f 	dsb	sy
+}
+ 8001132:	e000      	b.n	8001136 <Keypad_Interrupt+0xa2>
+        return;
+ 8001134:	bf00      	nop
+    __DSB();
+}
+ 8001136:	3718      	adds	r7, #24
+ 8001138:	46bd      	mov	sp, r7
+ 800113a:	bd80      	pop	{r7, pc}
+ 800113c:	40013c14 	.word	0x40013c14
+ 8001140:	20000055 	.word	0x20000055
+ 8001144:	40013c00 	.word	0x40013c00
+ 8001148:	20000056 	.word	0x20000056
+ 800114c:	20000057 	.word	0x20000057
+ 8001150:	40000024 	.word	0x40000024
+ 8001154:	20000058 	.word	0x20000058
+ 8001158:	20000065 	.word	0x20000065
+ 800115c:	2000005c 	.word	0x2000005c
+ 8001160:	20000054 	.word	0x20000054
+
+08001164 <EXTI0_IRQHandler>:
+
+//The startup vector table looks for these exact function names.
+void EXTI0_IRQHandler(void) { Keypad_Interrupt(0U); }
+ 8001164:	b580      	push	{r7, lr}
+ 8001166:	af00      	add	r7, sp, #0
+ 8001168:	2000      	movs	r0, #0
+ 800116a:	f7ff ff93 	bl	8001094 <Keypad_Interrupt>
+ 800116e:	bf00      	nop
+ 8001170:	bd80      	pop	{r7, pc}
+
+08001172 <EXTI1_IRQHandler>:
+void EXTI1_IRQHandler(void) { Keypad_Interrupt(1U); }
+ 8001172:	b580      	push	{r7, lr}
+ 8001174:	af00      	add	r7, sp, #0
+ 8001176:	2001      	movs	r0, #1
+ 8001178:	f7ff ff8c 	bl	8001094 <Keypad_Interrupt>
+ 800117c:	bf00      	nop
+ 800117e:	bd80      	pop	{r7, pc}
+
+08001180 <EXTI2_IRQHandler>:
+void EXTI2_IRQHandler(void) { Keypad_Interrupt(2U); }
+ 8001180:	b580      	push	{r7, lr}
+ 8001182:	af00      	add	r7, sp, #0
+ 8001184:	2002      	movs	r0, #2
+ 8001186:	f7ff ff85 	bl	8001094 <Keypad_Interrupt>
+ 800118a:	bf00      	nop
+ 800118c:	bd80      	pop	{r7, pc}
+
+0800118e <EXTI3_IRQHandler>:
+void EXTI3_IRQHandler(void) { Keypad_Interrupt(3U); }
+ 800118e:	b580      	push	{r7, lr}
+ 8001190:	af00      	add	r7, sp, #0
+ 8001192:	2003      	movs	r0, #3
+ 8001194:	f7ff ff7e 	bl	8001094 <Keypad_Interrupt>
+ 8001198:	bf00      	nop
+ 800119a:	bd80      	pop	{r7, pc}
+
+0800119c <Keypad_Init>:
+
+static void Keypad_Init(void)
+{
+ 800119c:	b580      	push	{r7, lr}
+ 800119e:	af00      	add	r7, sp, #0
+    //GPIOA bit0, GPIOB bit1, GPIOC bit2, GPIOG bit6, GPIOI bit8.
+    RCC_AHB1ENR |= (1U << 0) | (1U << 1) | (1U << 2) | (1U << 6) | (1U << 8);
+ 80011a0:	4b1f      	ldr	r3, [pc, #124]	@ (8001220 <Keypad_Init+0x84>)
+ 80011a2:	681a      	ldr	r2, [r3, #0]
+ 80011a4:	491e      	ldr	r1, [pc, #120]	@ (8001220 <Keypad_Init+0x84>)
+ 80011a6:	f240 1347 	movw	r3, #327	@ 0x147
+ 80011aa:	4313      	orrs	r3, r2
+ 80011ac:	600b      	str	r3, [r1, #0]
+    RCC_APB2ENR |= (1U << 14); //SYSCFG clock is on APB2, bit14.
+ 80011ae:	4b1d      	ldr	r3, [pc, #116]	@ (8001224 <Keypad_Init+0x88>)
+ 80011b0:	681b      	ldr	r3, [r3, #0]
+ 80011b2:	4a1c      	ldr	r2, [pc, #112]	@ (8001224 <Keypad_Init+0x88>)
+ 80011b4:	f443 4380 	orr.w	r3, r3, #16384	@ 0x4000
+ 80011b8:	6013      	str	r3, [r2, #0]
+    (void)RCC_AHB1ENR;
+ 80011ba:	4b19      	ldr	r3, [pc, #100]	@ (8001220 <Keypad_Init+0x84>)
+ 80011bc:	681b      	ldr	r3, [r3, #0]
+    (void)RCC_APB2ENR;
+ 80011be:	4b19      	ldr	r3, [pc, #100]	@ (8001224 <Keypad_Init+0x88>)
+ 80011c0:	681b      	ldr	r3, [r3, #0]
+    EXTI_IMR &= ~0x0FU;
+ 80011c2:	4b19      	ldr	r3, [pc, #100]	@ (8001228 <Keypad_Init+0x8c>)
+ 80011c4:	681b      	ldr	r3, [r3, #0]
+ 80011c6:	4a18      	ldr	r2, [pc, #96]	@ (8001228 <Keypad_Init+0x8c>)
+ 80011c8:	f023 030f 	bic.w	r3, r3, #15
+ 80011cc:	6013      	str	r3, [r2, #0]
+    Keypad_Idle();
+ 80011ce:	f7ff fe93 	bl	8000ef8 <Keypad_Idle>
+    //Each EXTI route takes 4 bits. Port A=0, port I=8.
+    //EXTI0=PA0, EXTI1=PI1, EXTI2=PI2, EXTI3=PI3 -> low 16 bits=0x8880.
+    SYSCFG_EXTICR1 = (SYSCFG_EXTICR1 & ~0xFFFFU) | 0x8880U;
+ 80011d2:	4b16      	ldr	r3, [pc, #88]	@ (800122c <Keypad_Init+0x90>)
+ 80011d4:	681b      	ldr	r3, [r3, #0]
+ 80011d6:	4a16      	ldr	r2, [pc, #88]	@ (8001230 <Keypad_Init+0x94>)
+ 80011d8:	401a      	ands	r2, r3
+ 80011da:	4914      	ldr	r1, [pc, #80]	@ (800122c <Keypad_Init+0x90>)
+ 80011dc:	f648 0380 	movw	r3, #34944	@ 0x8880
+ 80011e0:	4313      	orrs	r3, r2
+ 80011e2:	600b      	str	r3, [r1, #0]
+    EXTI_RTSR &= ~0x0FU;
+ 80011e4:	4b13      	ldr	r3, [pc, #76]	@ (8001234 <Keypad_Init+0x98>)
+ 80011e6:	681b      	ldr	r3, [r3, #0]
+ 80011e8:	4a12      	ldr	r2, [pc, #72]	@ (8001234 <Keypad_Init+0x98>)
+ 80011ea:	f023 030f 	bic.w	r3, r3, #15
+ 80011ee:	6013      	str	r3, [r2, #0]
+    EXTI_FTSR |= 0x0FU; //A pressed key pulls a column from HIGH to LOW.
+ 80011f0:	4b11      	ldr	r3, [pc, #68]	@ (8001238 <Keypad_Init+0x9c>)
+ 80011f2:	681b      	ldr	r3, [r3, #0]
+ 80011f4:	4a10      	ldr	r2, [pc, #64]	@ (8001238 <Keypad_Init+0x9c>)
+ 80011f6:	f043 030f 	orr.w	r3, r3, #15
+ 80011fa:	6013      	str	r3, [r2, #0]
+    EXTI_PR = 0x0FU;
+ 80011fc:	4b0f      	ldr	r3, [pc, #60]	@ (800123c <Keypad_Init+0xa0>)
+ 80011fe:	220f      	movs	r2, #15
+ 8001200:	601a      	str	r2, [r3, #0]
+    //NVIC interrupts 6,7,8,9 correspond to EXTI0,1,2,3.
+    //CMSIS gives the NVIC register layout; we still set the registers ourselves.
+    NVIC->ICPR[0] = (0x0FU << 6);
+ 8001202:	4b0f      	ldr	r3, [pc, #60]	@ (8001240 <Keypad_Init+0xa4>)
+ 8001204:	f44f 7270 	mov.w	r2, #960	@ 0x3c0
+ 8001208:	f8c3 2180 	str.w	r2, [r3, #384]	@ 0x180
+    NVIC->ISER[0] = (0x0FU << 6);
+ 800120c:	4b0c      	ldr	r3, [pc, #48]	@ (8001240 <Keypad_Init+0xa4>)
+ 800120e:	f44f 7270 	mov.w	r2, #960	@ 0x3c0
+ 8001212:	601a      	str	r2, [r3, #0]
+    keypad_started = TIM2_CNT;
+ 8001214:	4b0b      	ldr	r3, [pc, #44]	@ (8001244 <Keypad_Init+0xa8>)
+ 8001216:	681b      	ldr	r3, [r3, #0]
+ 8001218:	4a0b      	ldr	r2, [pc, #44]	@ (8001248 <Keypad_Init+0xac>)
+ 800121a:	6013      	str	r3, [r2, #0]
+    //Main waits for a stable release before unmasking EXTI.
+    //A key held at reset must be released before we accept input.
+}
+ 800121c:	bf00      	nop
+ 800121e:	bd80      	pop	{r7, pc}
+ 8001220:	40023830 	.word	0x40023830
+ 8001224:	40023844 	.word	0x40023844
+ 8001228:	40013c00 	.word	0x40013c00
+ 800122c:	40013808 	.word	0x40013808
+ 8001230:	ffff0000 	.word	0xffff0000
+ 8001234:	40013c08 	.word	0x40013c08
+ 8001238:	40013c0c 	.word	0x40013c0c
+ 800123c:	40013c14 	.word	0x40013c14
+ 8001240:	e000e100 	.word	0xe000e100
+ 8001244:	40000024 	.word	0x40000024
+ 8001248:	20000080 	.word	0x20000080
+
+0800124c <Countdown_Init>:
+
+static void Countdown_Init(void)
+{
+ 800124c:	b480      	push	{r7}
+ 800124e:	af00      	add	r7, sp, #0
+    RCC_APB1ENR |= (1U << 4); //TIM6 clock, bit4.
+ 8001250:	4b16      	ldr	r3, [pc, #88]	@ (80012ac <Countdown_Init+0x60>)
+ 8001252:	681b      	ldr	r3, [r3, #0]
+ 8001254:	4a15      	ldr	r2, [pc, #84]	@ (80012ac <Countdown_Init+0x60>)
+ 8001256:	f043 0310 	orr.w	r3, r3, #16
+ 800125a:	6013      	str	r3, [r2, #0]
+    (void)RCC_APB1ENR;
+ 800125c:	4b13      	ldr	r3, [pc, #76]	@ (80012ac <Countdown_Init+0x60>)
+ 800125e:	681b      	ldr	r3, [r3, #0]
+    RCC_APB1RSTR |= (1U << 4);
+ 8001260:	4b13      	ldr	r3, [pc, #76]	@ (80012b0 <Countdown_Init+0x64>)
+ 8001262:	681b      	ldr	r3, [r3, #0]
+ 8001264:	4a12      	ldr	r2, [pc, #72]	@ (80012b0 <Countdown_Init+0x64>)
+ 8001266:	f043 0310 	orr.w	r3, r3, #16
+ 800126a:	6013      	str	r3, [r2, #0]
+    RCC_APB1RSTR &= ~(1U << 4);
+ 800126c:	4b10      	ldr	r3, [pc, #64]	@ (80012b0 <Countdown_Init+0x64>)
+ 800126e:	681b      	ldr	r3, [r3, #0]
+ 8001270:	4a0f      	ldr	r2, [pc, #60]	@ (80012b0 <Countdown_Init+0x64>)
+ 8001272:	f023 0310 	bic.w	r3, r3, #16
+ 8001276:	6013      	str	r3, [r2, #0]
+    TIM6_CR1 = 0U;
+ 8001278:	4b0e      	ldr	r3, [pc, #56]	@ (80012b4 <Countdown_Init+0x68>)
+ 800127a:	2200      	movs	r2, #0
+ 800127c:	601a      	str	r2, [r3, #0]
+    TIM6_DIER = 0U; //No timer interrupt. We poll UIF in the main loop.
+ 800127e:	4b0e      	ldr	r3, [pc, #56]	@ (80012b8 <Countdown_Init+0x6c>)
+ 8001280:	2200      	movs	r2, #0
+ 8001282:	601a      	str	r2, [r3, #0]
+    TIM6_PSC = 15999U; //16MHz / (15999+1) = 1000 ticks per second.
+ 8001284:	4b0d      	ldr	r3, [pc, #52]	@ (80012bc <Countdown_Init+0x70>)
+ 8001286:	f643 627f 	movw	r2, #15999	@ 0x3e7f
+ 800128a:	601a      	str	r2, [r3, #0]
+    TIM6_ARR = 999U; //Counts 0 through 999, so exactly 1000 ticks nominally.
+ 800128c:	4b0c      	ldr	r3, [pc, #48]	@ (80012c0 <Countdown_Init+0x74>)
+ 800128e:	f240 32e7 	movw	r2, #999	@ 0x3e7
+ 8001292:	601a      	str	r2, [r3, #0]
+    TIM6_EGR = 1U; //Load PSC now instead of waiting for the first overflow.
+ 8001294:	4b0b      	ldr	r3, [pc, #44]	@ (80012c4 <Countdown_Init+0x78>)
+ 8001296:	2201      	movs	r2, #1
+ 8001298:	601a      	str	r2, [r3, #0]
+    TIM6_SR = 0U;
+ 800129a:	4b0b      	ldr	r3, [pc, #44]	@ (80012c8 <Countdown_Init+0x7c>)
+ 800129c:	2200      	movs	r2, #0
+ 800129e:	601a      	str	r2, [r3, #0]
+}
+ 80012a0:	bf00      	nop
+ 80012a2:	46bd      	mov	sp, r7
+ 80012a4:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80012a8:	4770      	bx	lr
+ 80012aa:	bf00      	nop
+ 80012ac:	40023840 	.word	0x40023840
+ 80012b0:	40023820 	.word	0x40023820
+ 80012b4:	40001000 	.word	0x40001000
+ 80012b8:	4000100c 	.word	0x4000100c
+ 80012bc:	40001028 	.word	0x40001028
+ 80012c0:	4000102c 	.word	0x4000102c
+ 80012c4:	40001014 	.word	0x40001014
+ 80012c8:	40001010 	.word	0x40001010
+
+080012cc <LED_Init>:
+
+static void LED_Init(void)
+{
+ 80012cc:	b580      	push	{r7, lr}
+ 80012ce:	af00      	add	r7, sp, #0
+    //GPIOB's clock was enabled by I2C/keypad setup before this function.
+    //Preload PB4 LOW, then set output mode. This starts the LED OFF.
+    Pin_OutputLow(GPIOB_BASE, 4U);
+ 80012d0:	2104      	movs	r1, #4
+ 80012d2:	4802      	ldr	r0, [pc, #8]	@ (80012dc <LED_Init+0x10>)
+ 80012d4:	f7ff fdba 	bl	8000e4c <Pin_OutputLow>
+}
+ 80012d8:	bf00      	nop
+ 80012da:	bd80      	pop	{r7, pc}
+ 80012dc:	40020400 	.word	0x40020400
+
+080012e0 <LED_Process>:
+
+static void LED_Process(uint32_t now)
+{
+ 80012e0:	b480      	push	{r7}
+ 80012e2:	b085      	sub	sp, #20
+ 80012e4:	af00      	add	r7, sp, #0
+ 80012e6:	6078      	str	r0, [r7, #4]
+    //Original lab: a short beep per key. Here: one 50ms LED flash per key.
+    //Checking elapsed time lets the main loop keep handling other work.
+    if ((short_flash != 0U) && ((uint32_t)(now - flash_started) >= KEY_FLASH_US)) {
+ 80012e8:	4b18      	ldr	r3, [pc, #96]	@ (800134c <LED_Process+0x6c>)
+ 80012ea:	781b      	ldrb	r3, [r3, #0]
+ 80012ec:	2b00      	cmp	r3, #0
+ 80012ee:	d00a      	beq.n	8001306 <LED_Process+0x26>
+ 80012f0:	4b17      	ldr	r3, [pc, #92]	@ (8001350 <LED_Process+0x70>)
+ 80012f2:	681b      	ldr	r3, [r3, #0]
+ 80012f4:	687a      	ldr	r2, [r7, #4]
+ 80012f6:	1ad3      	subs	r3, r2, r3
+ 80012f8:	f24c 324f 	movw	r2, #49999	@ 0xc34f
+ 80012fc:	4293      	cmp	r3, r2
+ 80012fe:	d902      	bls.n	8001306 <LED_Process+0x26>
+        short_flash = 0U;
+ 8001300:	4b12      	ldr	r3, [pc, #72]	@ (800134c <LED_Process+0x6c>)
+ 8001302:	2200      	movs	r2, #0
+ 8001304:	701a      	strb	r2, [r3, #0]
+    }
+    uint8_t on = short_flash;
+ 8001306:	4b11      	ldr	r3, [pc, #68]	@ (800134c <LED_Process+0x6c>)
+ 8001308:	781b      	ldrb	r3, [r3, #0]
+ 800130a:	73fb      	strb	r3, [r7, #15]
+    if (safe_state == ACCESS_GRANTED) {
+ 800130c:	4b11      	ldr	r3, [pc, #68]	@ (8001354 <LED_Process+0x74>)
+ 800130e:	781b      	ldrb	r3, [r3, #0]
+ 8001310:	b2db      	uxtb	r3, r3
+ 8001312:	2b01      	cmp	r3, #1
+ 8001314:	d102      	bne.n	800131c <LED_Process+0x3c>
+        //Original two-second continuous tone becomes a two-second steady light.
+        //App_Process() ends this state when its two-second deadline is reached.
+        on = 1U;
+ 8001316:	2301      	movs	r3, #1
+ 8001318:	73fb      	strb	r3, [r7, #15]
+ 800131a:	e007      	b.n	800132c <LED_Process+0x4c>
+    } else if (safe_state == LOCKED_OUT) {
+ 800131c:	4b0d      	ldr	r3, [pc, #52]	@ (8001354 <LED_Process+0x74>)
+ 800131e:	781b      	ldrb	r3, [r3, #0]
+ 8001320:	b2db      	uxtb	r3, r3
+ 8001322:	2b03      	cmp	r3, #3
+ 8001324:	d102      	bne.n	800132c <LED_Process+0x4c>
+        //Original alternating-second siren becomes 1s ON, 1s OFF blinking.
+        //TIM6 polling changes lockout_led_on once per elapsed second.
+        on = lockout_led_on;
+ 8001326:	4b0c      	ldr	r3, [pc, #48]	@ (8001358 <LED_Process+0x78>)
+ 8001328:	781b      	ldrb	r3, [r3, #0]
+ 800132a:	73fb      	strb	r3, [r7, #15]
+    }
+    //BSRR bit4 sets PB4 HIGH; bit20 (4+16) resets PB4 LOW.
+    GPIO_SET_RESET(GPIOB_BASE) = on ? (1U << 4) : (1U << 20);
+ 800132c:	7bfb      	ldrb	r3, [r7, #15]
+ 800132e:	2b00      	cmp	r3, #0
+ 8001330:	d001      	beq.n	8001336 <LED_Process+0x56>
+ 8001332:	2310      	movs	r3, #16
+ 8001334:	e001      	b.n	800133a <LED_Process+0x5a>
+ 8001336:	f44f 1380 	mov.w	r3, #1048576	@ 0x100000
+ 800133a:	4a08      	ldr	r2, [pc, #32]	@ (800135c <LED_Process+0x7c>)
+ 800133c:	6013      	str	r3, [r2, #0]
+}
+ 800133e:	bf00      	nop
+ 8001340:	3714      	adds	r7, #20
+ 8001342:	46bd      	mov	sp, r7
+ 8001344:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001348:	4770      	bx	lr
+ 800134a:	bf00      	nop
+ 800134c:	20000078 	.word	0x20000078
+ 8001350:	20000074 	.word	0x20000074
+ 8001354:	20000065 	.word	0x20000065
+ 8001358:	20000079 	.word	0x20000079
+ 800135c:	40020418 	.word	0x40020418
+
+08001360 <Entry_Reset>:
+
+static void Entry_Reset(void)
+{
+ 8001360:	b480      	push	{r7}
+ 8001362:	b083      	sub	sp, #12
+ 8001364:	af00      	add	r7, sp, #0
+    entered_count = 0U;
+ 8001366:	4b0f      	ldr	r3, [pc, #60]	@ (80013a4 <Entry_Reset+0x44>)
+ 8001368:	2200      	movs	r2, #0
+ 800136a:	701a      	strb	r2, [r3, #0]
+    for (uint8_t i = 0U; i < 4U; ++i) {
+ 800136c:	2300      	movs	r3, #0
+ 800136e:	71fb      	strb	r3, [r7, #7]
+ 8001370:	e006      	b.n	8001380 <Entry_Reset+0x20>
+        entered_pin[i] = '\0';
+ 8001372:	79fb      	ldrb	r3, [r7, #7]
+ 8001374:	4a0c      	ldr	r2, [pc, #48]	@ (80013a8 <Entry_Reset+0x48>)
+ 8001376:	2100      	movs	r1, #0
+ 8001378:	54d1      	strb	r1, [r2, r3]
+    for (uint8_t i = 0U; i < 4U; ++i) {
+ 800137a:	79fb      	ldrb	r3, [r7, #7]
+ 800137c:	3301      	adds	r3, #1
+ 800137e:	71fb      	strb	r3, [r7, #7]
+ 8001380:	79fb      	ldrb	r3, [r7, #7]
+ 8001382:	2b03      	cmp	r3, #3
+ 8001384:	d9f5      	bls.n	8001372 <Entry_Reset+0x12>
+    }
+    safe_state = PIN_ENTRY;
+ 8001386:	4b09      	ldr	r3, [pc, #36]	@ (80013ac <Entry_Reset+0x4c>)
+ 8001388:	2200      	movs	r2, #0
+ 800138a:	701a      	strb	r2, [r3, #0]
+    short_flash = 0U;
+ 800138c:	4b08      	ldr	r3, [pc, #32]	@ (80013b0 <Entry_Reset+0x50>)
+ 800138e:	2200      	movs	r2, #0
+ 8001390:	701a      	strb	r2, [r3, #0]
+    display_dirty = 1U;
+ 8001392:	4b08      	ldr	r3, [pc, #32]	@ (80013b4 <Entry_Reset+0x54>)
+ 8001394:	2201      	movs	r2, #1
+ 8001396:	701a      	strb	r2, [r3, #0]
+}
+ 8001398:	bf00      	nop
+ 800139a:	370c      	adds	r7, #12
+ 800139c:	46bd      	mov	sp, r7
+ 800139e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80013a2:	4770      	bx	lr
+ 80013a4:	2000006c 	.word	0x2000006c
+ 80013a8:	20000068 	.word	0x20000068
+ 80013ac:	20000065 	.word	0x20000065
+ 80013b0:	20000078 	.word	0x20000078
+ 80013b4:	20000004 	.word	0x20000004
+
+080013b8 <App_Key>:
+
+static void App_Key(char key, uint32_t now)
+{
+ 80013b8:	b480      	push	{r7}
+ 80013ba:	b085      	sub	sp, #20
+ 80013bc:	af00      	add	r7, sp, #0
+ 80013be:	4603      	mov	r3, r0
+ 80013c0:	6039      	str	r1, [r7, #0]
+ 80013c2:	71fb      	strb	r3, [r7, #7]
+    if (safe_state != PIN_ENTRY) {
+ 80013c4:	4b37      	ldr	r3, [pc, #220]	@ (80014a4 <App_Key+0xec>)
+ 80013c6:	781b      	ldrb	r3, [r3, #0]
+ 80013c8:	b2db      	uxtb	r3, r3
+ 80013ca:	2b00      	cmp	r3, #0
+ 80013cc:	d161      	bne.n	8001492 <App_Key+0xda>
+        return;
+    }
+    //Every key counts, including A-D, * and #. The lab says any four keys.
+    //A fixed four-byte buffer needs no string terminator because we compare bytes.
+    entered_pin[entered_count] = key;
+ 80013ce:	4b36      	ldr	r3, [pc, #216]	@ (80014a8 <App_Key+0xf0>)
+ 80013d0:	781b      	ldrb	r3, [r3, #0]
+ 80013d2:	4619      	mov	r1, r3
+ 80013d4:	4a35      	ldr	r2, [pc, #212]	@ (80014ac <App_Key+0xf4>)
+ 80013d6:	79fb      	ldrb	r3, [r7, #7]
+ 80013d8:	5453      	strb	r3, [r2, r1]
+    ++entered_count;
+ 80013da:	4b33      	ldr	r3, [pc, #204]	@ (80014a8 <App_Key+0xf0>)
+ 80013dc:	781b      	ldrb	r3, [r3, #0]
+ 80013de:	3301      	adds	r3, #1
+ 80013e0:	b2da      	uxtb	r2, r3
+ 80013e2:	4b31      	ldr	r3, [pc, #196]	@ (80014a8 <App_Key+0xf0>)
+ 80013e4:	701a      	strb	r2, [r3, #0]
+    short_flash = 1U;
+ 80013e6:	4b32      	ldr	r3, [pc, #200]	@ (80014b0 <App_Key+0xf8>)
+ 80013e8:	2201      	movs	r2, #1
+ 80013ea:	701a      	strb	r2, [r3, #0]
+    flash_started = now;
+ 80013ec:	4a31      	ldr	r2, [pc, #196]	@ (80014b4 <App_Key+0xfc>)
+ 80013ee:	683b      	ldr	r3, [r7, #0]
+ 80013f0:	6013      	str	r3, [r2, #0]
+    display_dirty = 1U;
+ 80013f2:	4b31      	ldr	r3, [pc, #196]	@ (80014b8 <App_Key+0x100>)
+ 80013f4:	2201      	movs	r2, #1
+ 80013f6:	701a      	strb	r2, [r3, #0]
+    if (entered_count < 4U) {
+ 80013f8:	4b2b      	ldr	r3, [pc, #172]	@ (80014a8 <App_Key+0xf0>)
+ 80013fa:	781b      	ldrb	r3, [r3, #0]
+ 80013fc:	2b03      	cmp	r3, #3
+ 80013fe:	d94a      	bls.n	8001496 <App_Key+0xde>
+        return;
+    }
+    uint8_t correct = 1U;
+ 8001400:	2301      	movs	r3, #1
+ 8001402:	73fb      	strb	r3, [r7, #15]
+    for (uint8_t i = 0U; i < 4U; ++i) {
+ 8001404:	2300      	movs	r3, #0
+ 8001406:	73bb      	strb	r3, [r7, #14]
+ 8001408:	e00c      	b.n	8001424 <App_Key+0x6c>
+        if (entered_pin[i] != SECRET_PIN[i]) {
+ 800140a:	7bbb      	ldrb	r3, [r7, #14]
+ 800140c:	4a27      	ldr	r2, [pc, #156]	@ (80014ac <App_Key+0xf4>)
+ 800140e:	5cd2      	ldrb	r2, [r2, r3]
+ 8001410:	7bbb      	ldrb	r3, [r7, #14]
+ 8001412:	492a      	ldr	r1, [pc, #168]	@ (80014bc <App_Key+0x104>)
+ 8001414:	5ccb      	ldrb	r3, [r1, r3]
+ 8001416:	429a      	cmp	r2, r3
+ 8001418:	d001      	beq.n	800141e <App_Key+0x66>
+            correct = 0U;
+ 800141a:	2300      	movs	r3, #0
+ 800141c:	73fb      	strb	r3, [r7, #15]
+    for (uint8_t i = 0U; i < 4U; ++i) {
+ 800141e:	7bbb      	ldrb	r3, [r7, #14]
+ 8001420:	3301      	adds	r3, #1
+ 8001422:	73bb      	strb	r3, [r7, #14]
+ 8001424:	7bbb      	ldrb	r3, [r7, #14]
+ 8001426:	2b03      	cmp	r3, #3
+ 8001428:	d9ef      	bls.n	800140a <App_Key+0x52>
+        }
+    }
+    state_started = now;
+ 800142a:	4a25      	ldr	r2, [pc, #148]	@ (80014c0 <App_Key+0x108>)
+ 800142c:	683b      	ldr	r3, [r7, #0]
+ 800142e:	6013      	str	r3, [r2, #0]
+    if (correct != 0U) {
+ 8001430:	7bfb      	ldrb	r3, [r7, #15]
+ 8001432:	2b00      	cmp	r3, #0
+ 8001434:	d006      	beq.n	8001444 <App_Key+0x8c>
+        wrong_attempts = 0U;
+ 8001436:	4b23      	ldr	r3, [pc, #140]	@ (80014c4 <App_Key+0x10c>)
+ 8001438:	2200      	movs	r2, #0
+ 800143a:	701a      	strb	r2, [r3, #0]
+        safe_state = ACCESS_GRANTED;
+ 800143c:	4b19      	ldr	r3, [pc, #100]	@ (80014a4 <App_Key+0xec>)
+ 800143e:	2201      	movs	r2, #1
+ 8001440:	701a      	strb	r2, [r3, #0]
+ 8001442:	e029      	b.n	8001498 <App_Key+0xe0>
+    } else {
+        ++wrong_attempts;
+ 8001444:	4b1f      	ldr	r3, [pc, #124]	@ (80014c4 <App_Key+0x10c>)
+ 8001446:	781b      	ldrb	r3, [r3, #0]
+ 8001448:	3301      	adds	r3, #1
+ 800144a:	b2da      	uxtb	r2, r3
+ 800144c:	4b1d      	ldr	r3, [pc, #116]	@ (80014c4 <App_Key+0x10c>)
+ 800144e:	701a      	strb	r2, [r3, #0]
+        if (wrong_attempts >= 3U) {
+ 8001450:	4b1c      	ldr	r3, [pc, #112]	@ (80014c4 <App_Key+0x10c>)
+ 8001452:	781b      	ldrb	r3, [r3, #0]
+ 8001454:	2b02      	cmp	r3, #2
+ 8001456:	d918      	bls.n	800148a <App_Key+0xd2>
+            safe_state = LOCKED_OUT;
+ 8001458:	4b12      	ldr	r3, [pc, #72]	@ (80014a4 <App_Key+0xec>)
+ 800145a:	2203      	movs	r2, #3
+ 800145c:	701a      	strb	r2, [r3, #0]
+            seconds_left = LOCKOUT_SECONDS;
+ 800145e:	4b1a      	ldr	r3, [pc, #104]	@ (80014c8 <App_Key+0x110>)
+ 8001460:	221e      	movs	r2, #30
+ 8001462:	701a      	strb	r2, [r3, #0]
+            lockout_led_on = 1U;
+ 8001464:	4b19      	ldr	r3, [pc, #100]	@ (80014cc <App_Key+0x114>)
+ 8001466:	2201      	movs	r2, #1
+ 8001468:	701a      	strb	r2, [r3, #0]
+            //Restart TIM6 at lockout entry so the first second is a full second.
+            TIM6_CR1 = 0U;
+ 800146a:	4b19      	ldr	r3, [pc, #100]	@ (80014d0 <App_Key+0x118>)
+ 800146c:	2200      	movs	r2, #0
+ 800146e:	601a      	str	r2, [r3, #0]
+            TIM6_CNT = 0U;
+ 8001470:	4b18      	ldr	r3, [pc, #96]	@ (80014d4 <App_Key+0x11c>)
+ 8001472:	2200      	movs	r2, #0
+ 8001474:	601a      	str	r2, [r3, #0]
+            TIM6_EGR = 1U;
+ 8001476:	4b18      	ldr	r3, [pc, #96]	@ (80014d8 <App_Key+0x120>)
+ 8001478:	2201      	movs	r2, #1
+ 800147a:	601a      	str	r2, [r3, #0]
+            TIM6_SR = 0U;
+ 800147c:	4b17      	ldr	r3, [pc, #92]	@ (80014dc <App_Key+0x124>)
+ 800147e:	2200      	movs	r2, #0
+ 8001480:	601a      	str	r2, [r3, #0]
+            TIM6_CR1 = 1U;
+ 8001482:	4b13      	ldr	r3, [pc, #76]	@ (80014d0 <App_Key+0x118>)
+ 8001484:	2201      	movs	r2, #1
+ 8001486:	601a      	str	r2, [r3, #0]
+ 8001488:	e006      	b.n	8001498 <App_Key+0xe0>
+        } else {
+            safe_state = ACCESS_DENIED;
+ 800148a:	4b06      	ldr	r3, [pc, #24]	@ (80014a4 <App_Key+0xec>)
+ 800148c:	2202      	movs	r2, #2
+ 800148e:	701a      	strb	r2, [r3, #0]
+ 8001490:	e002      	b.n	8001498 <App_Key+0xe0>
+        return;
+ 8001492:	bf00      	nop
+ 8001494:	e000      	b.n	8001498 <App_Key+0xe0>
+        return;
+ 8001496:	bf00      	nop
+        }
+    }
+}
+ 8001498:	3714      	adds	r7, #20
+ 800149a:	46bd      	mov	sp, r7
+ 800149c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80014a0:	4770      	bx	lr
+ 80014a2:	bf00      	nop
+ 80014a4:	20000065 	.word	0x20000065
+ 80014a8:	2000006c 	.word	0x2000006c
+ 80014ac:	20000068 	.word	0x20000068
+ 80014b0:	20000078 	.word	0x20000078
+ 80014b4:	20000074 	.word	0x20000074
+ 80014b8:	20000004 	.word	0x20000004
+ 80014bc:	08001c74 	.word	0x08001c74
+ 80014c0:	20000070 	.word	0x20000070
+ 80014c4:	2000006d 	.word	0x2000006d
+ 80014c8:	2000006e 	.word	0x2000006e
+ 80014cc:	20000079 	.word	0x20000079
+ 80014d0:	40001000 	.word	0x40001000
+ 80014d4:	40001024 	.word	0x40001024
+ 80014d8:	40001014 	.word	0x40001014
+ 80014dc:	40001010 	.word	0x40001010
+
+080014e0 <App_Process>:
+
+static void App_Process(uint32_t now)
+{
+ 80014e0:	b580      	push	{r7, lr}
+ 80014e2:	b082      	sub	sp, #8
+ 80014e4:	af00      	add	r7, sp, #0
+ 80014e6:	6078      	str	r0, [r7, #4]
+    //TIM6 runs in hardware. UIF is a flag we check, not an interrupt callback.
+    if ((TIM6_SR & 1U) != 0U) {
+ 80014e8:	4b28      	ldr	r3, [pc, #160]	@ (800158c <App_Process+0xac>)
+ 80014ea:	681b      	ldr	r3, [r3, #0]
+ 80014ec:	f003 0301 	and.w	r3, r3, #1
+ 80014f0:	2b00      	cmp	r3, #0
+ 80014f2:	d02a      	beq.n	800154a <App_Process+0x6a>
+        TIM6_SR = 0U;
+ 80014f4:	4b25      	ldr	r3, [pc, #148]	@ (800158c <App_Process+0xac>)
+ 80014f6:	2200      	movs	r2, #0
+ 80014f8:	601a      	str	r2, [r3, #0]
+        if ((safe_state == LOCKED_OUT) && (seconds_left > 0U)) {
+ 80014fa:	4b25      	ldr	r3, [pc, #148]	@ (8001590 <App_Process+0xb0>)
+ 80014fc:	781b      	ldrb	r3, [r3, #0]
+ 80014fe:	b2db      	uxtb	r3, r3
+ 8001500:	2b03      	cmp	r3, #3
+ 8001502:	d122      	bne.n	800154a <App_Process+0x6a>
+ 8001504:	4b23      	ldr	r3, [pc, #140]	@ (8001594 <App_Process+0xb4>)
+ 8001506:	781b      	ldrb	r3, [r3, #0]
+ 8001508:	2b00      	cmp	r3, #0
+ 800150a:	d01e      	beq.n	800154a <App_Process+0x6a>
+            --seconds_left;
+ 800150c:	4b21      	ldr	r3, [pc, #132]	@ (8001594 <App_Process+0xb4>)
+ 800150e:	781b      	ldrb	r3, [r3, #0]
+ 8001510:	3b01      	subs	r3, #1
+ 8001512:	b2da      	uxtb	r2, r3
+ 8001514:	4b1f      	ldr	r3, [pc, #124]	@ (8001594 <App_Process+0xb4>)
+ 8001516:	701a      	strb	r2, [r3, #0]
+            lockout_led_on ^= 1U;
+ 8001518:	4b1f      	ldr	r3, [pc, #124]	@ (8001598 <App_Process+0xb8>)
+ 800151a:	781b      	ldrb	r3, [r3, #0]
+ 800151c:	f083 0301 	eor.w	r3, r3, #1
+ 8001520:	b2da      	uxtb	r2, r3
+ 8001522:	4b1d      	ldr	r3, [pc, #116]	@ (8001598 <App_Process+0xb8>)
+ 8001524:	701a      	strb	r2, [r3, #0]
+            display_dirty = 1U;
+ 8001526:	4b1d      	ldr	r3, [pc, #116]	@ (800159c <App_Process+0xbc>)
+ 8001528:	2201      	movs	r2, #1
+ 800152a:	701a      	strb	r2, [r3, #0]
+            if (seconds_left == 0U) {
+ 800152c:	4b19      	ldr	r3, [pc, #100]	@ (8001594 <App_Process+0xb4>)
+ 800152e:	781b      	ldrb	r3, [r3, #0]
+ 8001530:	2b00      	cmp	r3, #0
+ 8001532:	d10a      	bne.n	800154a <App_Process+0x6a>
+                TIM6_CR1 = 0U;
+ 8001534:	4b1a      	ldr	r3, [pc, #104]	@ (80015a0 <App_Process+0xc0>)
+ 8001536:	2200      	movs	r2, #0
+ 8001538:	601a      	str	r2, [r3, #0]
+                wrong_attempts = 0U;
+ 800153a:	4b1a      	ldr	r3, [pc, #104]	@ (80015a4 <App_Process+0xc4>)
+ 800153c:	2200      	movs	r2, #0
+ 800153e:	701a      	strb	r2, [r3, #0]
+                lockout_led_on = 0U;
+ 8001540:	4b15      	ldr	r3, [pc, #84]	@ (8001598 <App_Process+0xb8>)
+ 8001542:	2200      	movs	r2, #0
+ 8001544:	701a      	strb	r2, [r3, #0]
+                Entry_Reset();
+ 8001546:	f7ff ff0b 	bl	8001360 <Entry_Reset>
+            }
+        }
+    }
+    if ((safe_state == ACCESS_GRANTED) &&
+ 800154a:	4b11      	ldr	r3, [pc, #68]	@ (8001590 <App_Process+0xb0>)
+ 800154c:	781b      	ldrb	r3, [r3, #0]
+ 800154e:	b2db      	uxtb	r3, r3
+ 8001550:	2b01      	cmp	r3, #1
+ 8001552:	d109      	bne.n	8001568 <App_Process+0x88>
+        ((uint32_t)(now - state_started) >= 2000000U)) {
+ 8001554:	4b14      	ldr	r3, [pc, #80]	@ (80015a8 <App_Process+0xc8>)
+ 8001556:	681b      	ldr	r3, [r3, #0]
+ 8001558:	687a      	ldr	r2, [r7, #4]
+ 800155a:	1ad3      	subs	r3, r2, r3
+    if ((safe_state == ACCESS_GRANTED) &&
+ 800155c:	4a13      	ldr	r2, [pc, #76]	@ (80015ac <App_Process+0xcc>)
+ 800155e:	4293      	cmp	r3, r2
+ 8001560:	d902      	bls.n	8001568 <App_Process+0x88>
+        Entry_Reset();
+ 8001562:	f7ff fefd 	bl	8001360 <Entry_Reset>
+    } else if ((safe_state == ACCESS_DENIED) &&
+               ((uint32_t)(now - state_started) >= 800000U)) {
+        Entry_Reset();
+    }
+}
+ 8001566:	e00d      	b.n	8001584 <App_Process+0xa4>
+    } else if ((safe_state == ACCESS_DENIED) &&
+ 8001568:	4b09      	ldr	r3, [pc, #36]	@ (8001590 <App_Process+0xb0>)
+ 800156a:	781b      	ldrb	r3, [r3, #0]
+ 800156c:	b2db      	uxtb	r3, r3
+ 800156e:	2b02      	cmp	r3, #2
+ 8001570:	d108      	bne.n	8001584 <App_Process+0xa4>
+               ((uint32_t)(now - state_started) >= 800000U)) {
+ 8001572:	4b0d      	ldr	r3, [pc, #52]	@ (80015a8 <App_Process+0xc8>)
+ 8001574:	681b      	ldr	r3, [r3, #0]
+ 8001576:	687a      	ldr	r2, [r7, #4]
+ 8001578:	1ad3      	subs	r3, r2, r3
+    } else if ((safe_state == ACCESS_DENIED) &&
+ 800157a:	4a0d      	ldr	r2, [pc, #52]	@ (80015b0 <App_Process+0xd0>)
+ 800157c:	4293      	cmp	r3, r2
+ 800157e:	d901      	bls.n	8001584 <App_Process+0xa4>
+        Entry_Reset();
+ 8001580:	f7ff feee 	bl	8001360 <Entry_Reset>
+}
+ 8001584:	bf00      	nop
+ 8001586:	3708      	adds	r7, #8
+ 8001588:	46bd      	mov	sp, r7
+ 800158a:	bd80      	pop	{r7, pc}
+ 800158c:	40001010 	.word	0x40001010
+ 8001590:	20000065 	.word	0x20000065
+ 8001594:	2000006e 	.word	0x2000006e
+ 8001598:	20000079 	.word	0x20000079
+ 800159c:	20000004 	.word	0x20000004
+ 80015a0:	40001000 	.word	0x40001000
+ 80015a4:	2000006d 	.word	0x2000006d
+ 80015a8:	20000070 	.word	0x20000070
+ 80015ac:	001e847f 	.word	0x001e847f
+ 80015b0:	000c34ff 	.word	0x000c34ff
+
+080015b4 <Keypad_Process>:
+
+static void Keypad_Process(uint32_t now)
+{
+ 80015b4:	b580      	push	{r7, lr}
+ 80015b6:	b084      	sub	sp, #16
+ 80015b8:	af00      	add	r7, sp, #0
+ 80015ba:	6078      	str	r0, [r7, #4]
+    uint8_t low = Keypad_LowColumns();
+ 80015bc:	f7ff fcd4 	bl	8000f68 <Keypad_LowColumns>
+ 80015c0:	4603      	mov	r3, r0
+ 80015c2:	73fb      	strb	r3, [r7, #15]
+    g_columns_low = low; //Bit0=C1, bit1=C2, bit2=C3, bit3=C4.
+ 80015c4:	4a49      	ldr	r2, [pc, #292]	@ (80016ec <Keypad_Process+0x138>)
+ 80015c6:	7bfb      	ldrb	r3, [r7, #15]
+ 80015c8:	7013      	strb	r3, [r2, #0]
+    //An interrupt may have happened after main sampled now. Refresh the time
+    //after noticing the event so subtraction cannot use a pre-interrupt timestamp.
+    if (key_waiting != 0U) {
+ 80015ca:	4b49      	ldr	r3, [pc, #292]	@ (80016f0 <Keypad_Process+0x13c>)
+ 80015cc:	781b      	ldrb	r3, [r3, #0]
+ 80015ce:	b2db      	uxtb	r3, r3
+ 80015d0:	2b00      	cmp	r3, #0
+ 80015d2:	d002      	beq.n	80015da <Keypad_Process+0x26>
+        now = TIM2_CNT;
+ 80015d4:	4b47      	ldr	r3, [pc, #284]	@ (80016f4 <Keypad_Process+0x140>)
+ 80015d6:	681b      	ldr	r3, [r3, #0]
+ 80015d8:	607b      	str	r3, [r7, #4]
+    }
+    if ((key_waiting != 0U) &&
+ 80015da:	4b45      	ldr	r3, [pc, #276]	@ (80016f0 <Keypad_Process+0x13c>)
+ 80015dc:	781b      	ldrb	r3, [r3, #0]
+ 80015de:	b2db      	uxtb	r3, r3
+ 80015e0:	2b00      	cmp	r3, #0
+ 80015e2:	d03c      	beq.n	800165e <Keypad_Process+0xaa>
+        ((uint32_t)(now - captured_at) >= DEBOUNCE_US)) {
+ 80015e4:	4b44      	ldr	r3, [pc, #272]	@ (80016f8 <Keypad_Process+0x144>)
+ 80015e6:	681b      	ldr	r3, [r3, #0]
+ 80015e8:	687a      	ldr	r2, [r7, #4]
+ 80015ea:	1ad3      	subs	r3, r2, r3
+    if ((key_waiting != 0U) &&
+ 80015ec:	f644 621f 	movw	r2, #19999	@ 0x4e1f
+ 80015f0:	4293      	cmp	r3, r2
+ 80015f2:	d934      	bls.n	800165e <Keypad_Process+0xaa>
+        key_waiting = 0U;
+ 80015f4:	4b3e      	ldr	r3, [pc, #248]	@ (80016f0 <Keypad_Process+0x13c>)
+ 80015f6:	2200      	movs	r2, #0
+ 80015f8:	701a      	strb	r2, [r3, #0]
+        //Check that the same key survived debounce. Interrupts remain masked.
+        //Decode again to reject a changed row or ambiguous two-key press.
+        if ((captured_key != '\0') &&
+ 80015fa:	4b40      	ldr	r3, [pc, #256]	@ (80016fc <Keypad_Process+0x148>)
+ 80015fc:	781b      	ldrb	r3, [r3, #0]
+ 80015fe:	b2db      	uxtb	r3, r3
+ 8001600:	2b00      	cmp	r3, #0
+ 8001602:	d02c      	beq.n	800165e <Keypad_Process+0xaa>
+            (low == (uint8_t)(1U << captured_column)) &&
+ 8001604:	4b3e      	ldr	r3, [pc, #248]	@ (8001700 <Keypad_Process+0x14c>)
+ 8001606:	781b      	ldrb	r3, [r3, #0]
+ 8001608:	b2db      	uxtb	r3, r3
+ 800160a:	461a      	mov	r2, r3
+ 800160c:	2301      	movs	r3, #1
+ 800160e:	4093      	lsls	r3, r2
+ 8001610:	b2db      	uxtb	r3, r3
+        if ((captured_key != '\0') &&
+ 8001612:	7bfa      	ldrb	r2, [r7, #15]
+ 8001614:	429a      	cmp	r2, r3
+ 8001616:	d122      	bne.n	800165e <Keypad_Process+0xaa>
+            (Keypad_FindRow(captured_column) == captured_key)) {
+ 8001618:	4b39      	ldr	r3, [pc, #228]	@ (8001700 <Keypad_Process+0x14c>)
+ 800161a:	781b      	ldrb	r3, [r3, #0]
+ 800161c:	b2db      	uxtb	r3, r3
+ 800161e:	4618      	mov	r0, r3
+ 8001620:	f7ff fcd2 	bl	8000fc8 <Keypad_FindRow>
+ 8001624:	4603      	mov	r3, r0
+ 8001626:	461a      	mov	r2, r3
+ 8001628:	4b34      	ldr	r3, [pc, #208]	@ (80016fc <Keypad_Process+0x148>)
+ 800162a:	781b      	ldrb	r3, [r3, #0]
+ 800162c:	b2db      	uxtb	r3, r3
+            (low == (uint8_t)(1U << captured_column)) &&
+ 800162e:	429a      	cmp	r2, r3
+ 8001630:	d115      	bne.n	800165e <Keypad_Process+0xaa>
+            g_last_key = captured_key;
+ 8001632:	4b32      	ldr	r3, [pc, #200]	@ (80016fc <Keypad_Process+0x148>)
+ 8001634:	781b      	ldrb	r3, [r3, #0]
+ 8001636:	b2da      	uxtb	r2, r3
+ 8001638:	4b32      	ldr	r3, [pc, #200]	@ (8001704 <Keypad_Process+0x150>)
+ 800163a:	701a      	strb	r2, [r3, #0]
+            ++g_key_events;
+ 800163c:	4b32      	ldr	r3, [pc, #200]	@ (8001708 <Keypad_Process+0x154>)
+ 800163e:	681b      	ldr	r3, [r3, #0]
+ 8001640:	3301      	adds	r3, #1
+ 8001642:	4a31      	ldr	r2, [pc, #196]	@ (8001708 <Keypad_Process+0x154>)
+ 8001644:	6013      	str	r3, [r2, #0]
+            if (captured_during_entry != 0U) {
+ 8001646:	4b31      	ldr	r3, [pc, #196]	@ (800170c <Keypad_Process+0x158>)
+ 8001648:	781b      	ldrb	r3, [r3, #0]
+ 800164a:	b2db      	uxtb	r3, r3
+ 800164c:	2b00      	cmp	r3, #0
+ 800164e:	d006      	beq.n	800165e <Keypad_Process+0xaa>
+                App_Key(captured_key, now);
+ 8001650:	4b2a      	ldr	r3, [pc, #168]	@ (80016fc <Keypad_Process+0x148>)
+ 8001652:	781b      	ldrb	r3, [r3, #0]
+ 8001654:	b2db      	uxtb	r3, r3
+ 8001656:	6879      	ldr	r1, [r7, #4]
+ 8001658:	4618      	mov	r0, r3
+ 800165a:	f7ff fead 	bl	80013b8 <App_Key>
+            }
+        }
+    }
+    if (keypad_armed != 0U) {
+ 800165e:	4b2c      	ldr	r3, [pc, #176]	@ (8001710 <Keypad_Process+0x15c>)
+ 8001660:	781b      	ldrb	r3, [r3, #0]
+ 8001662:	b2db      	uxtb	r3, r3
+ 8001664:	2b00      	cmp	r3, #0
+ 8001666:	d13c      	bne.n	80016e2 <Keypad_Process+0x12e>
+        return;
+    }
+    //Do not rearm until ALL keys have been released for 30ms.
+    //Holding a key therefore produces one input, not repeated characters.
+    if (low != 0U) {
+ 8001668:	7bfb      	ldrb	r3, [r7, #15]
+ 800166a:	2b00      	cmp	r3, #0
+ 800166c:	d003      	beq.n	8001676 <Keypad_Process+0xc2>
+        release_tracking = 0U;
+ 800166e:	4b29      	ldr	r3, [pc, #164]	@ (8001714 <Keypad_Process+0x160>)
+ 8001670:	2200      	movs	r2, #0
+ 8001672:	701a      	strb	r2, [r3, #0]
+        return;
+ 8001674:	e036      	b.n	80016e4 <Keypad_Process+0x130>
+    }
+    if (release_tracking == 0U) {
+ 8001676:	4b27      	ldr	r3, [pc, #156]	@ (8001714 <Keypad_Process+0x160>)
+ 8001678:	781b      	ldrb	r3, [r3, #0]
+ 800167a:	2b00      	cmp	r3, #0
+ 800167c:	d105      	bne.n	800168a <Keypad_Process+0xd6>
+        release_tracking = 1U;
+ 800167e:	4b25      	ldr	r3, [pc, #148]	@ (8001714 <Keypad_Process+0x160>)
+ 8001680:	2201      	movs	r2, #1
+ 8001682:	701a      	strb	r2, [r3, #0]
+        release_started = now;
+ 8001684:	4a24      	ldr	r2, [pc, #144]	@ (8001718 <Keypad_Process+0x164>)
+ 8001686:	687b      	ldr	r3, [r7, #4]
+ 8001688:	6013      	str	r3, [r2, #0]
+    }
+    if ((key_waiting == 0U) && ((uint32_t)(now - release_started) >= RELEASE_US)) {
+ 800168a:	4b19      	ldr	r3, [pc, #100]	@ (80016f0 <Keypad_Process+0x13c>)
+ 800168c:	781b      	ldrb	r3, [r3, #0]
+ 800168e:	b2db      	uxtb	r3, r3
+ 8001690:	2b00      	cmp	r3, #0
+ 8001692:	d127      	bne.n	80016e4 <Keypad_Process+0x130>
+ 8001694:	4b20      	ldr	r3, [pc, #128]	@ (8001718 <Keypad_Process+0x164>)
+ 8001696:	681b      	ldr	r3, [r3, #0]
+ 8001698:	687a      	ldr	r2, [r7, #4]
+ 800169a:	1ad3      	subs	r3, r2, r3
+ 800169c:	f247 522f 	movw	r2, #29999	@ 0x752f
+ 80016a0:	4293      	cmp	r3, r2
+ 80016a2:	d91f      	bls.n	80016e4 <Keypad_Process+0x130>
+        if (keypad_ready == 0U) {
+ 80016a4:	4b1d      	ldr	r3, [pc, #116]	@ (800171c <Keypad_Process+0x168>)
+ 80016a6:	781b      	ldrb	r3, [r3, #0]
+ 80016a8:	2b00      	cmp	r3, #0
+ 80016aa:	d105      	bne.n	80016b8 <Keypad_Process+0x104>
+            keypad_ready = 1U;
+ 80016ac:	4b1b      	ldr	r3, [pc, #108]	@ (800171c <Keypad_Process+0x168>)
+ 80016ae:	2201      	movs	r2, #1
+ 80016b0:	701a      	strb	r2, [r3, #0]
+            display_dirty = 1U;
+ 80016b2:	4b1b      	ldr	r3, [pc, #108]	@ (8001720 <Keypad_Process+0x16c>)
+ 80016b4:	2201      	movs	r2, #1
+ 80016b6:	701a      	strb	r2, [r3, #0]
+        }
+        EXTI_PR = 0x0FU;
+ 80016b8:	4b1a      	ldr	r3, [pc, #104]	@ (8001724 <Keypad_Process+0x170>)
+ 80016ba:	220f      	movs	r2, #15
+ 80016bc:	601a      	str	r2, [r3, #0]
+        NVIC->ICPR[0] = (0x0FU << 6);
+ 80016be:	4b1a      	ldr	r3, [pc, #104]	@ (8001728 <Keypad_Process+0x174>)
+ 80016c0:	f44f 7270 	mov.w	r2, #960	@ 0x3c0
+ 80016c4:	f8c3 2180 	str.w	r2, [r3, #384]	@ 0x180
+        keypad_armed = 1U;
+ 80016c8:	4b11      	ldr	r3, [pc, #68]	@ (8001710 <Keypad_Process+0x15c>)
+ 80016ca:	2201      	movs	r2, #1
+ 80016cc:	701a      	strb	r2, [r3, #0]
+        EXTI_IMR |= 0x0FU;
+ 80016ce:	4b17      	ldr	r3, [pc, #92]	@ (800172c <Keypad_Process+0x178>)
+ 80016d0:	681b      	ldr	r3, [r3, #0]
+ 80016d2:	4a16      	ldr	r2, [pc, #88]	@ (800172c <Keypad_Process+0x178>)
+ 80016d4:	f043 030f 	orr.w	r3, r3, #15
+ 80016d8:	6013      	str	r3, [r2, #0]
+        release_tracking = 0U;
+ 80016da:	4b0e      	ldr	r3, [pc, #56]	@ (8001714 <Keypad_Process+0x160>)
+ 80016dc:	2200      	movs	r2, #0
+ 80016de:	701a      	strb	r2, [r3, #0]
+ 80016e0:	e000      	b.n	80016e4 <Keypad_Process+0x130>
+        return;
+ 80016e2:	bf00      	nop
+    }
+}
+ 80016e4:	3710      	adds	r7, #16
+ 80016e6:	46bd      	mov	sp, r7
+ 80016e8:	bd80      	pop	{r7, pc}
+ 80016ea:	bf00      	nop
+ 80016ec:	20000064 	.word	0x20000064
+ 80016f0:	20000054 	.word	0x20000054
+ 80016f4:	40000024 	.word	0x40000024
+ 80016f8:	20000058 	.word	0x20000058
+ 80016fc:	20000056 	.word	0x20000056
+ 8001700:	20000057 	.word	0x20000057
+ 8001704:	2000005d 	.word	0x2000005d
+ 8001708:	20000060 	.word	0x20000060
+ 800170c:	2000005c 	.word	0x2000005c
+ 8001710:	20000055 	.word	0x20000055
+ 8001714:	2000007b 	.word	0x2000007b
+ 8001718:	2000007c 	.word	0x2000007c
+ 800171c:	2000007a 	.word	0x2000007a
+ 8001720:	20000004 	.word	0x20000004
+ 8001724:	40013c14 	.word	0x40013c14
+ 8001728:	e000e100 	.word	0xe000e100
+ 800172c:	40013c00 	.word	0x40013c00
+
+08001730 <Screen_Text>:
+
+static void Screen_Text(uint8_t row, const char *text)
+{
+ 8001730:	b490      	push	{r4, r7}
+ 8001732:	b084      	sub	sp, #16
+ 8001734:	af00      	add	r7, sp, #0
+ 8001736:	4603      	mov	r3, r0
+ 8001738:	6039      	str	r1, [r7, #0]
+ 800173a:	71fb      	strb	r3, [r7, #7]
+    //Always pad to 16 characters so shorter text erases leftover characters.
+    uint8_t column = 0U;
+ 800173c:	2300      	movs	r3, #0
+ 800173e:	73fb      	strb	r3, [r7, #15]
+    while ((column < 16U) && (*text != '\0')) {
+ 8001740:	e010      	b.n	8001764 <Screen_Text+0x34>
+        desired_screen[row][column++] = *text++;
+ 8001742:	683b      	ldr	r3, [r7, #0]
+ 8001744:	1c5a      	adds	r2, r3, #1
+ 8001746:	603a      	str	r2, [r7, #0]
+ 8001748:	79fa      	ldrb	r2, [r7, #7]
+ 800174a:	7bf9      	ldrb	r1, [r7, #15]
+ 800174c:	1c48      	adds	r0, r1, #1
+ 800174e:	73f8      	strb	r0, [r7, #15]
+ 8001750:	460c      	mov	r4, r1
+ 8001752:	7818      	ldrb	r0, [r3, #0]
+ 8001754:	4916      	ldr	r1, [pc, #88]	@ (80017b0 <Screen_Text+0x80>)
+ 8001756:	4613      	mov	r3, r2
+ 8001758:	011b      	lsls	r3, r3, #4
+ 800175a:	4413      	add	r3, r2
+ 800175c:	440b      	add	r3, r1
+ 800175e:	4423      	add	r3, r4
+ 8001760:	4602      	mov	r2, r0
+ 8001762:	701a      	strb	r2, [r3, #0]
+    while ((column < 16U) && (*text != '\0')) {
+ 8001764:	7bfb      	ldrb	r3, [r7, #15]
+ 8001766:	2b0f      	cmp	r3, #15
+ 8001768:	d811      	bhi.n	800178e <Screen_Text+0x5e>
+ 800176a:	683b      	ldr	r3, [r7, #0]
+ 800176c:	781b      	ldrb	r3, [r3, #0]
+ 800176e:	2b00      	cmp	r3, #0
+ 8001770:	d1e7      	bne.n	8001742 <Screen_Text+0x12>
+    }
+    while (column < 16U) {
+ 8001772:	e00c      	b.n	800178e <Screen_Text+0x5e>
+        desired_screen[row][column++] = ' ';
+ 8001774:	79fa      	ldrb	r2, [r7, #7]
+ 8001776:	7bfb      	ldrb	r3, [r7, #15]
+ 8001778:	1c59      	adds	r1, r3, #1
+ 800177a:	73f9      	strb	r1, [r7, #15]
+ 800177c:	4618      	mov	r0, r3
+ 800177e:	490c      	ldr	r1, [pc, #48]	@ (80017b0 <Screen_Text+0x80>)
+ 8001780:	4613      	mov	r3, r2
+ 8001782:	011b      	lsls	r3, r3, #4
+ 8001784:	4413      	add	r3, r2
+ 8001786:	440b      	add	r3, r1
+ 8001788:	4403      	add	r3, r0
+ 800178a:	2220      	movs	r2, #32
+ 800178c:	701a      	strb	r2, [r3, #0]
+    while (column < 16U) {
+ 800178e:	7bfb      	ldrb	r3, [r7, #15]
+ 8001790:	2b0f      	cmp	r3, #15
+ 8001792:	d9ef      	bls.n	8001774 <Screen_Text+0x44>
+    }
+    desired_screen[row][16] = '\0';
+ 8001794:	79fa      	ldrb	r2, [r7, #7]
+ 8001796:	4906      	ldr	r1, [pc, #24]	@ (80017b0 <Screen_Text+0x80>)
+ 8001798:	4613      	mov	r3, r2
+ 800179a:	011b      	lsls	r3, r3, #4
+ 800179c:	4413      	add	r3, r2
+ 800179e:	440b      	add	r3, r1
+ 80017a0:	3310      	adds	r3, #16
+ 80017a2:	2200      	movs	r2, #0
+ 80017a4:	701a      	strb	r2, [r3, #0]
+}
+ 80017a6:	bf00      	nop
+ 80017a8:	3710      	adds	r7, #16
+ 80017aa:	46bd      	mov	sp, r7
+ 80017ac:	bc90      	pop	{r4, r7}
+ 80017ae:	4770      	bx	lr
+ 80017b0:	20000084 	.word	0x20000084
+
+080017b4 <Screen_Prepare>:
+
+static void Screen_Prepare(uint32_t now)
+{
+ 80017b4:	b580      	push	{r7, lr}
+ 80017b6:	b084      	sub	sp, #16
+ 80017b8:	af00      	add	r7, sp, #0
+ 80017ba:	6078      	str	r0, [r7, #4]
+    //A column stuck LOW at startup can be a held key, a wiring error, or D13's LED.
+    //The program cannot disconnect SB8. Check the circuit if bit1 stays LOW.
+    if ((keypad_ready == 0U) &&
+ 80017bc:	4b41      	ldr	r3, [pc, #260]	@ (80018c4 <Screen_Prepare+0x110>)
+ 80017be:	781b      	ldrb	r3, [r3, #0]
+ 80017c0:	2b00      	cmp	r3, #0
+ 80017c2:	d119      	bne.n	80017f8 <Screen_Prepare+0x44>
+        ((uint32_t)(now - keypad_started) >= 500000U)) {
+ 80017c4:	4b40      	ldr	r3, [pc, #256]	@ (80018c8 <Screen_Prepare+0x114>)
+ 80017c6:	681b      	ldr	r3, [r3, #0]
+ 80017c8:	687a      	ldr	r2, [r7, #4]
+ 80017ca:	1ad3      	subs	r3, r2, r3
+    if ((keypad_ready == 0U) &&
+ 80017cc:	4a3f      	ldr	r2, [pc, #252]	@ (80018cc <Screen_Prepare+0x118>)
+ 80017ce:	4293      	cmp	r3, r2
+ 80017d0:	d912      	bls.n	80017f8 <Screen_Prepare+0x44>
+        Screen_Text(0U, "Release all keys");
+ 80017d2:	493f      	ldr	r1, [pc, #252]	@ (80018d0 <Screen_Prepare+0x11c>)
+ 80017d4:	2000      	movs	r0, #0
+ 80017d6:	f7ff ffab 	bl	8001730 <Screen_Text>
+        Screen_Text(1U, (g_columns_low & 2U) ? "Check D13 / SB8" : "Check keypad");
+ 80017da:	4b3e      	ldr	r3, [pc, #248]	@ (80018d4 <Screen_Prepare+0x120>)
+ 80017dc:	781b      	ldrb	r3, [r3, #0]
+ 80017de:	b2db      	uxtb	r3, r3
+ 80017e0:	f003 0302 	and.w	r3, r3, #2
+ 80017e4:	2b00      	cmp	r3, #0
+ 80017e6:	d001      	beq.n	80017ec <Screen_Prepare+0x38>
+ 80017e8:	4b3b      	ldr	r3, [pc, #236]	@ (80018d8 <Screen_Prepare+0x124>)
+ 80017ea:	e000      	b.n	80017ee <Screen_Prepare+0x3a>
+ 80017ec:	4b3b      	ldr	r3, [pc, #236]	@ (80018dc <Screen_Prepare+0x128>)
+ 80017ee:	4619      	mov	r1, r3
+ 80017f0:	2001      	movs	r0, #1
+ 80017f2:	f7ff ff9d 	bl	8001730 <Screen_Text>
+        return;
+ 80017f6:	e062      	b.n	80018be <Screen_Prepare+0x10a>
+    }
+    if (safe_state == PIN_ENTRY) {
+ 80017f8:	4b39      	ldr	r3, [pc, #228]	@ (80018e0 <Screen_Prepare+0x12c>)
+ 80017fa:	781b      	ldrb	r3, [r3, #0]
+ 80017fc:	b2db      	uxtb	r3, r3
+ 80017fe:	2b00      	cmp	r3, #0
+ 8001800:	d118      	bne.n	8001834 <Screen_Prepare+0x80>
+        Screen_Text(0U, "Enter PIN:");
+ 8001802:	4938      	ldr	r1, [pc, #224]	@ (80018e4 <Screen_Prepare+0x130>)
+ 8001804:	2000      	movs	r0, #0
+ 8001806:	f7ff ff93 	bl	8001730 <Screen_Text>
+        Screen_Text(1U, "");
+ 800180a:	4937      	ldr	r1, [pc, #220]	@ (80018e8 <Screen_Prepare+0x134>)
+ 800180c:	2001      	movs	r0, #1
+ 800180e:	f7ff ff8f 	bl	8001730 <Screen_Text>
+        for (uint8_t i = 0U; i < entered_count; ++i) {
+ 8001812:	2300      	movs	r3, #0
+ 8001814:	73fb      	strb	r3, [r7, #15]
+ 8001816:	e007      	b.n	8001828 <Screen_Prepare+0x74>
+            desired_screen[1][i] = '*';
+ 8001818:	7bfb      	ldrb	r3, [r7, #15]
+ 800181a:	4a34      	ldr	r2, [pc, #208]	@ (80018ec <Screen_Prepare+0x138>)
+ 800181c:	4413      	add	r3, r2
+ 800181e:	222a      	movs	r2, #42	@ 0x2a
+ 8001820:	745a      	strb	r2, [r3, #17]
+        for (uint8_t i = 0U; i < entered_count; ++i) {
+ 8001822:	7bfb      	ldrb	r3, [r7, #15]
+ 8001824:	3301      	adds	r3, #1
+ 8001826:	73fb      	strb	r3, [r7, #15]
+ 8001828:	4b31      	ldr	r3, [pc, #196]	@ (80018f0 <Screen_Prepare+0x13c>)
+ 800182a:	781b      	ldrb	r3, [r3, #0]
+ 800182c:	7bfa      	ldrb	r2, [r7, #15]
+ 800182e:	429a      	cmp	r2, r3
+ 8001830:	d3f2      	bcc.n	8001818 <Screen_Prepare+0x64>
+ 8001832:	e044      	b.n	80018be <Screen_Prepare+0x10a>
+        }
+    } else if (safe_state == ACCESS_GRANTED) {
+ 8001834:	4b2a      	ldr	r3, [pc, #168]	@ (80018e0 <Screen_Prepare+0x12c>)
+ 8001836:	781b      	ldrb	r3, [r3, #0]
+ 8001838:	b2db      	uxtb	r3, r3
+ 800183a:	2b01      	cmp	r3, #1
+ 800183c:	d108      	bne.n	8001850 <Screen_Prepare+0x9c>
+        Screen_Text(0U, "Access Granted!");
+ 800183e:	492d      	ldr	r1, [pc, #180]	@ (80018f4 <Screen_Prepare+0x140>)
+ 8001840:	2000      	movs	r0, #0
+ 8001842:	f7ff ff75 	bl	8001730 <Screen_Text>
+        Screen_Text(1U, "");
+ 8001846:	4928      	ldr	r1, [pc, #160]	@ (80018e8 <Screen_Prepare+0x134>)
+ 8001848:	2001      	movs	r0, #1
+ 800184a:	f7ff ff71 	bl	8001730 <Screen_Text>
+ 800184e:	e036      	b.n	80018be <Screen_Prepare+0x10a>
+    } else if (safe_state == ACCESS_DENIED) {
+ 8001850:	4b23      	ldr	r3, [pc, #140]	@ (80018e0 <Screen_Prepare+0x12c>)
+ 8001852:	781b      	ldrb	r3, [r3, #0]
+ 8001854:	b2db      	uxtb	r3, r3
+ 8001856:	2b02      	cmp	r3, #2
+ 8001858:	d10e      	bne.n	8001878 <Screen_Prepare+0xc4>
+        Screen_Text(0U, "Incorrect PIN");
+ 800185a:	4927      	ldr	r1, [pc, #156]	@ (80018f8 <Screen_Prepare+0x144>)
+ 800185c:	2000      	movs	r0, #0
+ 800185e:	f7ff ff67 	bl	8001730 <Screen_Text>
+        Screen_Text(1U, "Attempts: 0/3");
+ 8001862:	4926      	ldr	r1, [pc, #152]	@ (80018fc <Screen_Prepare+0x148>)
+ 8001864:	2001      	movs	r0, #1
+ 8001866:	f7ff ff63 	bl	8001730 <Screen_Text>
+        desired_screen[1][10] = (char)('0' + wrong_attempts);
+ 800186a:	4b25      	ldr	r3, [pc, #148]	@ (8001900 <Screen_Prepare+0x14c>)
+ 800186c:	781b      	ldrb	r3, [r3, #0]
+ 800186e:	3330      	adds	r3, #48	@ 0x30
+ 8001870:	b2da      	uxtb	r2, r3
+ 8001872:	4b1e      	ldr	r3, [pc, #120]	@ (80018ec <Screen_Prepare+0x138>)
+ 8001874:	76da      	strb	r2, [r3, #27]
+ 8001876:	e022      	b.n	80018be <Screen_Prepare+0x10a>
+    } else {
+        Screen_Text(0U, "LOCKED!");
+ 8001878:	4922      	ldr	r1, [pc, #136]	@ (8001904 <Screen_Prepare+0x150>)
+ 800187a:	2000      	movs	r0, #0
+ 800187c:	f7ff ff58 	bl	8001730 <Screen_Text>
+        Screen_Text(1U, "Time: 00");
+ 8001880:	4921      	ldr	r1, [pc, #132]	@ (8001908 <Screen_Prepare+0x154>)
+ 8001882:	2001      	movs	r0, #1
+ 8001884:	f7ff ff54 	bl	8001730 <Screen_Text>
+        desired_screen[1][6] = (char)('0' + seconds_left / 10U);
+ 8001888:	4b20      	ldr	r3, [pc, #128]	@ (800190c <Screen_Prepare+0x158>)
+ 800188a:	781b      	ldrb	r3, [r3, #0]
+ 800188c:	4a20      	ldr	r2, [pc, #128]	@ (8001910 <Screen_Prepare+0x15c>)
+ 800188e:	fba2 2303 	umull	r2, r3, r2, r3
+ 8001892:	08db      	lsrs	r3, r3, #3
+ 8001894:	b2db      	uxtb	r3, r3
+ 8001896:	3330      	adds	r3, #48	@ 0x30
+ 8001898:	b2da      	uxtb	r2, r3
+ 800189a:	4b14      	ldr	r3, [pc, #80]	@ (80018ec <Screen_Prepare+0x138>)
+ 800189c:	75da      	strb	r2, [r3, #23]
+        desired_screen[1][7] = (char)('0' + seconds_left % 10U);
+ 800189e:	4b1b      	ldr	r3, [pc, #108]	@ (800190c <Screen_Prepare+0x158>)
+ 80018a0:	781a      	ldrb	r2, [r3, #0]
+ 80018a2:	4b1b      	ldr	r3, [pc, #108]	@ (8001910 <Screen_Prepare+0x15c>)
+ 80018a4:	fba3 1302 	umull	r1, r3, r3, r2
+ 80018a8:	08d9      	lsrs	r1, r3, #3
+ 80018aa:	460b      	mov	r3, r1
+ 80018ac:	009b      	lsls	r3, r3, #2
+ 80018ae:	440b      	add	r3, r1
+ 80018b0:	005b      	lsls	r3, r3, #1
+ 80018b2:	1ad3      	subs	r3, r2, r3
+ 80018b4:	b2db      	uxtb	r3, r3
+ 80018b6:	3330      	adds	r3, #48	@ 0x30
+ 80018b8:	b2da      	uxtb	r2, r3
+ 80018ba:	4b0c      	ldr	r3, [pc, #48]	@ (80018ec <Screen_Prepare+0x138>)
+ 80018bc:	761a      	strb	r2, [r3, #24]
+    }
+}
+ 80018be:	3710      	adds	r7, #16
+ 80018c0:	46bd      	mov	sp, r7
+ 80018c2:	bd80      	pop	{r7, pc}
+ 80018c4:	2000007a 	.word	0x2000007a
+ 80018c8:	20000080 	.word	0x20000080
+ 80018cc:	0007a11f 	.word	0x0007a11f
+ 80018d0:	08001c7c 	.word	0x08001c7c
+ 80018d4:	20000064 	.word	0x20000064
+ 80018d8:	08001c90 	.word	0x08001c90
+ 80018dc:	08001ca0 	.word	0x08001ca0
+ 80018e0:	20000065 	.word	0x20000065
+ 80018e4:	08001cb0 	.word	0x08001cb0
+ 80018e8:	08001cbc 	.word	0x08001cbc
+ 80018ec:	20000084 	.word	0x20000084
+ 80018f0:	2000006c 	.word	0x2000006c
+ 80018f4:	08001cc0 	.word	0x08001cc0
+ 80018f8:	08001cd0 	.word	0x08001cd0
+ 80018fc:	08001ce0 	.word	0x08001ce0
+ 8001900:	2000006d 	.word	0x2000006d
+ 8001904:	08001cf0 	.word	0x08001cf0
+ 8001908:	08001cf8 	.word	0x08001cf8
+ 800190c:	2000006e 	.word	0x2000006e
+ 8001910:	cccccccd 	.word	0xcccccccd
+
+08001914 <Screen_Process>:
+
+static void Screen_Process(I2C_LCD_HandleTypeDef *lcd, uint32_t now)
+{
+ 8001914:	b5b0      	push	{r4, r5, r7, lr}
+ 8001916:	b084      	sub	sp, #16
+ 8001918:	af00      	add	r7, sp, #0
+ 800191a:	6078      	str	r0, [r7, #4]
+ 800191c:	6039      	str	r1, [r7, #0]
+    //Prepare text in RAM quickly. Sending it to the LCD is the slower part.
+    if ((display_dirty != 0U) || (keypad_ready == 0U)) {
+ 800191e:	4b3f      	ldr	r3, [pc, #252]	@ (8001a1c <Screen_Process+0x108>)
+ 8001920:	781b      	ldrb	r3, [r3, #0]
+ 8001922:	2b00      	cmp	r3, #0
+ 8001924:	d103      	bne.n	800192e <Screen_Process+0x1a>
+ 8001926:	4b3e      	ldr	r3, [pc, #248]	@ (8001a20 <Screen_Process+0x10c>)
+ 8001928:	781b      	ldrb	r3, [r3, #0]
+ 800192a:	2b00      	cmp	r3, #0
+ 800192c:	d105      	bne.n	800193a <Screen_Process+0x26>
+        Screen_Prepare(now);
+ 800192e:	6838      	ldr	r0, [r7, #0]
+ 8001930:	f7ff ff40 	bl	80017b4 <Screen_Prepare>
+        display_dirty = 0U;
+ 8001934:	4b39      	ldr	r3, [pc, #228]	@ (8001a1c <Screen_Process+0x108>)
+ 8001936:	2200      	movs	r2, #0
+ 8001938:	701a      	strb	r2, [r3, #0]
+    }
+    if (display_retry_wait != 0U) {
+ 800193a:	4b3a      	ldr	r3, [pc, #232]	@ (8001a24 <Screen_Process+0x110>)
+ 800193c:	781b      	ldrb	r3, [r3, #0]
+ 800193e:	2b00      	cmp	r3, #0
+ 8001940:	d009      	beq.n	8001956 <Screen_Process+0x42>
+        if ((uint32_t)(now - display_retry_at) < 100000U) {
+ 8001942:	4b39      	ldr	r3, [pc, #228]	@ (8001a28 <Screen_Process+0x114>)
+ 8001944:	681b      	ldr	r3, [r3, #0]
+ 8001946:	683a      	ldr	r2, [r7, #0]
+ 8001948:	1ad3      	subs	r3, r2, r3
+ 800194a:	4a38      	ldr	r2, [pc, #224]	@ (8001a2c <Screen_Process+0x118>)
+ 800194c:	4293      	cmp	r3, r2
+ 800194e:	d961      	bls.n	8001a14 <Screen_Process+0x100>
+            return;
+        }
+        display_retry_wait = 0U;
+ 8001950:	4b34      	ldr	r3, [pc, #208]	@ (8001a24 <Screen_Process+0x110>)
+ 8001952:	2200      	movs	r2, #0
+ 8001954:	701a      	strb	r2, [r3, #0]
+    }
+    for (uint8_t row = 0U; row < 2U; ++row) {
+ 8001956:	2300      	movs	r3, #0
+ 8001958:	73fb      	strb	r3, [r7, #15]
+ 800195a:	e057      	b.n	8001a0c <Screen_Process+0xf8>
+        for (uint8_t column = 0U; column < 16U; ++column) {
+ 800195c:	2300      	movs	r3, #0
+ 800195e:	73bb      	strb	r3, [r7, #14]
+ 8001960:	e04e      	b.n	8001a00 <Screen_Process+0xec>
+            if (desired_screen[row][column] != shown_screen[row][column]) {
+ 8001962:	7bfa      	ldrb	r2, [r7, #15]
+ 8001964:	7bb9      	ldrb	r1, [r7, #14]
+ 8001966:	4832      	ldr	r0, [pc, #200]	@ (8001a30 <Screen_Process+0x11c>)
+ 8001968:	4613      	mov	r3, r2
+ 800196a:	011b      	lsls	r3, r3, #4
+ 800196c:	4413      	add	r3, r2
+ 800196e:	4403      	add	r3, r0
+ 8001970:	440b      	add	r3, r1
+ 8001972:	781a      	ldrb	r2, [r3, #0]
+ 8001974:	7bf9      	ldrb	r1, [r7, #15]
+ 8001976:	7bbb      	ldrb	r3, [r7, #14]
+ 8001978:	482e      	ldr	r0, [pc, #184]	@ (8001a34 <Screen_Process+0x120>)
+ 800197a:	0109      	lsls	r1, r1, #4
+ 800197c:	4401      	add	r1, r0
+ 800197e:	440b      	add	r3, r1
+ 8001980:	781b      	ldrb	r3, [r3, #0]
+ 8001982:	429a      	cmp	r2, r3
+ 8001984:	d039      	beq.n	80019fa <Screen_Process+0xe6>
+                //One cursor command and one character, about 8ms plus I2C time.
+                //Return to the main loop after this so deadlines get checked.
+                if ((I2C_LCD_SetCursor(lcd, row, column) == I2C_LCD_OK) &&
+ 8001986:	7bba      	ldrb	r2, [r7, #14]
+ 8001988:	7bfb      	ldrb	r3, [r7, #15]
+ 800198a:	4619      	mov	r1, r3
+ 800198c:	6878      	ldr	r0, [r7, #4]
+ 800198e:	f7fe fe42 	bl	8000616 <I2C_LCD_SetCursor>
+ 8001992:	4603      	mov	r3, r0
+ 8001994:	2b00      	cmp	r3, #0
+ 8001996:	d124      	bne.n	80019e2 <Screen_Process+0xce>
+                    (I2C_LCD_WriteChar(lcd, desired_screen[row][column]) == I2C_LCD_OK)) {
+ 8001998:	7bfa      	ldrb	r2, [r7, #15]
+ 800199a:	7bb9      	ldrb	r1, [r7, #14]
+ 800199c:	4824      	ldr	r0, [pc, #144]	@ (8001a30 <Screen_Process+0x11c>)
+ 800199e:	4613      	mov	r3, r2
+ 80019a0:	011b      	lsls	r3, r3, #4
+ 80019a2:	4413      	add	r3, r2
+ 80019a4:	4403      	add	r3, r0
+ 80019a6:	440b      	add	r3, r1
+ 80019a8:	781b      	ldrb	r3, [r3, #0]
+ 80019aa:	4619      	mov	r1, r3
+ 80019ac:	6878      	ldr	r0, [r7, #4]
+ 80019ae:	f7fe fe63 	bl	8000678 <I2C_LCD_WriteChar>
+ 80019b2:	4603      	mov	r3, r0
+                if ((I2C_LCD_SetCursor(lcd, row, column) == I2C_LCD_OK) &&
+ 80019b4:	2b00      	cmp	r3, #0
+ 80019b6:	d114      	bne.n	80019e2 <Screen_Process+0xce>
+                    shown_screen[row][column] = desired_screen[row][column];
+ 80019b8:	7bfa      	ldrb	r2, [r7, #15]
+ 80019ba:	7bbc      	ldrb	r4, [r7, #14]
+ 80019bc:	7bf8      	ldrb	r0, [r7, #15]
+ 80019be:	7bb9      	ldrb	r1, [r7, #14]
+ 80019c0:	4d1b      	ldr	r5, [pc, #108]	@ (8001a30 <Screen_Process+0x11c>)
+ 80019c2:	4613      	mov	r3, r2
+ 80019c4:	011b      	lsls	r3, r3, #4
+ 80019c6:	4413      	add	r3, r2
+ 80019c8:	442b      	add	r3, r5
+ 80019ca:	4423      	add	r3, r4
+ 80019cc:	781c      	ldrb	r4, [r3, #0]
+ 80019ce:	4a19      	ldr	r2, [pc, #100]	@ (8001a34 <Screen_Process+0x120>)
+ 80019d0:	0103      	lsls	r3, r0, #4
+ 80019d2:	4413      	add	r3, r2
+ 80019d4:	440b      	add	r3, r1
+ 80019d6:	4622      	mov	r2, r4
+ 80019d8:	701a      	strb	r2, [r3, #0]
+                    g_lcd_status = I2C_LCD_OK;
+ 80019da:	4b17      	ldr	r3, [pc, #92]	@ (8001a38 <Screen_Process+0x124>)
+ 80019dc:	2200      	movs	r2, #0
+ 80019de:	601a      	str	r2, [r3, #0]
+                } else {
+                    g_lcd_status = I2C_LCD_ERR_IO;
+                    display_retry_at = TIM2_CNT;
+                    display_retry_wait = 1U;
+                }
+                return;
+ 80019e0:	e019      	b.n	8001a16 <Screen_Process+0x102>
+                    g_lcd_status = I2C_LCD_ERR_IO;
+ 80019e2:	4b15      	ldr	r3, [pc, #84]	@ (8001a38 <Screen_Process+0x124>)
+ 80019e4:	f06f 0201 	mvn.w	r2, #1
+ 80019e8:	601a      	str	r2, [r3, #0]
+                    display_retry_at = TIM2_CNT;
+ 80019ea:	4b14      	ldr	r3, [pc, #80]	@ (8001a3c <Screen_Process+0x128>)
+ 80019ec:	681b      	ldr	r3, [r3, #0]
+ 80019ee:	4a0e      	ldr	r2, [pc, #56]	@ (8001a28 <Screen_Process+0x114>)
+ 80019f0:	6013      	str	r3, [r2, #0]
+                    display_retry_wait = 1U;
+ 80019f2:	4b0c      	ldr	r3, [pc, #48]	@ (8001a24 <Screen_Process+0x110>)
+ 80019f4:	2201      	movs	r2, #1
+ 80019f6:	701a      	strb	r2, [r3, #0]
+                return;
+ 80019f8:	e00d      	b.n	8001a16 <Screen_Process+0x102>
+        for (uint8_t column = 0U; column < 16U; ++column) {
+ 80019fa:	7bbb      	ldrb	r3, [r7, #14]
+ 80019fc:	3301      	adds	r3, #1
+ 80019fe:	73bb      	strb	r3, [r7, #14]
+ 8001a00:	7bbb      	ldrb	r3, [r7, #14]
+ 8001a02:	2b0f      	cmp	r3, #15
+ 8001a04:	d9ad      	bls.n	8001962 <Screen_Process+0x4e>
+    for (uint8_t row = 0U; row < 2U; ++row) {
+ 8001a06:	7bfb      	ldrb	r3, [r7, #15]
+ 8001a08:	3301      	adds	r3, #1
+ 8001a0a:	73fb      	strb	r3, [r7, #15]
+ 8001a0c:	7bfb      	ldrb	r3, [r7, #15]
+ 8001a0e:	2b01      	cmp	r3, #1
+ 8001a10:	d9a4      	bls.n	800195c <Screen_Process+0x48>
+ 8001a12:	e000      	b.n	8001a16 <Screen_Process+0x102>
+            return;
+ 8001a14:	bf00      	nop
+            }
+        }
+    }
+}
+ 8001a16:	3710      	adds	r7, #16
+ 8001a18:	46bd      	mov	sp, r7
+ 8001a1a:	bdb0      	pop	{r4, r5, r7, pc}
+ 8001a1c:	20000004 	.word	0x20000004
+ 8001a20:	2000007a 	.word	0x2000007a
+ 8001a24:	200000cc 	.word	0x200000cc
+ 8001a28:	200000c8 	.word	0x200000c8
+ 8001a2c:	0001869f 	.word	0x0001869f
+ 8001a30:	20000084 	.word	0x20000084
+ 8001a34:	200000a8 	.word	0x200000a8
+ 8001a38:	20000000 	.word	0x20000000
+ 8001a3c:	40000024 	.word	0x40000024
+
+08001a40 <main>:
+
+//======================================================================
+//PART 3: MAIN LOOP - READ THIS AS THE ORDER OF WORK EACH PASS
+//======================================================================
+int main(void)
+{
+ 8001a40:	b580      	push	{r7, lr}
+ 8001a42:	b088      	sub	sp, #32
+ 8001a44:	af00      	add	r7, sp, #0
+    I2C_LCD_HandleTypeDef lcd = {0};
+ 8001a46:	1d3b      	adds	r3, r7, #4
+ 8001a48:	2200      	movs	r2, #0
+ 8001a4a:	601a      	str	r2, [r3, #0]
+ 8001a4c:	605a      	str	r2, [r3, #4]
+ 8001a4e:	609a      	str	r2, [r3, #8]
+ 8001a50:	60da      	str	r2, [r3, #12]
+ 8001a52:	611a      	str	r2, [r3, #16]
+ 8001a54:	615a      	str	r2, [r3, #20]
+    g_boot_stage = 1U;
+ 8001a56:	4b29      	ldr	r3, [pc, #164]	@ (8001afc <main+0xbc>)
+ 8001a58:	2201      	movs	r2, #1
+ 8001a5a:	601a      	str	r2, [r3, #0]
+    Clock_Init();
+ 8001a5c:	f7fe fe5c 	bl	8000718 <Clock_Init>
+    g_boot_stage = 2U;
+ 8001a60:	4b26      	ldr	r3, [pc, #152]	@ (8001afc <main+0xbc>)
+ 8001a62:	2202      	movs	r2, #2
+ 8001a64:	601a      	str	r2, [r3, #0]
+    Timebase_Init(); //TIM2 gives microseconds for debounce and short deadlines.
+ 8001a66:	f7fe fea7 	bl	80007b8 <Timebase_Init>
+    g_boot_stage = 3U;
+ 8001a6a:	4b24      	ldr	r3, [pc, #144]	@ (8001afc <main+0xbc>)
+ 8001a6c:	2203      	movs	r2, #3
+ 8001a6e:	601a      	str	r2, [r3, #0]
+    I2C1_Init();
+ 8001a70:	f7fe ff30 	bl	80008d4 <I2C1_Init>
+    g_boot_stage = 4U;
+ 8001a74:	4b21      	ldr	r3, [pc, #132]	@ (8001afc <main+0xbc>)
+ 8001a76:	2204      	movs	r2, #4
+ 8001a78:	601a      	str	r2, [r3, #0]
+    for (;;) {
+        ++g_lcd_attempts;
+ 8001a7a:	4b21      	ldr	r3, [pc, #132]	@ (8001b00 <main+0xc0>)
+ 8001a7c:	681b      	ldr	r3, [r3, #0]
+ 8001a7e:	3301      	adds	r3, #1
+ 8001a80:	4a1f      	ldr	r2, [pc, #124]	@ (8001b00 <main+0xc0>)
+ 8001a82:	6013      	str	r3, [r2, #0]
+        g_lcd_status = LCD_Start(&lcd);
+ 8001a84:	1d3b      	adds	r3, r7, #4
+ 8001a86:	4618      	mov	r0, r3
+ 8001a88:	f7ff f8e2 	bl	8000c50 <LCD_Start>
+ 8001a8c:	4603      	mov	r3, r0
+ 8001a8e:	4a1d      	ldr	r2, [pc, #116]	@ (8001b04 <main+0xc4>)
+ 8001a90:	6013      	str	r3, [r2, #0]
+        if (g_lcd_status == I2C_LCD_OK) {
+ 8001a92:	4b1c      	ldr	r3, [pc, #112]	@ (8001b04 <main+0xc4>)
+ 8001a94:	681b      	ldr	r3, [r3, #0]
+ 8001a96:	2b00      	cmp	r3, #0
+ 8001a98:	d115      	bne.n	8001ac6 <main+0x86>
+            g_boot_stage = 5U;
+ 8001a9a:	4b18      	ldr	r3, [pc, #96]	@ (8001afc <main+0xbc>)
+ 8001a9c:	2205      	movs	r2, #5
+ 8001a9e:	601a      	str	r2, [r3, #0]
+            break;
+ 8001aa0:	bf00      	nop
+        }
+        Delay_Ms(1000U); //Only startup waits here; the application has not begun.
+        I2C1_Reset();
+    }
+    g_boot_stage = 6U;
+ 8001aa2:	4b16      	ldr	r3, [pc, #88]	@ (8001afc <main+0xbc>)
+ 8001aa4:	2206      	movs	r2, #6
+ 8001aa6:	601a      	str	r2, [r3, #0]
+    Countdown_Init(); //TIM6 supplies the one-second countdown flag.
+ 8001aa8:	f7ff fbd0 	bl	800124c <Countdown_Init>
+    g_boot_stage = 7U;
+ 8001aac:	4b13      	ldr	r3, [pc, #76]	@ (8001afc <main+0xbc>)
+ 8001aae:	2207      	movs	r2, #7
+ 8001ab0:	601a      	str	r2, [r3, #0]
+    Keypad_Init();
+ 8001ab2:	f7ff fb73 	bl	800119c <Keypad_Init>
+    LED_Init();
+ 8001ab6:	f7ff fc09 	bl	80012cc <LED_Init>
+    Entry_Reset();
+ 8001aba:	f7ff fc51 	bl	8001360 <Entry_Reset>
+    g_boot_stage = 8U;
+ 8001abe:	4b0f      	ldr	r3, [pc, #60]	@ (8001afc <main+0xbc>)
+ 8001ac0:	2208      	movs	r2, #8
+ 8001ac2:	601a      	str	r2, [r3, #0]
+ 8001ac4:	e006      	b.n	8001ad4 <main+0x94>
+        Delay_Ms(1000U); //Only startup waits here; the application has not begun.
+ 8001ac6:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+ 8001aca:	f7fe febb 	bl	8000844 <Delay_Ms>
+        I2C1_Reset();
+ 8001ace:	f7fe fed7 	bl	8000880 <I2C1_Reset>
+        ++g_lcd_attempts;
+ 8001ad2:	e7d2      	b.n	8001a7a <main+0x3a>
+    for (;;) {
+        uint32_t now = TIM2_CNT;
+ 8001ad4:	4b0c      	ldr	r3, [pc, #48]	@ (8001b08 <main+0xc8>)
+ 8001ad6:	681b      	ldr	r3, [r3, #0]
+ 8001ad8:	61fb      	str	r3, [r7, #28]
+        App_Process(now); //Check countdown and success/failure deadlines first.
+ 8001ada:	69f8      	ldr	r0, [r7, #28]
+ 8001adc:	f7ff fd00 	bl	80014e0 <App_Process>
+        Keypad_Process(now); //Debounce the event captured by EXTI, then accept it.
+ 8001ae0:	69f8      	ldr	r0, [r7, #28]
+ 8001ae2:	f7ff fd67 	bl	80015b4 <Keypad_Process>
+        LED_Process(now); //Update the replacement LED without a long delay.
+ 8001ae6:	69f8      	ldr	r0, [r7, #28]
+ 8001ae8:	f7ff fbfa 	bl	80012e0 <LED_Process>
+        Screen_Process(&lcd, now); //Send one changed character, then start over.
+ 8001aec:	1d3b      	adds	r3, r7, #4
+ 8001aee:	69f9      	ldr	r1, [r7, #28]
+ 8001af0:	4618      	mov	r0, r3
+ 8001af2:	f7ff ff0f 	bl	8001914 <Screen_Process>
+    for (;;) {
+ 8001af6:	bf00      	nop
+ 8001af8:	e7ec      	b.n	8001ad4 <main+0x94>
+ 8001afa:	bf00      	nop
+ 8001afc:	20000050 	.word	0x20000050
+ 8001b00:	20000030 	.word	0x20000030
+ 8001b04:	20000000 	.word	0x20000000
+ 8001b08:	40000024 	.word	0x40000024
+
+08001b0c <NMI_Handler>:
+/******************************************************************************/
+/**
+  * @brief This function handles Non maskable interrupt.
+  */
+void NMI_Handler(void)
+{
+ 8001b0c:	b480      	push	{r7}
+ 8001b0e:	af00      	add	r7, sp, #0
+  /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+
+  /* USER CODE END NonMaskableInt_IRQn 0 */
+  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+   while (1)
+ 8001b10:	bf00      	nop
+ 8001b12:	e7fd      	b.n	8001b10 <NMI_Handler+0x4>
+
+08001b14 <HardFault_Handler>:
+
+/**
+  * @brief This function handles Hard fault interrupt.
+  */
+void HardFault_Handler(void)
+{
+ 8001b14:	b480      	push	{r7}
+ 8001b16:	af00      	add	r7, sp, #0
+  /* USER CODE BEGIN HardFault_IRQn 0 */
+
+  /* USER CODE END HardFault_IRQn 0 */
+  while (1)
+ 8001b18:	bf00      	nop
+ 8001b1a:	e7fd      	b.n	8001b18 <HardFault_Handler+0x4>
+
+08001b1c <MemManage_Handler>:
+
+/**
+  * @brief This function handles Memory management fault.
+  */
+void MemManage_Handler(void)
+{
+ 8001b1c:	b480      	push	{r7}
+ 8001b1e:	af00      	add	r7, sp, #0
+  /* USER CODE BEGIN MemoryManagement_IRQn 0 */
+
+  /* USER CODE END MemoryManagement_IRQn 0 */
+  while (1)
+ 8001b20:	bf00      	nop
+ 8001b22:	e7fd      	b.n	8001b20 <MemManage_Handler+0x4>
+
+08001b24 <BusFault_Handler>:
+
+/**
+  * @brief This function handles Pre-fetch fault, memory access fault.
+  */
+void BusFault_Handler(void)
+{
+ 8001b24:	b480      	push	{r7}
+ 8001b26:	af00      	add	r7, sp, #0
+  /* USER CODE BEGIN BusFault_IRQn 0 */
+
+  /* USER CODE END BusFault_IRQn 0 */
+  while (1)
+ 8001b28:	bf00      	nop
+ 8001b2a:	e7fd      	b.n	8001b28 <BusFault_Handler+0x4>
+
+08001b2c <UsageFault_Handler>:
+
+/**
+  * @brief This function handles Undefined instruction or illegal state.
+  */
+void UsageFault_Handler(void)
+{
+ 8001b2c:	b480      	push	{r7}
+ 8001b2e:	af00      	add	r7, sp, #0
+  /* USER CODE BEGIN UsageFault_IRQn 0 */
+
+  /* USER CODE END UsageFault_IRQn 0 */
+  while (1)
+ 8001b30:	bf00      	nop
+ 8001b32:	e7fd      	b.n	8001b30 <UsageFault_Handler+0x4>
+
+08001b34 <SVC_Handler>:
+
+/**
+  * @brief This function handles System service call via SWI instruction.
+  */
+void SVC_Handler(void)
+{
+ 8001b34:	b480      	push	{r7}
+ 8001b36:	af00      	add	r7, sp, #0
+
+  /* USER CODE END SVCall_IRQn 0 */
+  /* USER CODE BEGIN SVCall_IRQn 1 */
+
+  /* USER CODE END SVCall_IRQn 1 */
+}
+ 8001b38:	bf00      	nop
+ 8001b3a:	46bd      	mov	sp, r7
+ 8001b3c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001b40:	4770      	bx	lr
+
+08001b42 <DebugMon_Handler>:
+
+/**
+  * @brief This function handles Debug monitor.
+  */
+void DebugMon_Handler(void)
+{
+ 8001b42:	b480      	push	{r7}
+ 8001b44:	af00      	add	r7, sp, #0
+
+  /* USER CODE END DebugMonitor_IRQn 0 */
+  /* USER CODE BEGIN DebugMonitor_IRQn 1 */
+
+  /* USER CODE END DebugMonitor_IRQn 1 */
+}
+ 8001b46:	bf00      	nop
+ 8001b48:	46bd      	mov	sp, r7
+ 8001b4a:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001b4e:	4770      	bx	lr
+
+08001b50 <PendSV_Handler>:
+
+/**
+  * @brief This function handles Pendable request for system service.
+  */
+void PendSV_Handler(void)
+{
+ 8001b50:	b480      	push	{r7}
+ 8001b52:	af00      	add	r7, sp, #0
+
+  /* USER CODE END PendSV_IRQn 0 */
+  /* USER CODE BEGIN PendSV_IRQn 1 */
+
+  /* USER CODE END PendSV_IRQn 1 */
+}
+ 8001b54:	bf00      	nop
+ 8001b56:	46bd      	mov	sp, r7
+ 8001b58:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001b5c:	4770      	bx	lr
+
+08001b5e <SysTick_Handler>:
+
+/**
+  * @brief This function handles System tick timer.
+  */
+void SysTick_Handler(void)
+{
+ 8001b5e:	b480      	push	{r7}
+ 8001b60:	af00      	add	r7, sp, #0
+  /* USER CODE END SysTick_IRQn 0 */
+  /* No HAL tick: LCD delays and I2C timeouts poll TIM2 directly. */
+  /* USER CODE BEGIN SysTick_IRQn 1 */
+
+  /* USER CODE END SysTick_IRQn 1 */
+}
+ 8001b62:	bf00      	nop
+ 8001b64:	46bd      	mov	sp, r7
+ 8001b66:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001b6a:	4770      	bx	lr
+
+08001b6c <SystemInit>:
+  *         SystemFrequency variable.
+  * @param  None
+  * @retval None
+  */
+void SystemInit(void)
+{
+ 8001b6c:	b480      	push	{r7}
+ 8001b6e:	af00      	add	r7, sp, #0
+  /* FPU settings ------------------------------------------------------------*/
+#if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+  SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+ 8001b70:	4b06      	ldr	r3, [pc, #24]	@ (8001b8c <SystemInit+0x20>)
+ 8001b72:	f8d3 3088 	ldr.w	r3, [r3, #136]	@ 0x88
+ 8001b76:	4a05      	ldr	r2, [pc, #20]	@ (8001b8c <SystemInit+0x20>)
+ 8001b78:	f443 0370 	orr.w	r3, r3, #15728640	@ 0xf00000
+ 8001b7c:	f8c2 3088 	str.w	r3, [r2, #136]	@ 0x88
+
+  /* Configure the Vector Table location -------------------------------------*/
+#if defined(USER_VECT_TAB_ADDRESS)
+  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+#endif /* USER_VECT_TAB_ADDRESS */
+}
+ 8001b80:	bf00      	nop
+ 8001b82:	46bd      	mov	sp, r7
+ 8001b84:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8001b88:	4770      	bx	lr
+ 8001b8a:	bf00      	nop
+ 8001b8c:	e000ed00 	.word	0xe000ed00
+
+08001b90 <Reset_Handler>:
+
+    .section  .text.Reset_Handler
+  .weak  Reset_Handler
+  .type  Reset_Handler, %function
+Reset_Handler:  
+  ldr   sp, =_estack      /* set stack pointer */
+ 8001b90:	f8df d034 	ldr.w	sp, [pc, #52]	@ 8001bc8 <LoopFillZerobss+0xe>
+  
+/* Call the clock system initialization function.*/
+  bl  SystemInit   
+ 8001b94:	f7ff ffea 	bl	8001b6c <SystemInit>
+
+/* Copy the data segment initializers from flash to SRAM */  
+  ldr r0, =_sdata
+ 8001b98:	480c      	ldr	r0, [pc, #48]	@ (8001bcc <LoopFillZerobss+0x12>)
+  ldr r1, =_edata
+ 8001b9a:	490d      	ldr	r1, [pc, #52]	@ (8001bd0 <LoopFillZerobss+0x16>)
+  ldr r2, =_sidata
+ 8001b9c:	4a0d      	ldr	r2, [pc, #52]	@ (8001bd4 <LoopFillZerobss+0x1a>)
+  movs r3, #0
+ 8001b9e:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8001ba0:	e002      	b.n	8001ba8 <LoopCopyDataInit>
+
+08001ba2 <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 8001ba2:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 8001ba4:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 8001ba6:	3304      	adds	r3, #4
+
+08001ba8 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8001ba8:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8001baa:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8001bac:	d3f9      	bcc.n	8001ba2 <CopyDataInit>
+  
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8001bae:	4a0a      	ldr	r2, [pc, #40]	@ (8001bd8 <LoopFillZerobss+0x1e>)
+  ldr r4, =_ebss
+ 8001bb0:	4c0a      	ldr	r4, [pc, #40]	@ (8001bdc <LoopFillZerobss+0x22>)
+  movs r3, #0
+ 8001bb2:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8001bb4:	e001      	b.n	8001bba <LoopFillZerobss>
+
+08001bb6 <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8001bb6:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8001bb8:	3204      	adds	r2, #4
+
+08001bba <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8001bba:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8001bbc:	d3fb      	bcc.n	8001bb6 <FillZerobss>
+  
+/* Call static constructors */
+    bl __libc_init_array
+ 8001bbe:	f000 f811 	bl	8001be4 <__libc_init_array>
+/* Call the application's entry point.*/
+  bl  main
+ 8001bc2:	f7ff ff3d 	bl	8001a40 <main>
+  bx  lr    
+ 8001bc6:	4770      	bx	lr
+  ldr   sp, =_estack      /* set stack pointer */
+ 8001bc8:	20050000 	.word	0x20050000
+  ldr r0, =_sdata
+ 8001bcc:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8001bd0:	2000000c 	.word	0x2000000c
+  ldr r2, =_sidata
+ 8001bd4:	08001d44 	.word	0x08001d44
+  ldr r2, =_sbss
+ 8001bd8:	2000000c 	.word	0x2000000c
+  ldr r4, =_ebss
+ 8001bdc:	200000d0 	.word	0x200000d0
+
+08001be0 <ADC_IRQHandler>:
+ * @retval None       
+*/
+    .section  .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b  Infinite_Loop
+ 8001be0:	e7fe      	b.n	8001be0 <ADC_IRQHandler>
+	...
+
+08001be4 <__libc_init_array>:
+ 8001be4:	b570      	push	{r4, r5, r6, lr}
+ 8001be6:	4b0d      	ldr	r3, [pc, #52]	@ (8001c1c <__libc_init_array+0x38>)
+ 8001be8:	4d0d      	ldr	r5, [pc, #52]	@ (8001c20 <__libc_init_array+0x3c>)
+ 8001bea:	1b5b      	subs	r3, r3, r5
+ 8001bec:	109c      	asrs	r4, r3, #2
+ 8001bee:	2600      	movs	r6, #0
+ 8001bf0:	42a6      	cmp	r6, r4
+ 8001bf2:	d109      	bne.n	8001c08 <__libc_init_array+0x24>
+ 8001bf4:	f000 f81a 	bl	8001c2c <_init>
+ 8001bf8:	4d0a      	ldr	r5, [pc, #40]	@ (8001c24 <__libc_init_array+0x40>)
+ 8001bfa:	4b0b      	ldr	r3, [pc, #44]	@ (8001c28 <__libc_init_array+0x44>)
+ 8001bfc:	1b5b      	subs	r3, r3, r5
+ 8001bfe:	109c      	asrs	r4, r3, #2
+ 8001c00:	2600      	movs	r6, #0
+ 8001c02:	42a6      	cmp	r6, r4
+ 8001c04:	d105      	bne.n	8001c12 <__libc_init_array+0x2e>
+ 8001c06:	bd70      	pop	{r4, r5, r6, pc}
+ 8001c08:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8001c0c:	4798      	blx	r3
+ 8001c0e:	3601      	adds	r6, #1
+ 8001c10:	e7ee      	b.n	8001bf0 <__libc_init_array+0xc>
+ 8001c12:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8001c16:	4798      	blx	r3
+ 8001c18:	3601      	adds	r6, #1
+ 8001c1a:	e7f2      	b.n	8001c02 <__libc_init_array+0x1e>
+ 8001c1c:	08001d3c 	.word	0x08001d3c
+ 8001c20:	08001d3c 	.word	0x08001d3c
+ 8001c24:	08001d3c 	.word	0x08001d3c
+ 8001c28:	08001d40 	.word	0x08001d40
+
+08001c2c <_init>:
+ 8001c2c:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8001c2e:	bf00      	nop
+ 8001c30:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8001c32:	bc08      	pop	{r3}
+ 8001c34:	469e      	mov	lr, r3
+ 8001c36:	4770      	bx	lr
+
+08001c38 <_fini>:
+ 8001c38:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8001c3a:	bf00      	nop
+ 8001c3c:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8001c3e:	bc08      	pop	{r3}
+ 8001c40:	469e      	mov	lr, r3
+ 8001c42:	4770      	bx	lr
